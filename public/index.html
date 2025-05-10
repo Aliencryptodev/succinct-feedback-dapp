@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Succinct Feedback DApp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0A0A0A;
+      color: white;
+      font-family: sans-serif;
+    }
+    .hero {
+      padding: 4rem 2rem 2rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      color: #FE11C5;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      color: #90DCFF;
+    }
+    .leaderboard {
+      padding: 2rem;
+      text-align: center;
+    }
+    .leaderboard h2 {
+      color: #F9E766;
+    }
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding-top: 1rem;
+    }
+    .idea-card {
+      background-color: #111;
+      border: 1px solid #FE11C5;
+      border-radius: 12px;
+      padding: 1rem;
+      width: 300px;
+      text-align: left;
+      box-shadow: 0 0 10px #FE11C533;
+      transition: transform 0.2s ease;
+    }
+    .idea-card:hover {
+      transform: scale(1.02);
+    }
+    .idea-text {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .username {
+      color: #90DCFF;
+      font-size: 0.9rem;
+    }
+    .votes {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      color: #F9E766;
+      font-weight: bold;
+    }
+    .submit-idea {
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    textarea {
+      width: 90%;
+      max-width: 500px;
+      height: 100px;
+      border-radius: 8px;
+      border: none;
+      padding: 1rem;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #FE11C5;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      margin-top: 1rem;
+    }
+    #notification {
+      display: none;
+      background-color: #F9E766;
+      color: black;
+      padding: 1rem;
+      text-align: center;
+      font-weight: bold;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div id="notification">✅ Idea submitted successfully!</div>
+
+  <section class="hero">
+    <h1>Shape Succinct’s future</h1>
+    <p>Backed by your ideas, verified by zero-knowledge proofs.</p>
+    <a href="/login"><button>Connect with Discord</button></a>
+  </section>
+
+  <section class="leaderboard">
+    <h2>Leaderboard</h2>
+    <div id="ideaCards" class="cards">
+      <p>Loading...</p>
+    </div>
+  </section>
+
+  <section class="submit-idea">
+    <h2 style="color: #F9E766;">Submit your idea</h2>
+    <form id="ideaForm">
+      <textarea id="ideaText" placeholder="Describe your idea..." required></textarea><br>
+      <button type="submit">Submit Idea</button>
+    </form>
+  </section>
+
+  <script>
+    let userId = '', username = '', userRoles = [];
+
+    async function getUser() {
+      const res = await fetch('/api/user');
+      const data = await res.json();
+      userId = data.discord_id;
+      username = data.username;
+      userRoles = data.roles || [];
+
+      // Ocultar formulario si no tiene el rol
+      if (!userRoles.includes("Let's pruv it")) {
+        document.querySelector('.submit-idea').style.display = 'none';
+      }
+    }
+
+    async function loadIdeas() {
+      const res = await fetch('/ideas');
+      const ideas = await res.json();
+      const container = document.getElementById('ideaCards');
+      container.innerHTML = '';
+
+      ideas.forEach((i, idx) => {
+        const card = document.createElement('div');
+        card.className = 'idea-card';
+        card.innerHTML = `
+          <p class="idea-text">#${idx + 1} — ${i.idea}</p>
+          <span class="username">by @${i.username || 'unknown'}</span>
+          <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    document.getElementById('ideaForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const idea = document.getElementById('ideaText').value;
+      const res = await fetch('/submit-idea', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idea, discord_id: userId, username })
+      });
+      const data = await res.json();
+      if (data.success) {
+        const note = document.getElementById('notification');
+        note.style.display = 'block';
+        setTimeout(() => { note.style.display = 'none'; }, 3000);
+      } else {
+        alert(data.error || 'Submission failed');
+      }
+      loadIdeas();
+      document.getElementById('ideaText').value = '';
+    };
+
+    getUser().then(loadIdeas);
+  </script>
+
+  <section class="leaderboard">
+    <h2 style="color:#FF5555;">Discarded Ideas</h2>
+    <div id="discardedIdeas" class="cards">
+      <p>Loading...</p>
+    </div>
+  </section>
+  <script>
+    async function loadDiscardedIdeas() {
+      const res = await fetch('/message.json');
+      const messages = await res.json();
+      const container = document.getElementById('discardedIdeas');
+      container.innerHTML = '';
+
+      messages.forEach((msg, idx) => {
+        const card = document.createElement('div');
+        card.className = 'idea-card';
+        card.innerHTML = `
+          <p class="idea-text">🗑️ ${msg.idea}</p>
+          <span class="votes" style="color: #FF8888;">Reason: ${msg.reason}</span>
+        `;
+        container.appendChild(card);
+      });
+    }
+    loadDiscardedIdeas();
+  </script>
+</body>
+</html>
+
