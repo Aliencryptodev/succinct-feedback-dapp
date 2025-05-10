@@ -106,6 +106,18 @@
       width: 100%;
       z-index: 1000;
     }
+    .profile-card {
+      display: none;
+      max-width: 500px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background-color: #0F0F1A;
+      border: 2px solid #00FFFF;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,255,255,0.3);
+      color: white;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -115,8 +127,19 @@
     <h1>Shape Succinct’s future</h1>
     <p>Backed by your ideas, verified by zero-knowledge proofs.</p>
     <a href="https://discord.com/api/oauth2/authorize?client_id=1370780186177437736&redirect_uri=http%3A%2F%2F217.65.144.64%3A3000%2Fcallback&response_type=code&scope=identify%20guilds.members.read">
-    <button>Connect with Discord</button>
-    </section>
+    <button>Connect with Discord</button></a>
+  </section>
+
+  <div class="profile-card">
+    <div class="avatar-section">
+      <img id="discordAvatar" alt="avatar" style="width:100px; height:100px; border-radius:100%; border:3px solid #FE11C5;">
+      <h2 id="discordUsername" style="margin-top:1rem; color:#FE11C5; font-size:1.4rem;">@usuario</h2>
+    </div>
+    <div class="roles-section">
+      <h3 style="color:#90DCFF; margin-bottom:0.5rem;">Roles:</h3>
+      <div id="roleTags" style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem;"></div>
+    </div>
+  </div>
 
   <section class="leaderboard">
     <h2>Leaderboard</h2>
@@ -133,6 +156,13 @@
     </form>
   </section>
 
+  <section class="leaderboard">
+    <h2 style="color:#FF5555;">Discarded Ideas</h2>
+    <div id="discardedIdeas" class="cards">
+      <p>Loading...</p>
+    </div>
+  </section>
+
   <script>
     let userId = '', username = '', userRoles = [];
 
@@ -143,7 +173,6 @@
       username = data.username;
       userRoles = data.roles || [];
 
-      // Ocultar formulario si no tiene el rol
       if (!userRoles.includes("Let's pruv it")) {
         document.querySelector('.submit-idea').style.display = 'none';
       }
@@ -187,16 +216,6 @@
       document.getElementById('ideaText').value = '';
     };
 
-    getUser().then(loadIdeas);
-  </script>
-
-  <section class="leaderboard">
-    <h2 style="color:#FF5555;">Discarded Ideas</h2>
-    <div id="discardedIdeas" class="cards">
-      <p>Loading...</p>
-    </div>
-  </section>
-  <script>
     async function loadDiscardedIdeas() {
       const res = await fetch('/message.json');
       const messages = await res.json();
@@ -213,8 +232,46 @@
         container.appendChild(card);
       });
     }
+
+    async function loadUserProfileCard() {
+      try {
+        const res = await fetch('/api/user');
+        if (!res.ok) throw new Error('Not authenticated');
+        const user = await res.json();
+
+        const allowedRoles = ['Proof Verified', "Let's pruv it"];
+        const hasAccess = user.roles.some(role => allowedRoles.includes(role));
+        if (!hasAccess) return;
+
+        document.getElementById('discordUsername').textContent = `@${user.username}`;
+        document.getElementById('discordAvatar').src = user.avatar_url;
+
+        const roleTags = document.getElementById('roleTags');
+        user.roles.forEach(role => {
+          const tag = document.createElement('span');
+          tag.textContent = role;
+          tag.style.cssText = `
+            background-color: #1A1A2B;
+            color: #90DCFF;
+            border: 1px solid #90DCFF;
+            border-radius: 12px;
+            padding: 0.3rem 0.7rem;
+            font-size: 0.9rem;
+          `;
+          roleTags.appendChild(tag);
+        });
+
+        document.querySelector('.profile-card').style.display = 'block';
+      } catch (e) {
+        console.log('User not authenticated or unauthorized for profile card.');
+      }
+    }
+
+    getUser().then(loadIdeas);
     loadDiscardedIdeas();
+    loadUserProfileCard();
   </script>
 </body>
 </html>
+
 
