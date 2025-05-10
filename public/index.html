@@ -180,22 +180,26 @@
     }
 
     async function loadIdeas() {
-      const res = await fetch('/ideas');
-      const ideas = await res.json();
-      const container = document.getElementById('ideaCards');
-      container.innerHTML = '';
+  const res = await fetch('/ideas');
+  const { ideas, totalVotes } = await res.json();
+  const container = document.getElementById('ideaCards');
+  container.innerHTML = '';
 
-      ideas.forEach((i, idx) => {
-        const card = document.createElement('div');
-        card.className = 'idea-card';
-        card.innerHTML = `
-          <p class="idea-text">#${idx + 1} — ${i.idea}</p>
-          <span class="username">by @${i.username || 'unknown'}</span>
-          <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
-        `;
-        container.appendChild(card);
-      });
-    }
+  // Mostrar contador de votos
+  const counter = document.getElementById('voteCounter');
+  if (counter) counter.textContent = `🔎 Total verified SP1 votes: ${totalVotes}`;
+
+  ideas.forEach((i, idx) => {
+    const card = document.createElement('div');
+    card.className = 'idea-card';
+    card.innerHTML = `
+      <p class="idea-text">#${idx + 1} — ${i.idea}</p>
+      <span class="username">by @${i.username || 'unknown'}</span>
+      <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
+    `;
+    container.appendChild(card);
+  });
+}
 
     async function loadDiscardedIdeas() {
       const res = await fetch('/message.json');
