@@ -170,7 +170,7 @@
     let userId = '', username = '', userRoles = [];
 
     async function getUser() {
-      const res = await fetch('/api/user');
+      const res = await fetch('http://217.65.144.64:3000/api/user');
       const data = await res.json();
       userId = data.discord_id;
       username = data.username;
@@ -181,8 +181,33 @@
       }
     }
 
-    async function loadIdeas() {
-      const res = await fetch('/ideas');
+    document.getElementById('ideaForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const ideaText = document.getElementById('ideaText').value.trim();
+    if (!ideaText) return;
+
+    const res = await fetch('http://217.65.144.64:3000/submit-idea', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        idea: ideaText,
+        discord_id: userId,
+        username: username
+      })
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      alert('✅ Idea submitted and verified!');
+      document.getElementById('ideaText').value = '';
+      loadIdeas();
+    } else {
+      alert(data.error || '❌ Submission failed.');
+    }
+  });
+
+      async function loadIdeas() {
+      const res = await fetch('http://217.65.144.64:3000/ideas');
       const { ideas, totalVotes } = await res.json();
       const container = document.getElementById('ideaCards');
       container.innerHTML = '';
@@ -204,7 +229,7 @@
     }
 
     async function loadDiscardedIdeas() {
-      const res = await fetch('/message.json');
+      const res = await fetch('http://217.65.144.64:3000/message.json');
       const messages = await res.json();
       const container = document.getElementById('discardedIdeas');
       container.innerHTML = '';
@@ -251,7 +276,7 @@
 
     async function loadUserProfileCard() {
       try {
-        const res = await fetch('/api/user');
+        const res = await fetch('http://217.65.144.64:3000/api/user');
         if (!res.ok) throw new Error('Not authenticated');
         const user = await res.json();
 
@@ -291,7 +316,7 @@
   button.disabled = true;
   button.textContent = 'Verifying...';
 
-  const res = await fetch('/vote', {
+  const res = await fetch('http://217.65.144.64:3000/vote', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ index, discord_id: userId })
