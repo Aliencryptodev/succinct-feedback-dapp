@@ -163,8 +163,10 @@ app.post('/vote', async (req, res) => {
 });
 
 app.get('/ideas', (req, res) => {
-  const ideas = loadIdeas().sort((a, b) => b.votes - a.votes);
-  res.json(ideas);
+  const ideas = loadIdeas();
+  const sorted = ideas.sort((a, b) => b.votes - a.votes);
+  const totalVotes = ideas.reduce((sum, i) => sum + (i.votes || 0), 0);
+  res.json({ ideas: sorted, totalVotes });
 });
 
 app.listen(3000, () => console.log('Backend running on http://localhost:3000'));
