@@ -221,7 +221,10 @@
         const user = await res.json();
 
         const allowedRoles = ['Proof Verified', "Let's pruv it"];
-        const hasAccess = user.roles.some(role => allowedRoles.includes(role));
+        const hasAccess = user.roles.some(role =>
+        allowedRoles.map(r => r.toLowerCase()).includes(role.toLowerCase())
+        );
+
         if (!hasAccess) return;
 
         document.getElementById('discordUsername').textContent = `@${user.username}`;
