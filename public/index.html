@@ -197,6 +197,7 @@
           <p class="idea-text">#${idx + 1} — ${i.idea}</p>
           <span class="username">by @${i.username || 'unknown'}</span>
           <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
+          ${userRoles.includes('Proof of verify') ? `<button onclick="voteIdea(${idx}, this)">🔎 Vote with SP1</button>` : ''}
         `;
         container.appendChild(card);
       });
@@ -268,7 +269,7 @@
         user.roles.forEach(role => {
           const tag = document.createElement('span');
           tag.textContent = role;
-          const color = ROLE_STYLES[role.toUpperCase()] || '#90DCFF';
+          const color = ROLE_STYLES[role.toUpperCase()] || ROLE_STYLES[role] || '#90DCFF';
           tag.style.cssText = `
             background-color: #1A1A2B;
             color: ${color};
@@ -285,6 +286,27 @@
         console.log('User not authenticated or unauthorized for profile card.');
       }
     }
+
+    async function voteIdea(index, button) {
+  button.disabled = true;
+  button.textContent = 'Verifying...';
+
+  const res = await fetch('/vote', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ index, discord_id: userId })
+  });
+  const data = await res.json();
+
+  if (data.success) {
+    alert('✅ Vote verified with SP1!');
+    loadIdeas();
+  } else {
+    alert(data.error || '❌ Voting failed.');
+    button.disabled = false;
+    button.textContent = '🔎 Vote with SP1';
+  }
+}
 
     getUser().then(loadIdeas);
     loadDiscardedIdeas();
