@@ -106,10 +106,11 @@ app.get('/api/user', async (req, res) => {
   const discordId = req.session.user.id;
   const roles = await getUserRoles(discordId);
   res.json({
-    username: req.session.user.username,
-    discord_id: discordId,
-    roles
-  });
+  username: req.session.user.username,
+  discord_id: discordId,
+  avatar_url: `https://cdn.discordapp.com/avatars/${discordId}/${req.session.user.avatar}.png`,
+  roles
+ });
 });
 
 app.post('/submit-idea', async (req, res) => {
