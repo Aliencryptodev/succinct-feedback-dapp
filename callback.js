@@ -1,47 +1,54 @@
 
   export default async function handler(req, res) {
-  if (req.method !== 'GET') return res.status(405).end();
-
   const code = req.query.code;
-  if (!code) return res.status(400).send('Missing code');
 
-  const client_id = process.env.DISCORD_CLIENT_ID;
-  const client_secret = process.env.DISCORD_CLIENT_SECRET;
-  const redirect_uri = process.env.DISCORD_REDIRECT_URI;
+  if (!code) {
+    return res.status(400).json({ error: 'Missing code' });
+  }
+
+  const params = new URLSearchParams();
+  params.append('client_id', process.env.DISCORD_CLIENT_ID);
+  params.append('client_secret', process.env.DISCORD_CLIENT_SECRET);
+  params.append('grant_type', 'authorization_code');
+  params.append('code', code);
+  params.append('redirect_uri', process.env.DISCORD_REDIRECT_URI);
+  params.append('scope', 'identify guilds.members.read');
 
   try {
+    // Step 1: Exchange code for access_token
     const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        client_id,
-        client_secret,
-        grant_type: 'authorization_code',
-        code,
-        redirect_uri,
-      })
+      body: params
     });
 
     const tokenData = await tokenRes.json();
-    if (!tokenRes.ok) throw new Error(tokenData.error || 'Token exchange failed');
+    const accessToken = tokenData.access_token;
 
-    const access_token = tokenData.access_token;
+    if (!accessToken) {
+      return res.status(400).json({ error: 'Invalid access token exchange' });
+    }
 
+    // Step 2: Fetch user info
     const userRes = await fetch('https://discord.com/api/users/@me', {
-      headers: { Authorization: `Bearer ${access_token}` }
+      headers: { Authorization: `Bearer ${accessToken}` }
     });
-    const user = await userRes.json();
-    if (!userRes.ok) throw new Error('User fetch failed');
+    const userData = await userRes.json();
 
-    const avatar = user.avatar
-      ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
-      : 'https://cdn.discordapp.com/embed/avatars/0.png';
+    const discord_id = userData.id;
+    const username = userData.username;
+    const avatar_url = `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`;
 
-    const frontendURL = `https://succinct-feedback-dapp.vercel.app/?discord_id=${user.id}&username=${user.username}&avatar=${encodeURIComponent(avatar)}`;
-    return res.redirect(frontendURL);
+    // Step 3: Redirect to frontend with user info in query params
+    const redirectURL = new URL('/', process.env.DISCORD_REDIRECT_URI);
+    redirectURL.searchParams.set('discord_id', discord_id);
+    redirectURL.searchParams.set('username', username);
+    redirectURL.searchParams.set('avatar_url', avatar_url);
 
+    return res.redirect(302, redirectURL.toString());
   } catch (err) {
     console.error('OAuth callback error:', err);
-    return res.status(500).send('OAuth failed');
+    return res.status(500).json({ error: 'Internal error during Discord login' });
   }
 }
+
