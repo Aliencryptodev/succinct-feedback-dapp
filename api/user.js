@@ -1,7 +1,9 @@
+const express = require('express');
+const router = express.Router();
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+require('dotenv').config();
 
-export default async function handler(req, res) {
-  if (req.method !== 'GET') return res.status(405).end();
-
+router.get('/', async (req, res) => {
   const userId = req.headers['x-discord-id'];
   const username = req.headers['x-username'];
 
@@ -14,13 +16,10 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(`https://152.53.243.39.sslip.io/api/discord/${query}`, {
-      headers: {
-        'x-api-key': apiKey
-      }
+      headers: { 'x-api-key': apiKey }
     });
 
     if (!response.ok) throw new Error('Failed to fetch user roles');
-
     const data = await response.json();
 
     res.status(200).json({
@@ -33,4 +32,6 @@ export default async function handler(req, res) {
     console.error('Error fetching roles:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
-}
+});
+
+module.exports = router;
