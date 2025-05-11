@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -162,7 +163,7 @@
     let userId = '', username = '', userRoles = [];
 
     async function getUser() {
-      const res = await fetch('http://217.65.144.64:3000/api/user');
+      const res = await fetch('/api/user');
       const data = await res.json();
       userId = data.discord_id;
       username = data.username;
@@ -174,7 +175,7 @@
     }
 
     async function loadIdeas() {
-      const res = await fetch('http://217.65.144.64:3000/ideas');
+      const res = await fetch('/api/ideas');
       const { ideas, totalVotes } = await res.json();
       const container = document.getElementById('ideaCards');
       container.innerHTML = '';
@@ -199,7 +200,7 @@
       button.disabled = true;
       button.textContent = 'Verifying...';
 
-      const res = await fetch('http://217.65.144.64:3000/vote', {
+      const res = await fetch('/api/vote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ index, discord_id: userId })
@@ -288,7 +289,7 @@
       const ideaText = document.getElementById('ideaText').value.trim();
       if (!ideaText) return;
 
-      const res = await fetch('http://217.65.144.64:3000/submit-idea', {
+      const res = await fetch('/api/ideas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
