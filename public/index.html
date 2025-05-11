@@ -163,16 +163,36 @@
     let userId = '', username = '', userRoles = [];
 
     async function getUser() {
-      const res = await fetch('/api/user');
-      const data = await res.json();
-      userId = data.discord_id;
-      username = data.username;
-      userRoles = data.roles || [];
+  try {
+    const discord_id = localStorage.getItem('discord_id');
+    const username = localStorage.getItem('username');
 
-      if (!userRoles.includes("lets pruv it")) {
-        document.querySelector('.submit-idea').style.display = 'none';
-      }
+    if (!discord_id && !username) {
+      throw new Error('Missing user info');
     }
+
+    const res = await fetch('/api/user', {
+      headers: {
+        'x-discord-id': discord_id || '',
+        'x-username': username || ''
+      }
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to fetch user');
+
+    userId = data.discord_id;
+    username = data.username;
+    userRoles = data.roles || [];
+
+    if (!userRoles.includes("lets pruv it")) {
+      document.querySelector('.submit-idea').style.display = 'none';
+    }
+
+  } catch (err) {
+    console.error('User fetch failed:', err);
+  }
+}
 
     async function loadIdeas() {
       const res = await fetch('/api/ideas');
