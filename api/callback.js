@@ -1,4 +1,5 @@
-export default async function handler(req, res) {
+
+  export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).end();
 
   const code = req.query.code;
@@ -44,4 +45,3 @@ export default async function handler(req, res) {
     return res.status(500).send('OAuth failed');
   }
 }
-
