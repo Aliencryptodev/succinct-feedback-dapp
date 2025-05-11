@@ -251,7 +251,7 @@
       "PROOF OF DEV": "#9999ff",
       "PROOF OF MUSIC": "#66cccc",
       "PROOF OF VIDEO": "#cc99ff",
-      "PROOF VERIFIED": "#55d6aa",
+      "Proof of verify": "#55d6aa",
       "lets pruv it": "#ff9999",
       "ZK EVENTS": "#ff6699",
       "X PROVER": "#ff4da6",
@@ -280,7 +280,7 @@
         if (!res.ok) throw new Error('Not authenticated');
         const user = await res.json();
 
-        const allowedRoles = ['Proof Verified', "lets pruv it"];
+        const allowedRoles = ['Proof of verify', "lets pruv it"];
         const hasAccess = user.roles.some(role =>
           allowedRoles.map(r => r.toLowerCase()).includes(role.toLowerCase())
         );
