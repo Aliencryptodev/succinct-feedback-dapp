@@ -39,7 +39,7 @@
     const avatar_url = `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`;
 
     // Step 3: Redirect to frontend with user info in query params
-    const redirectURL = new URL('/', process.env.DISCORD_REDIRECT_URI);
+    const redirectURL = new URL('/', 'https://succinct-feedback-dapp.vercel.app');
     redirectURL.searchParams.set('discord_id', discord_id);
     redirectURL.searchParams.set('username', username);
     redirectURL.searchParams.set('avatar_url', avatar_url);
