@@ -1,4 +1,3 @@
-
   export default async function handler(req, res) {
   const code = req.query.code;
 
