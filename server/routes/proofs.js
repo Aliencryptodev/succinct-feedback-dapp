@@ -4,7 +4,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 
 const router = express.Router();
-const ELF_PATH = path.join(__dirname, '../zk/hasher/script/script/example.elf');
+const ELF_PATH = path.join(__dirname, '../../zk/hasher/script/script/example.elf');
 
 router.post('/hash-proof', async (req, res) => {
   try {
