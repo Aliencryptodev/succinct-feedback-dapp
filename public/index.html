@@ -176,7 +176,7 @@
       username = data.username;
       userRoles = data.roles || [];
 
-      if (!userRoles.includes("let's pruv it")) {
+      if (!userRoles.includes("lets pruv it")) {
         document.querySelector('.submit-idea').style.display = 'none';
       }
     }
@@ -252,7 +252,7 @@
       "PROOF OF MUSIC": "#66cccc",
       "PROOF OF VIDEO": "#cc99ff",
       "PROOF VERIFIED": "#55d6aa",
-      "LET'S PRUV IT": "#ff9999",
+      "LETS PRUV IT": "#ff9999",
       "ZK EVENTS": "#ff6699",
       "X PROVER": "#ff4da6",
       "DEV CHANNEL": "#6666ff",
@@ -280,7 +280,7 @@
         if (!res.ok) throw new Error('Not authenticated');
         const user = await res.json();
 
-        const allowedRoles = ['Proof Verified', "Let's pruv it"];
+        const allowedRoles = ['Proof Verified', "lets pruv it"];
         const hasAccess = user.roles.some(role =>
           allowedRoles.map(r => r.toLowerCase()).includes(role.toLowerCase())
         );
