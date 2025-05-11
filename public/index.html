@@ -268,7 +268,7 @@
 
     async function loadUserProfileCard() {
       try {
-        const res = await fetch('http://217.65.144.64:3000/api/user');
+        const res = await fetch('/api/user');
         if (!res.ok) throw new Error('Not authenticated');
         const user = await res.json();
 
