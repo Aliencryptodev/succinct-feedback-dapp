@@ -171,7 +171,7 @@
       throw new Error('Missing user info');
     }
 
-    const res = await fetch('/api/user', {
+    const res = await fetch('http://217.65.144.64:3000/api/user', {
       headers: {
         'x-discord-id': discord_id || '',
         'x-username': username || ''
@@ -195,7 +195,7 @@
 }
 
     async function loadIdeas() {
-      const res = await fetch('/api/ideas');
+      const res = await fetch('http://217.65.144.64:3000/api/ideas');
       const { ideas, totalVotes } = await res.json();
       const container = document.getElementById('ideaCards');
       container.innerHTML = '';
@@ -220,7 +220,7 @@
       button.disabled = true;
       button.textContent = 'Verifying...';
 
-      const res = await fetch('/api/vote', {
+      const res = await fetch('http://217.65.144.64:3000/api/vote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ index, discord_id: userId })
@@ -268,7 +268,7 @@
 
     async function loadUserProfileCard() {
       try {
-        const res = await fetch('/api/user');
+        const res = await fetch('http://217.65.144.64:3000/api/user');
         if (!res.ok) throw new Error('Not authenticated');
         const user = await res.json();
 
@@ -309,7 +309,7 @@
       const ideaText = document.getElementById('ideaText').value.trim();
       if (!ideaText) return;
 
-      const res = await fetch('/api/ideas', {
+      const res = await fetch('http://217.65.144.64:3000/api/ideas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
