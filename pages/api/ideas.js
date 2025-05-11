@@ -1,8 +1,10 @@
 
-import ideas from '../../../server/ideas.json';
-
-export default function handler(req, res) {
-  const sorted = ideas.sort((a, b) => b.votes - a.votes);
-  const totalVotes = ideas.reduce((sum, i) => sum + (i.votes || 0), 0);
-  res.status(200).json({ ideas: sorted, totalVotes });
+export default async function handler(req, res) {
+  try {
+    const backendRes = await fetch('http://217.65.144.64:3000/ideas');
+    const data = await backendRes.json();
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch ideas from backend' });
+  }
 }
