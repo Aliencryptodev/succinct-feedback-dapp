@@ -268,7 +268,7 @@
       const params = new URLSearchParams(window.location.search);
       const discord_id = params.get('discord_id');
       const username = params.get('username');
-      const avatar = params.get('avatar');
+      const avatar = params.get('avatar_url');
 
       if (discord_id && username) {
         localStorage.setItem('discord_id', discord_id);
