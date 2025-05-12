@@ -160,42 +160,44 @@
   <div id="voteCounter" style="text-align:center; font-size:1.2rem; color:#00FFFF; margin-top:1rem;"></div>
 
   <script>
+    const API_BASE = 'http://217.65.144.64:3000';
+
     let userId = '', username = '', userRoles = [];
 
     async function getUser() {
-  try {
-    const discord_id = localStorage.getItem('discord_id');
-    const username = localStorage.getItem('username');
+      try {
+        const discord_id = localStorage.getItem('discord_id');
+        const usernameLS = localStorage.getItem('username');
 
-    if (!discord_id && !username) {
-      throw new Error('Missing user info');
-    }
+        if (!discord_id && !usernameLS) {
+          throw new Error('Missing user info');
+        }
 
-    const res = await fetch('http://217.65.144.64:3000/api/user', {
-      headers: {
-        'x-discord-id': discord_id || '',
-        'x-username': username || ''
+        const res = await fetch(`${API_BASE}/api/user`, {
+          headers: {
+            'x-discord-id': discord_id || '',
+            'x-username': usernameLS || ''
+          }
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to fetch user');
+
+        userId = data.discord_id;
+        username = data.username;
+        userRoles = data.roles || [];
+
+        if (!userRoles.includes("lets pruv it")) {
+          document.querySelector('.submit-idea').style.display = 'none';
+        }
+
+      } catch (err) {
+        console.error('User fetch failed:', err);
       }
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Failed to fetch user');
-
-    userId = data.discord_id;
-    username = data.username;
-    userRoles = data.roles || [];
-
-    if (!userRoles.includes("lets pruv it")) {
-      document.querySelector('.submit-idea').style.display = 'none';
     }
-
-  } catch (err) {
-    console.error('User fetch failed:', err);
-  }
-}
 
     async function loadIdeas() {
-      const res = await fetch('http://217.65.144.64:3000/api/ideas');
+      const res = await fetch(`${API_BASE}/ideas`);
       const { ideas, totalVotes } = await res.json();
       const container = document.getElementById('ideaCards');
       container.innerHTML = '';
@@ -220,7 +222,7 @@
       button.disabled = true;
       button.textContent = 'Verifying...';
 
-      const res = await fetch('http://217.65.144.64:3000/api/vote', {
+      const res = await fetch(`${API_BASE}/vote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ index, discord_id: userId })
@@ -237,79 +239,12 @@
       }
     }
 
-    const ROLE_STYLES = {
-      "PROVED UR LUV": "#ff66cc",
-      "PROOF OF ART": "#00e6e6",
-      "PROOF OF DEV": "#9999ff",
-      "PROOF OF MUSIC": "#66cccc",
-      "PROOF OF VIDEO": "#cc99ff",
-      "Proof Verified": "#55d6aa",
-      "lets pruv it": "#ff9999",
-      "ZK EVENTS": "#ff6699",
-      "X PROVER": "#ff4da6",
-      "DEV CHANNEL": "#6666ff",
-      "ALL IN SUCCINCT": "#ffcc66",
-      "RUSTACEAN": "#cc6600",
-      "SUCCINCT CRACKED EMPLOYEE": "#ff0066",
-      "HELPER PROVER": "#ffcc00",
-      "STAFF PROVER": "#ff3399",
-      "🇪🇸・español": "#cccccc",
-      "🇨🇳・中文": "#cccccc",
-      "🇻🇳・tiếng-việt": "#cccccc",
-      "🇮🇩・indonesia": "#cccccc",
-      "🇹🇷・türkçe": "#cccccc",
-      "🇷🇺・русский": "#cccccc",
-      "🇵🇱・polski": "#cccccc",
-      "🇧🇷・português": "#cccccc",
-      "🇮🇳・हिन्दी": "#cccccc",
-      "Dev Helper": "#8888ff",
-      "Beta Prover": "#cc00cc"
-    };
-
-    async function loadUserProfileCard() {
-      try {
-        const res = await fetch('http://217.65.144.64:3000/api/user');
-        if (!res.ok) throw new Error('Not authenticated');
-        const user = await res.json();
-
-        const allowedRoles = ['Proof Verified', 'lets pruv it'];
-        const hasAccess = user.roles.some(role =>
-          allowedRoles.map(r => r.toLowerCase()).includes(role.toLowerCase())
-        );
-
-        if (!hasAccess) return;
-
-        document.getElementById('discordUsername').textContent = `@${user.username}`;
-        document.getElementById('discordAvatar').src = user.avatar_url;
-
-        const roleTags = document.getElementById('roleTags');
-        user.roles.forEach(role => {
-          const tag = document.createElement('span');
-          tag.textContent = role;
-          const color = ROLE_STYLES[role] || '#90DCFF';
-          tag.style.cssText = `
-            background-color: #1A1A2B;
-            color: ${color};
-            border: 1px solid ${color};
-            border-radius: 12px;
-            padding: 0.3rem 0.7rem;
-            font-size: 0.9rem;
-          `;
-          roleTags.appendChild(tag);
-        });
-
-        document.querySelector('.profile-card').style.display = 'block';
-      } catch (e) {
-        console.log('User not authenticated or unauthorized for profile card.');
-      }
-    }
-
     document.getElementById('ideaForm').addEventListener('submit', async function (e) {
       e.preventDefault();
       const ideaText = document.getElementById('ideaText').value.trim();
       if (!ideaText) return;
 
-      const res = await fetch('http://217.65.144.64:3000/api/ideas', {
+      const res = await fetch(`${API_BASE}/submit-idea`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -329,27 +264,26 @@
       }
     });
 
-     // Extrae los datos del callback y los guarda en localStorage
-  window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const discord_id = params.get('discord_id');
-    const username = params.get('username');
-    const avatar = params.get('avatar');
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const discord_id = params.get('discord_id');
+      const username = params.get('username');
+      const avatar = params.get('avatar');
 
-    if (discord_id && username) {
-      localStorage.setItem('discord_id', discord_id);
-      localStorage.setItem('username', username);
-      localStorage.setItem('avatar_url', avatar);
-      // Limpia la URL
-      window.history.replaceState({}, document.title, '/');
-    }
-   });
-    
-      getUser().then(() => {
+      if (discord_id && username) {
+        localStorage.setItem('discord_id', discord_id);
+        localStorage.setItem('username', username);
+        localStorage.setItem('avatar_url', avatar);
+        window.history.replaceState({}, document.title, '/');
+      }
+    });
+
+    getUser().then(() => {
       loadIdeas();
       loadUserProfileCard();
     });
-   </script>
-   </body>
-   </html>
+  </script>
+</body>
+</html>
+
 
