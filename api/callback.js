@@ -30,7 +30,10 @@ export default async function handler(req, res) {
     const redirectURL = new URL('/', 'https://succinct-feedback-dapp.vercel.app');
     redirectURL.searchParams.set('discord_id', userData.id);
     redirectURL.searchParams.set('username', userData.username);
-    redirectURL.searchParams.set('avatar_url', `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`);
+    redirectURL.searchParams.set(
+      'avatar_url',
+      `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`
+    );
 
     return res.redirect(302, redirectURL.toString());
   } catch (err) {
@@ -38,4 +41,3 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Internal error during Discord login' });
   }
 }
-
