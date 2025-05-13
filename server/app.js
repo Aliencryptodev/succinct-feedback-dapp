@@ -2,7 +2,6 @@
 const express = require('express');
 const session = require('express-session');
 const fetch = require('node-fetch');
-const { exec } = require('child_process');
 const crypto = require('crypto');
 const fs = require('fs');
 const app = express();
@@ -11,11 +10,11 @@ require('dotenv').config();
 const DATA_FILE = 'ideas.json';
 const DISCORD_API = 'https://152.53.243.39.sslip.io/api/discord';
 const VOTE_ROLE = 'Proof of verify';
-const COMMENT_ROLE = "Let's pruv it";
+const COMMENT_ROLE = "lets pruv it";
 
 app.use(express.json());
 app.use(session({
-  secret: process.env.SESSION_SECRET, // Ahora usa la variable de entorno
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }));
@@ -25,10 +24,6 @@ const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI;
 
-function hashInput(str) {
-  return parseInt(crypto.createHash('sha256').update(str).digest('hex').slice(0, 8), 16);
-}
-
 function loadIdeas() {
   if (!fs.existsSync(DATA_FILE)) return [];
   return JSON.parse(fs.readFileSync(DATA_FILE));
@@ -36,12 +31,6 @@ function loadIdeas() {
 
 function saveIdeas(ideas) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(ideas, null, 2));
-}
-
-function saveIdea(newIdea) {
-  const ideas = loadIdeas();
-  ideas.push(newIdea);
-  saveIdeas(ideas);
 }
 
 async function userHasRole(discordId, requiredRole) {
@@ -59,7 +48,6 @@ async function userHasRole(discordId, requiredRole) {
     return false;
   }
 }
-
 
 async function getUserRoles(discordId) {
   try {
@@ -147,24 +135,6 @@ app.post('/submit-idea', async (req, res) => {
   }
 });
 
-
-  const ideaHash = hashInput(idea);
-  const discordHash = hashInput(discord_id);
-  const cmd = `sp1 prove src/main.rs --args ${discordHash} ${ideaHash}`;
-
-  exec(cmd, { cwd: './sp1-circuit' }, (err, stdout, stderr) => {
-    if (err) return res.status(500).json({ success: false, error: stderr });
-
-    const verifyCmd = `sp1 verify ./output/proof.json`;
-    exec(verifyCmd, { cwd: './sp1-circuit' }, (vErr, vOut, vErrOut) => {
-      if (vErr) return res.status(403).json({ success: false, error: 'Prueba SP1 inválida' });
-      const proofOutput = stdout.trim();
-      saveIdea({ idea, discord_id, username, proof: proofOutput, timestamp: Date.now(), votes: 0 });
-      res.json({ success: true });
-    });
-  });
-});
-
 app.post('/vote', async (req, res) => {
   const { index, discord_id } = req.body;
 
@@ -179,8 +149,6 @@ app.post('/vote', async (req, res) => {
   saveIdeas(ideas);
 
   res.json({ success: true });
-    });
-  });
 });
 
 app.get('/ideas', (req, res) => {
@@ -191,4 +159,3 @@ app.get('/ideas', (req, res) => {
 });
 
 app.listen(3000, () => console.log('Backend running on http://localhost:3000'));
-
