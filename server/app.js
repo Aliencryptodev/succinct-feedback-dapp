@@ -14,7 +14,11 @@ const VOTE_ROLE = 'Proof of verify';
 const COMMENT_ROLE = "Let's pruv it";
 
 app.use(express.json());
-app.use(session({ secret: 'succinct-secret', resave: false, saveUninitialized: false }));
+app.use(session({
+  secret: process.env.SESSION_SECRET, // Ahora usa la variable de entorno
+  resave: false,
+  saveUninitialized: false
+}));
 app.use(express.static('public'));
 
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
