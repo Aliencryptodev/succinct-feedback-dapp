@@ -51,12 +51,15 @@ async function userHasRole(discordId, requiredRole) {
     });
     if (res.status !== 200) return false;
     const data = await res.json();
-    return data.roles && data.roles.includes(requiredRole);
+    return data.roles && data.roles.some(r =>
+      r.toLowerCase().replace(/['"]/g, '') === requiredRole.toLowerCase().replace(/['"]/g, '')
+    );
   } catch (e) {
     console.error("Error verificando usuario Discord:", e);
     return false;
   }
 }
+
 
 async function getUserRoles(discordId) {
   try {
