@@ -8,7 +8,7 @@ require('dotenv').config();
 
 const DATA_FILE = 'ideas.json';
 const DISCORD_API = 'https://152.53.243.39.sslip.io/api/discord';
-const VOTE_ROLE = 'proof verified';
+const VOTE_ROLE = 'Proof Verified';
 const COMMENT_ROLE = "lets pruv it";
 
 app.use(express.json());
@@ -138,7 +138,7 @@ app.post('/vote', async (req, res) => {
   const { index, discord_id } = req.body;
 
   if (!(await userHasRole(discord_id, VOTE_ROLE))) {
-    return res.status(403).json({ success: false, error: 'No tienes el rol Proof of verify' });
+    return res.status(403).json({ success: false, error: 'No tienes el rol Proof Verified' });
   }
 
   const ideas = loadIdeas();
