@@ -137,18 +137,26 @@ app.post('/submit-idea', async (req, res) => {
 app.post('/vote', async (req, res) => {
   const { index, discord_id } = req.body;
 
+  console.log(`🗳️ Intentando votar idea #${index} por ${discord_id}`);
+
   if (!(await userHasRole(discord_id, VOTE_ROLE))) {
+    console.log('❌ Usuario no tiene el rol necesario para votar');
     return res.status(403).json({ success: false, error: 'No tienes el rol Proof Verified' });
   }
 
   const ideas = loadIdeas();
-  if (!ideas[index]) return res.status(404).json({ success: false, error: 'Idea no encontrada' });
+  if (!ideas[index]) {
+    console.log(`❌ Idea con índice ${index} no encontrada`);
+    return res.status(404).json({ success: false, error: 'Idea no encontrada' });
+  }
 
   ideas[index].votes++;
   saveIdeas(ideas);
 
+  console.log(`✅ Voto registrado correctamente para idea #${index}`);
   res.json({ success: true });
 });
+
 
 app.get('/ideas', (req, res) => {
   const ideas = loadIdeas();
