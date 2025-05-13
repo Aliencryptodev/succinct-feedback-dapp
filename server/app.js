@@ -3,6 +3,7 @@ const session = require('express-session');
 const fetch = require('node-fetch');
 const crypto = require('crypto');
 const fs = require('fs');
+const { ensureUserVotes, updateUserVotes } = require('./votes');
 const app = express();
 require('dotenv').config();
 
@@ -135,28 +136,33 @@ app.post('/submit-idea', async (req, res) => {
 });
 
 app.post('/vote', async (req, res) => {
-  const { index, discord_id } = req.body;
+  const { index, discord_id, username, amount } = req.body;
 
-  console.log(`🗳️ Intentando votar idea #${index} por ${discord_id}`);
+  const roles = await getUserRoles(discord_id);
 
   if (!(await userHasRole(discord_id, VOTE_ROLE))) {
-    console.log('❌ Usuario no tiene el rol necesario para votar');
-    return res.status(403).json({ success: false, error: 'No tienes el rol Proof Verified' });
+    return res.status(403).json({ success: false, error: 'No tienes el rol para votar' });
   }
 
-  const ideas = loadIdeas();
-  if (!ideas[index]) {
-    console.log(`❌ Idea con índice ${index} no encontrada`);
-    return res.status(404).json({ success: false, error: 'Idea no encontrada' });
+  const user = ensureUserVotes(discord_id, username, roles);
+
+  try {
+    updateUserVotes(discord_id, index, amount);
+
+    const ideas = loadIdeas();
+    if (!ideas[index]) return res.status(404).json({ success: false, error: 'Idea no encontrada' });
+
+    ideas[index].votes += amount;
+    ideas[index].voters = ideas[index].voters || {};
+    ideas[index].voters[discord_id] = (ideas[index].voters[discord_id] || 0) + amount;
+
+    saveIdeas(ideas);
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
   }
-
-  ideas[index].votes++;
-  saveIdeas(ideas);
-
-  console.log(`✅ Voto registrado correctamente para idea #${index}`);
-  res.json({ success: true });
 });
-
 
 app.get('/ideas', (req, res) => {
   const ideas = loadIdeas();
