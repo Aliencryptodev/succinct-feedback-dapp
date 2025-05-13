@@ -5,6 +5,9 @@
   <meta charset="UTF-8">
   <title>Succinct Feedback DApp</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    const BACKEND_URL = 'http://217.65.144.64:3000';
+  </script>
   <style>
     body {
       margin: 0;
@@ -126,7 +129,7 @@
   <section class="hero">
     <h1>Shape Succinct’s future</h1>
     <p>Backed by your ideas, verified by zero-knowledge proofs.</p>
-    <a href="https://discord.com/api/oauth2/authorize?client_id=1370780186177437736&redirect_uri=http%3A%2F%2F217.65.144.64%3A3000%2Fcallback&response_type=code&scope=identify%20guilds.members.read">
+    <a href="https://discord.com/api/oauth2/authorize?client_id=1371930922877849651&redirect_uri=http%3A%2F%2F217.65.144.64%3A3000%2Fcallback&response_type=code&scope=identify%20guilds.members.read">
       <button>Connect with Discord</button>
     </a>
   </section>
@@ -137,7 +140,7 @@
       <h2 id="discordUsername" style="margin-top:1rem; color:#FE11C5; font-size:1.4rem;">@usuario</h2>
     </div>
     <div class="roles-section">
-      <h3 style="color:#90DCFF; margin-bottom:0.5rem;">Roles:</h3>
+      <h3 style="color: #90DCFF; margin-bottom: 0.5rem;">Roles:</h3>
       <div id="roleTags" style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem;"></div>
     </div>
   </div>
@@ -166,163 +169,131 @@
     </div>
   </section>
 
-  <script>
-    let userId = '', username = '', userRoles = [];
+<script>
+let userId = '', username = '', userRoles = [];
 
-    async function getUser() {
-      const res = await fetch('http://217.65.144.64:3000/api/user');
-      const data = await res.json();
-      userId = data.discord_id;
-      username = data.username;
-      userRoles = data.roles || [];
+async function getUser() {
+  const res = await fetch(`${BACKEND_URL}/api/user`);
+  const data = await res.json();
+  userId = data.discord_id;
+  username = data.username;
+  userRoles = data.roles || [];
+  if (!userRoles.includes("Let's pruv it")) {
+    document.querySelector('.submit-idea').style.display = 'none';
+  }
+}
 
-      if (!userRoles.includes("Let's pruv it")) {
-        document.querySelector('.submit-idea').style.display = 'none';
-      }
-    }
+document.getElementById('ideaForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const ideaText = document.getElementById('ideaText').value.trim();
+  if (!ideaText) return;
 
-    document.getElementById('ideaForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const ideaText = document.getElementById('ideaText').value.trim();
-    if (!ideaText) return;
-
-    const res = await fetch('http://217.65.144.64:3000/submit-idea', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        idea: ideaText,
-        discord_id: userId,
-        username: username
-      })
-    });
-
-    const data = await res.json();
-    if (data.success) {
-      alert('✅ Idea submitted and verified!');
-      document.getElementById('ideaText').value = '';
-      loadIdeas();
-    } else {
-      alert(data.error || '❌ Submission failed.');
-    }
+  const res = await fetch(`${BACKEND_URL}/submit-idea`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
   });
 
-      async function loadIdeas() {
-      const res = await fetch('http://217.65.144.64:3000/ideas');
-      const { ideas, totalVotes } = await res.json();
-      const container = document.getElementById('ideaCards');
-      container.innerHTML = '';
+  const data = await res.json();
+  if (data.success) {
+    alert('✅ Idea submitted and verified!');
+    document.getElementById('ideaText').value = '';
+    loadIdeas();
+  } else {
+    alert(data.error || '❌ Submission failed.');
+  }
+});
 
-      const counter = document.getElementById('voteCounter');
-      if (counter) counter.textContent = `🔎 Total verified SP1 votes: ${totalVotes}`;
+async function loadIdeas() {
+  const res = await fetch(`${BACKEND_URL}/ideas`);
+  const { ideas, totalVotes } = await res.json();
+  const container = document.getElementById('ideaCards');
+  container.innerHTML = '';
+  const counter = document.getElementById('voteCounter');
+  if (counter) counter.textContent = `🔎 Total verified SP1 votes: ${totalVotes}`;
+  ideas.forEach((i, idx) => {
+    const card = document.createElement('div');
+    card.className = 'idea-card';
+    card.innerHTML = `
+      <p class="idea-text">#${idx + 1} — ${i.idea}</p>
+      <span class="username">by @${i.username || 'unknown'}</span>
+      <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
+      ${userRoles.includes('Proof of verify') ? `<button onclick="voteIdea(${idx}, this)">🔎 Vote with SP1</button>` : ''}
+    `;
+    container.appendChild(card);
+  });
+}
 
-      ideas.forEach((i, idx) => {
-        const card = document.createElement('div');
-        card.className = 'idea-card';
-        card.innerHTML = `
-          <p class="idea-text">#${idx + 1} — ${i.idea}</p>
-          <span class="username">by @${i.username || 'unknown'}</span>
-          <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
-          ${userRoles.includes('Proof of verify') ? `<button onclick="voteIdea(${idx}, this)">🔎 Vote with SP1</button>` : ''}
-        `;
-        container.appendChild(card);
-      });
-    }
+async function loadDiscardedIdeas() {
+  const res = await fetch(`${BACKEND_URL}/message.json`);
+  const messages = await res.json();
+  const container = document.getElementById('discardedIdeas');
+  container.innerHTML = '';
+  messages.forEach((msg) => {
+    const card = document.createElement('div');
+    card.className = 'idea-card';
+    card.innerHTML = `
+      <p class="idea-text">🗑️ ${msg.idea}</p>
+      <span class="votes" style="color: #FF8888;">Reason: ${msg.reason}</span>
+    `;
+    container.appendChild(card);
+  });
+}
 
-    async function loadDiscardedIdeas() {
-      const res = await fetch('http://217.65.144.64:3000/message.json');
-      const messages = await res.json();
-      const container = document.getElementById('discardedIdeas');
-      container.innerHTML = '';
+const ROLE_STYLES = {
+  "PROVED UR LUV": "#ff66cc", "PROOF OF ART": "#00e6e6", "PROOF OF DEV": "#9999ff",
+  "PROOF OF MUSIC": "#66cccc", "PROOF OF VIDEO": "#cc99ff", "PROOF VERIFIED": "#55d6aa",
+  "LET'S PRUV IT": "#ff9999", "ZK EVENTS": "#ff6699", "X PROVER": "#ff4da6",
+  "DEV CHANNEL": "#6666ff", "ALL IN SUCCINCT": "#ffcc66", "RUSTACEAN": "#cc6600",
+  "SUCCINCT CRACKED EMPLOYEE": "#ff0066", "HELPER PROVER": "#ffcc00", "STAFF PROVER": "#ff3399",
+  "🇪🇸・español": "#cccccc", "🇨🇳・中文": "#cccccc", "🇻🇳・tiếng-việt": "#cccccc",
+  "🇮🇩・indonesia": "#cccccc", "🇹🇷・türkçe": "#cccccc", "🇷🇺・русский": "#cccccc",
+  "🇵🇱・polski": "#cccccc", "🇧🇷・português": "#cccccc", "🇮🇳・हिन्दी": "#cccccc",
+  "Dev Helper": "#8888ff", "Beta Prover": "#cc00cc"
+};
 
-      messages.forEach((msg, idx) => {
-        const card = document.createElement('div');
-        card.className = 'idea-card';
-        card.innerHTML = `
-          <p class="idea-text">🗑️ ${msg.idea}</p>
-          <span class="votes" style="color: #FF8888;">Reason: ${msg.reason}</span>
-        `;
-        container.appendChild(card);
-      });
-    }
+async function loadUserProfileCard() {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/user`);
+    if (!res.ok) throw new Error('Not authenticated');
+    const user = await res.json();
+    const allowedRoles = ['Proof Verified', "Let's pruv it"];
+    const hasAccess = user.roles.some(role =>
+      allowedRoles.map(r => r.toLowerCase()).includes(role.toLowerCase())
+    );
+    if (!hasAccess) return;
+    document.getElementById('discordUsername').textContent = `@${user.username}`;
+    document.getElementById('discordAvatar').src = user.avatar_url;
+    const roleTags = document.getElementById('roleTags');
+    user.roles.forEach(role => {
+      const tag = document.createElement('span');
+      tag.textContent = role;
+      const color = ROLE_STYLES[role.toUpperCase()] || ROLE_STYLES[role] || '#90DCFF';
+      tag.style.cssText = `
+        background-color: #1A1A2B;
+        color: ${color};
+        border: 1px solid ${color};
+        border-radius: 12px;
+        padding: 0.3rem 0.7rem;
+        font-size: 0.9rem;
+      `;
+      roleTags.appendChild(tag);
+    });
+    document.querySelector('.profile-card').style.display = 'block';
+  } catch (e) {
+    console.log('User not authenticated or unauthorized for profile card.');
+  }
+}
 
-    const ROLE_STYLES = {
-      "PROVED UR LUV": "#ff66cc",
-      "PROOF OF ART": "#00e6e6",
-      "PROOF OF DEV": "#9999ff",
-      "PROOF OF MUSIC": "#66cccc",
-      "PROOF OF VIDEO": "#cc99ff",
-      "PROOF VERIFIED": "#55d6aa",
-      "LET'S PRUV IT": "#ff9999",
-      "ZK EVENTS": "#ff6699",
-      "X PROVER": "#ff4da6",
-      "DEV CHANNEL": "#6666ff",
-      "ALL IN SUCCINCT": "#ffcc66",
-      "RUSTACEAN": "#cc6600",
-      "SUCCINCT CRACKED EMPLOYEE": "#ff0066",
-      "HELPER PROVER": "#ffcc00",
-      "STAFF PROVER": "#ff3399",
-      "🇪🇸・español": "#cccccc",
-      "🇨🇳・中文": "#cccccc",
-      "🇻🇳・tiếng-việt": "#cccccc",
-      "🇮🇩・indonesia": "#cccccc",
-      "🇹🇷・türkçe": "#cccccc",
-      "🇷🇺・русский": "#cccccc",
-      "🇵🇱・polski": "#cccccc",
-      "🇧🇷・português": "#cccccc",
-      "🇮🇳・हिन्दी": "#cccccc",
-      "Dev Helper": "#8888ff",
-      "Beta Prover": "#cc00cc"
-    };
-
-    async function loadUserProfileCard() {
-      try {
-        const res = await fetch('http://217.65.144.64:3000/api/user');
-        if (!res.ok) throw new Error('Not authenticated');
-        const user = await res.json();
-
-        const allowedRoles = ['Proof Verified', "Let's pruv it"];
-        const hasAccess = user.roles.some(role =>
-          allowedRoles.map(r => r.toLowerCase()).includes(role.toLowerCase())
-        );
-
-        if (!hasAccess) return;
-
-        document.getElementById('discordUsername').textContent = `@${user.username}`;
-        document.getElementById('discordAvatar').src = user.avatar_url;
-
-        const roleTags = document.getElementById('roleTags');
-        user.roles.forEach(role => {
-          const tag = document.createElement('span');
-          tag.textContent = role;
-          const color = ROLE_STYLES[role.toUpperCase()] || ROLE_STYLES[role] || '#90DCFF';
-          tag.style.cssText = `
-            background-color: #1A1A2B;
-            color: ${color};
-            border: 1px solid ${color};
-            border-radius: 12px;
-            padding: 0.3rem 0.7rem;
-            font-size: 0.9rem;
-          `;
-          roleTags.appendChild(tag);
-        });
-
-        document.querySelector('.profile-card').style.display = 'block';
-      } catch (e) {
-        console.log('User not authenticated or unauthorized for profile card.');
-      }
-    }
-
-    async function voteIdea(index, button) {
+async function voteIdea(index, button) {
   button.disabled = true;
   button.textContent = 'Verifying...';
-
-  const res = await fetch('http://217.65.144.64:3000/vote', {
+  const res = await fetch(`${BACKEND_URL}/vote`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ index, discord_id: userId })
   });
   const data = await res.json();
-
   if (data.success) {
     alert('✅ Vote verified with SP1!');
     loadIdeas();
@@ -333,12 +304,9 @@
   }
 }
 
-    getUser().then(loadIdeas);
-    loadDiscardedIdeas();
-    loadUserProfileCard();
-  </script>
+getUser().then(loadIdeas);
+loadDiscardedIdeas();
+loadUserProfileCard();
+</script>
 </body>
 </html>
-
-
-
