@@ -98,15 +98,23 @@ app.get('/dashboard', (req, res) => {
 
 app.get('/api/user', async (req, res) => {
   if (!req.session.user) return res.status(401).json({ error: 'No autenticado' });
+
   const discordId = req.session.user.id;
+  const username = req.session.user.username;
   const roles = await getUserRoles(discordId);
+
+  // Aseguramos que tenga asignados los votos
+  const userVotes = ensureUserVotes(discordId, username, roles);
+
   res.json({
-    username: req.session.user.username,
+    username,
     discord_id: discordId,
     avatar_url: `https://cdn.discordapp.com/avatars/${discordId}/${req.session.user.avatar}.png`,
-    roles
+    roles,
+    remaining_votes: userVotes.remaining_votes
   });
 });
+
 
 app.post('/submit-idea', async (req, res) => {
   const { idea, discord_id, username } = req.body;
