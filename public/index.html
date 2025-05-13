@@ -122,15 +122,13 @@
 </head>
 <body>
   <div id="notification">✅ Idea submitted successfully!</div>
-
   <section class="hero">
     <h1>Shape Succinct’s future</h1>
     <p>Backed by your ideas, verified by zero-knowledge proofs.</p>
     <a href="https://discord.com/api/oauth2/authorize?client_id=1371241967542861896&redirect_uri=https%3A%2F%2Fsuccinct-feedback-dapp.vercel.app%2Fapi%2Fcallback&response_type=code&scope=identify%20guilds.members.read">
-    <button>Connect with Discord</button>
+      <button>Connect with Discord</button>
     </a>
   </section>
-
   <div class="profile-card">
     <div class="avatar-section">
       <img id="discordAvatar" alt="avatar" style="width:100px; height:100px; border-radius:100%; border:3px solid #FE11C5;">
@@ -141,14 +139,10 @@
       <div id="roleTags" style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem;"></div>
     </div>
   </div>
-
   <section class="leaderboard">
     <h2>Leaderboard</h2>
-    <div id="ideaCards" class="cards">
-      <p>Loading...</p>
-    </div>
+    <div id="ideaCards" class="cards"><p>Loading...</p></div>
   </section>
-
   <section class="submit-idea">
     <h2 style="color: #F9E766;">Submit your idea</h2>
     <form id="ideaForm">
@@ -156,22 +150,16 @@
       <button type="submit">Submit Idea</button>
     </form>
   </section>
-
   <div id="voteCounter" style="text-align:center; font-size:1.2rem; color:#00FFFF; margin-top:1rem;"></div>
-
   <script>
     const API_BASE = 'http://217.65.144.64:3000';
-
     let userId = '', username = '', userRoles = [];
 
     async function getUser() {
       try {
         const discord_id = localStorage.getItem('discord_id');
         const usernameLS = localStorage.getItem('username');
-
-        if (!discord_id && !usernameLS) {
-          throw new Error('Missing user info');
-        }
+        if (!discord_id && !usernameLS) return;
 
         const res = await fetch(`${API_BASE}/api/user`, {
           headers: {
@@ -181,7 +169,7 @@
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to fetch user');
+        if (!res.ok) throw new Error(data.error || 'Fetch user error');
 
         userId = data.discord_id;
         username = data.username;
@@ -190,7 +178,6 @@
         if (!userRoles.includes("lets pruv it")) {
           document.querySelector('.submit-idea').style.display = 'none';
         }
-
       } catch (err) {
         console.error('User fetch failed:', err);
       }
@@ -203,7 +190,7 @@
       container.innerHTML = '';
 
       const counter = document.getElementById('voteCounter');
-      if (counter) counter.textContent = `🔎 Total verified SP1 votes: ${totalVotes}`;
+      counter.textContent = `🔎 Total verified SP1 votes: ${totalVotes}`;
 
       ideas.forEach((i, idx) => {
         const card = document.createElement('div');
@@ -221,14 +208,12 @@
     async function voteIdea(index, button) {
       button.disabled = true;
       button.textContent = 'Verifying...';
-
       const res = await fetch(`${API_BASE}/vote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ index, discord_id: userId })
       });
       const data = await res.json();
-
       if (data.success) {
         alert('✅ Vote verified with SP1!');
         loadIdeas();
@@ -247,13 +232,8 @@
       const res = await fetch(`${API_BASE}/submit-idea`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          idea: ideaText,
-          discord_id: userId,
-          username: username
-        })
+        body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
       });
-
       const data = await res.json();
       if (data.success) {
         alert('✅ Idea submitted and verified!');
@@ -269,7 +249,6 @@
       const discord_id = params.get('discord_id');
       const username = params.get('username');
       const avatar = params.get('avatar_url');
-
       if (discord_id && username) {
         localStorage.setItem('discord_id', discord_id);
         localStorage.setItem('username', username);
@@ -278,14 +257,28 @@
       }
     });
 
-    function loadUserProfileCard() {
-      const avatar = localStorage.getItem('avatar_url');
-      const username = localStorage.getItem('username');
+    async function loadUserProfileCard() {
+      try {
+        const res = await fetch(`${API_BASE}/api/user`, {
+          headers: {
+            'x-discord-id': localStorage.getItem('discord_id'),
+            'x-username': localStorage.getItem('username')
+          }
+        });
+        const user = await res.json();
+        document.getElementById('discordUsername').textContent = `@${user.username}`;
+        document.getElementById('discordAvatar').src = user.avatar_url;
 
-      if (avatar && username) {
-        document.getElementById('discordAvatar').src = avatar;
-        document.getElementById('discordUsername').textContent = `@${username}`;
+        const roleTags = document.getElementById('roleTags');
+        user.roles.forEach(role => {
+          const tag = document.createElement('span');
+          tag.textContent = role;
+          tag.style.cssText = `background-color:#1A1A2B;color:#90DCFF;border:1px solid #90DCFF;border-radius:12px;padding:0.3rem 0.7rem;font-size:0.9rem;`;
+          roleTags.appendChild(tag);
+        });
         document.querySelector('.profile-card').style.display = 'block';
+      } catch (err) {
+        console.error('Failed to load profile card:', err);
       }
     }
 
