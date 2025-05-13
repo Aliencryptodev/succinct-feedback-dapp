@@ -122,9 +122,31 @@ app.get('/api/user', async (req, res) => {
 
 app.post('/submit-idea', async (req, res) => {
   const { idea, discord_id, username } = req.body;
+
   if (!(await userHasRole(discord_id, COMMENT_ROLE))) {
     return res.status(403).json({ success: false, error: 'No tienes el rol Lets pruv it' });
   }
+
+  try {
+    const ideaEntry = {
+      idea,
+      discord_id,
+      username,
+      timestamp: Date.now(),
+      votes: 0
+    };
+
+    const ideas = loadIdeas();
+    ideas.push(ideaEntry);
+    saveIdeas(ideas);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error al guardar la idea:', err);
+    res.status(500).json({ success: false, error: 'Error al guardar la idea' });
+  }
+});
+
 
   const ideaHash = hashInput(idea);
   const discordHash = hashInput(discord_id);
@@ -145,6 +167,7 @@ app.post('/submit-idea', async (req, res) => {
 
 app.post('/vote', async (req, res) => {
   const { index, discord_id } = req.body;
+
   if (!(await userHasRole(discord_id, VOTE_ROLE))) {
     return res.status(403).json({ success: false, error: 'No tienes el rol Proof of verify' });
   }
@@ -152,19 +175,10 @@ app.post('/vote', async (req, res) => {
   const ideas = loadIdeas();
   if (!ideas[index]) return res.status(404).json({ success: false, error: 'Idea no encontrada' });
 
-  const ideaHash = hashInput(ideas[index].idea);
-  const discordHash = hashInput(discord_id);
-  const cmd = `sp1 prove src/main.rs --args ${discordHash} ${ideaHash}`;
+  ideas[index].votes++;
+  saveIdeas(ideas);
 
-  exec(cmd, { cwd: './sp1-circuit' }, (err, stdout, stderr) => {
-    if (err) return res.status(500).json({ success: false, error: stderr });
-
-    const verifyCmd = `sp1 verify ./output/proof.json`;
-    exec(verifyCmd, { cwd: './sp1-circuit' }, (vErr, vOut, vErrOut) => {
-      if (vErr) return res.status(403).json({ success: false, error: 'Prueba SP1 inválida' });
-      ideas[index].votes++;
-      saveIdeas(ideas);
-      res.json({ success: true });
+  res.json({ success: true });
     });
   });
 });
