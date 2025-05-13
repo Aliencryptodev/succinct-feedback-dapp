@@ -178,9 +178,9 @@ async function getUser() {
   userId = data.discord_id;
   username = data.username;
   userRoles = data.roles || [];
-  if (!userRoles.includes("lets pruv it")) {
-    document.querySelector('.submit-idea').style.display = 'none';
-  }
+ if (!userRoles.some(r => r.toLowerCase().replace(/['"]/g, '') === "lets pruv it")) {
+  document.querySelector('.submit-idea').style.display = 'none';
+ }
 }
 
 document.getElementById('ideaForm').addEventListener('submit', async function (e) {
