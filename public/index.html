@@ -142,6 +142,7 @@
     <div class="roles-section">
       <h3 style="color: #90DCFF; margin-bottom: 0.5rem;">Roles:</h3>
       <div id="roleTags" style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem;"></div>
+      <div id="voteCountDisplay" style="margin-top:1rem; font-size:1rem; color:#F9E766;"></div>
     </div>
   </div>
 
@@ -209,8 +210,10 @@ async function loadIdeas() {
   const { ideas, totalVotes } = await res.json();
   const container = document.getElementById('ideaCards');
   container.innerHTML = '';
+
   const counter = document.getElementById('voteCounter');
   if (counter) counter.textContent = `🔎 Total verified SP1 votes: ${totalVotes}`;
+
   ideas.forEach((i, idx) => {
     const card = document.createElement('div');
     card.className = 'idea-card';
@@ -218,11 +221,20 @@ async function loadIdeas() {
       <p class="idea-text">#${idx + 1} — ${i.idea}</p>
       <span class="username">by @${i.username || 'unknown'}</span>
       <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
-      ${userRoles.includes('Proof Verified') ? `<button onclick="voteIdea(${idx}, this)">🔎 Vote with SP1</button>` : ''}
+      ${
+        userRoles.some(r => r.toLowerCase() === 'proof verified' || r.toLowerCase() === 'proof of verify')
+          ? `
+        <input type="number" id="voteInput${idx}" min="1" placeholder="Votes" style="width: 60px; margin-top: 0.5rem;" />
+        <br />
+        <button onclick="voteIdea(${idx}, this)">🔎 Vote</button>
+        `
+          : ''
+      }
     `;
     container.appendChild(card);
   });
 }
+
 
 async function loadDiscardedIdeas() {
   const res = await fetch(`${BACKEND_URL}/message.json`);
@@ -262,7 +274,7 @@ async function loadUserProfileCard() {
       allowedRoles.map(r => r.toLowerCase()).includes(role.toLowerCase())
     );
     if (!hasAccess) return;
-    document.getElementById('discordUsername').textContent = `@${user.username}`;
+    document.getElementById('voteCountDisplay').textContent = `🗳️ Votos disponibles: ${user.remaining_votes}`;
     document.getElementById('discordAvatar').src = user.avatar_url;
     const roleTags = document.getElementById('roleTags');
     user.roles.forEach(role => {
@@ -286,21 +298,37 @@ async function loadUserProfileCard() {
 }
 
 async function voteIdea(index, button) {
+  const input = document.getElementById(`voteInput${index}`);
+  const amount = parseInt(input.value);
+
+  if (!amount || amount < 1) {
+    alert('❌ Ingresa una cantidad válida de votos');
+    return;
+  }
+
   button.disabled = true;
-  button.textContent = 'Verifying...';
-  const res = await fetch(`${BACKEND_URL}/vote`, {
+  button.textContent = 'Verificando...';
+
+  const res = await fetch('http://217.65.144.64:3000/vote', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ index, discord_id: userId })
+    body: JSON.stringify({
+      index,
+      discord_id: userId,
+      username: username,
+      amount
+    })
   });
+
   const data = await res.json();
+
   if (data.success) {
-    alert('✅ Vote verified with SP1!');
+    alert(`✅ Votaste con ${amount} votos`);
     loadIdeas();
   } else {
-    alert(data.error || '❌ Voting failed.');
+    alert(data.error || '❌ Falló el voto');
     button.disabled = false;
-    button.textContent = '🔎 Vote with SP1';
+    button.textContent = '🔎 Vote';
   }
 }
 
