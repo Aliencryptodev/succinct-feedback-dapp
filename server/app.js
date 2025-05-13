@@ -8,7 +8,7 @@ require('dotenv').config();
 
 const DATA_FILE = 'ideas.json';
 const DISCORD_API = 'https://152.53.243.39.sslip.io/api/discord';
-const VOTE_ROLE = 'Proof of verify';
+const VOTE_ROLE = 'proof verified';
 const COMMENT_ROLE = "lets pruv it";
 
 app.use(express.json());
