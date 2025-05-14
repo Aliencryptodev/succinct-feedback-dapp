@@ -146,37 +146,39 @@ app.post('/submit-idea', async (req, res) => {
 app.post('/vote', async (req, res) => {
   const { index, discord_id, username, amount } = req.body;
 
+  console.log(`🗳️ Intentando votar con ${amount} voto(s) por ${discord_id} en idea #${index}`);
+
+  if (!index && index !== 0 || !discord_id || !username || !amount) {
+    return res.status(400).json({ success: false, error: 'Faltan datos en la petición' });
+  }
+
   const roles = await getUserRoles(discord_id);
 
-  if (!(await userHasRole(discord_id, VOTE_ROLE))) {
-    return res.status(403).json({ success: false, error: 'No tienes el rol para votar' });
+  // Asegura que el usuario tenga votos asignados
+  try {
+    ensureUserVotes(discord_id, username, roles);
+  } catch (e) {
+    return res.status(500).json({ success: false, error: 'Error al inicializar votos del usuario' });
   }
 
-  const user = ensureUserVotes(discord_id, username, roles);
-
+  // Verifica que tenga suficientes votos
   try {
     updateUserVotes(discord_id, index, amount);
-
-    const ideas = loadIdeas();
-    if (!ideas[index]) return res.status(404).json({ success: false, error: 'Idea no encontrada' });
-
-    ideas[index].votes += amount;
-    ideas[index].voters = ideas[index].voters || {};
-    ideas[index].voters[discord_id] = (ideas[index].voters[discord_id] || 0) + amount;
-
-    saveIdeas(ideas);
-
-    res.json({ success: true });
-  } catch (err) {
-    res.status(400).json({ success: false, error: err.message });
+  } catch (e) {
+    return res.status(403).json({ success: false, error: e.message });
   }
-});
 
-app.get('/ideas', (req, res) => {
+  // Carga y actualiza ideas
   const ideas = loadIdeas();
-  const sorted = ideas.sort((a, b) => b.votes - a.votes);
-  const totalVotes = ideas.reduce((sum, i) => sum + (i.votes || 0), 0);
-  res.json({ ideas: sorted, totalVotes });
+  if (!ideas[index]) {
+    return res.status(404).json({ success: false, error: 'Idea no encontrada' });
+  }
+
+  ideas[index].votes += amount;
+  saveIdeas(ideas);
+
+  console.log(`✅ Se aplicaron ${amount} votos a la idea #${index}`);
+  return res.json({ success: true });
 });
 
 app.listen(3000, () => console.log('Backend running on http://localhost:3000'));
