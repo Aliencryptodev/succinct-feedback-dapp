@@ -174,15 +174,30 @@
 let userId = '', username = '', userRoles = [];
 
 async function getUser() {
-  const res = await fetch(`${BACKEND_URL}/api/user`);
-  const data = await res.json();
-  userId = data.discord_id;
-  username = data.username;
-  userRoles = data.roles || [];
- const canSubmit = userRoles.some(r => r.toLowerCase().includes("lets pruv it"));
-if (canSubmit) {
-  document.getElementById('ideaSubmitSection').style.display = 'block';
- }
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/user`);
+    const data = await res.json();
+    userId = data.discord_id;
+    username = data.username;
+    userRoles = data.roles || [];
+
+    // Mostrar todo solo si está logueado
+    document.querySelector('.leaderboard').style.display = 'block';
+    document.getElementById('discardedIdeas').parentElement.style.display = 'block';
+
+    const canSubmit = userRoles.some(r => r.toLowerCase().includes("lets pruv it"));
+    if (canSubmit) {
+      document.getElementById('ideaSubmitSection').style.display = 'block';
+    }
+
+    return data;
+  } catch {
+    // Si no está autenticado, ocultar todo
+    document.querySelector('.leaderboard').style.display = 'none';
+    document.getElementById('discardedIdeas').parentElement.style.display = 'none';
+    document.getElementById('ideaSubmitSection').style.display = 'none';
+    return null;
+  }
 }
 
 document.getElementById('ideaForm').addEventListener('submit', async function (e) {
