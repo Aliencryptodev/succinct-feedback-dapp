@@ -309,13 +309,13 @@ async function voteIdea(index, button) {
   button.disabled = true;
   button.textContent = 'Verificando...';
 
-  const res = await fetch('http://217.65.144.64:3000/vote', {
+  const res = await fetch(`${BACKEND_URL}/vote`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       index,
       discord_id: userId,
-      username: username,
+      username,
       amount
     })
   });
@@ -324,9 +324,9 @@ async function voteIdea(index, button) {
 
   if (data.success) {
     alert(`✅ Votaste con ${amount} voto${amount === 1 ? '' : 's'}`);
-    input.value = ''; // limpia input
-    loadIdeas(); // actualiza ideas
-    updateRemainingVotesDisplay(); // actualiza votos disponibles
+    input.value = '';
+    loadIdeas();
+    updateRemainingVotesDisplay();
   } else {
     alert(data.error || '❌ Falló el voto');
     button.disabled = false;
