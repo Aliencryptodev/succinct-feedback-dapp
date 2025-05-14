@@ -299,7 +299,7 @@ async function loadUserProfileCard() {
 
 async function voteIdea(index, button) {
   const input = document.getElementById(`voteInput${index}`);
-  const amount = parseInt(input.value);
+  const amount = parseInt(input?.value || '1', 10);
 
   if (!amount || amount < 1) {
     alert('❌ Ingresa una cantidad válida de votos');
@@ -323,8 +323,10 @@ async function voteIdea(index, button) {
   const data = await res.json();
 
   if (data.success) {
-    alert(`✅ Votaste con ${amount} votos`);
-    loadIdeas();
+    alert(`✅ Votaste con ${amount} voto${amount === 1 ? '' : 's'}`);
+    input.value = ''; // limpia input
+    loadIdeas(); // actualiza ideas
+    updateRemainingVotesDisplay(); // actualiza votos disponibles
   } else {
     alert(data.error || '❌ Falló el voto');
     button.disabled = false;
@@ -332,6 +334,17 @@ async function voteIdea(index, button) {
   }
 }
 
+
+    async function updateRemainingVotesDisplay() {
+    const res = await fetch(`${BACKEND_URL}/api/user`);
+    const user = await res.json();
+
+    const voteCountDisplay = document.getElementById('voteCountDisplay');
+    if (voteCountDisplay) {
+      voteCountDisplay.textContent = `🗳️ Votos disponibles: ${user.remaining_votes}`;
+    }
+  }
+  
 getUser().then(loadIdeas);
 loadDiscardedIdeas();
 loadUserProfileCard();
