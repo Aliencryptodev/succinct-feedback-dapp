@@ -335,7 +335,7 @@ async function voteIdea(index, button) {
 }
 
 
-    async function updateRemainingVotesDisplay() {
+async function updateRemainingVotesDisplay() {
     const res = await fetch(`${BACKEND_URL}/api/user`);
     const user = await res.json();
 
@@ -344,10 +344,13 @@ async function voteIdea(index, button) {
       voteCountDisplay.textContent = `🗳️ Votos disponibles: ${user.remaining_votes}`;
     }
   }
-  
-getUser().then(loadIdeas);
-loadDiscardedIdeas();
-loadUserProfileCard();
+
+    getUser().then(() => {
+    loadIdeas();
+    loadDiscardedIdeas();
+    loadUserProfileCard();
+    updateRemainingVotesDisplay(); // ✅ Aquí se actualiza en tiempo real
+  });
 </script>
 </body>
 </html>
