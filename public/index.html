@@ -9,118 +9,67 @@
     const BACKEND_URL = 'http://217.65.144.64:3000';
   </script>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #0A0A0A;
-      color: white;
-      font-family: sans-serif;
+
+    <body>
+  <div id="notification">✅ Idea submitted successfully!</div>
+
+  <div class="sidebar">
+    <button onclick="showSection('dashboard')">🏠 Dashboard</button>
+    <button onclick="showSection('create')">💡 Create Idea</button>
+    <button onclick="showSection('vote')">🗳️ Vote</button>
+  </div>
+
+  <div class="main-content">
+    <div id="dashboard" class="section">
+      <!-- Aquí se mostrará el hero + perfil -->
+      <section class="hero">
+        <h1>Shape Succinct’s future</h1>
+        <p>Backed by your ideas, verified by zero-knowledge proofs.</p>
+        <a href="https://discord.com/api/oauth2/authorize?client_id=1371930922877849651&redirect_uri=http%3A%2F%2F217.65.144.64%3A3000%2Fcallback&response_type=code&scope=identify%20guilds.members.read">
+          <button>Connect with Discord</button>
+        </a>
+      </section>
+
+      <div class="profile-card">
+        <div class="avatar-section">
+          <img id="discordAvatar" alt="avatar" style="width:100px; height:100px; border-radius:100%; border:3px solid #FE11C5;">
+          <h2 id="discordUsername" style="margin-top:1rem; color:#FE11C5; font-size:1.4rem;">@usuario</h2>
+        </div>
+        <div class="roles-section">
+          <h3 style="color: #90DCFF; margin-bottom: 0.5rem;">Roles:</h3>
+          <div id="roleTags" style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem;"></div>
+          <div id="voteCountDisplay" style="margin-top:1rem; font-size:1rem; color:#F9E766;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="create" class="section" style="display:none;">
+      <h2>Submit Your Idea</h2>
+      <form id="ideaForm">
+        <textarea id="ideaText" placeholder="Describe your idea..." required></textarea><br>
+        <button type="submit" class="submit-button">Submit Idea</button>
+      </form>
+    </div>
+
+    <div id="vote" class="section" style="display:none;">
+      <h2>Leaderboard</h2>
+      <div id="ideaCards" class="cards"><p>Loading...</p></div>
+
+      <div id="voteCounter" style="text-align:center; font-size:1.2rem; color:#00FFFF; margin-top:1rem;"></div>
+
+      <h2 style="color:#FF5555; margin-top:3rem;">Discarded Ideas</h2>
+      <div id="discardedIdeas" class="cards"><p>Loading...</p></div>
+    </div>
+  </div>
+
+  <script>
+    function showSection(id) {
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('create').style.display = 'none';
+      document.getElementById('vote').style.display = 'none';
+      document.getElementById(id).style.display = 'block';
     }
-    .hero {
-      padding: 4rem 2rem 2rem;
-      text-align: center;
-    }
-    .hero h1 {
-      font-size: 2.5rem;
-      color: #FE11C5;
-      margin-bottom: 1rem;
-    }
-    .hero p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin: 0 auto;
-      color: #90DCFF;
-    }
-    .leaderboard {
-      padding: 2rem;
-      text-align: center;
-    }
-    .leaderboard h2 {
-      color: #F9E766;
-    }
-    .cards {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      padding-top: 1rem;
-    }
-    .idea-card {
-      background-color: #111;
-      border: 1px solid #FE11C5;
-      border-radius: 12px;
-      padding: 1rem;
-      width: 300px;
-      text-align: left;
-      box-shadow: 0 0 10px #FE11C533;
-      transition: transform 0.2s ease;
-    }
-    .idea-card:hover {
-      transform: scale(1.02);
-    }
-    .idea-text {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-    .username {
-      color: #90DCFF;
-      font-size: 0.9rem;
-    }
-    .votes {
-      display: block;
-      margin-top: 0.5rem;
-      font-size: 0.95rem;
-      color: #F9E766;
-      font-weight: bold;
-    }
-    .submit-idea {
-      padding: 3rem 2rem;
-      text-align: center;
-    }
-    textarea {
-      width: 90%;
-      max-width: 500px;
-      height: 100px;
-      border-radius: 8px;
-      border: none;
-      padding: 1rem;
-      font-size: 1rem;
-    }
-    button {
-      background-color: #FE11C5;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      margin-top: 1rem;
-    }
-    #notification {
-      display: none;
-      background-color: #F9E766;
-      color: black;
-      padding: 1rem;
-      text-align: center;
-      font-weight: bold;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-    }
-    .profile-card {
-      display: none;
-      max-width: 500px;
-      margin: 3rem auto;
-      padding: 2rem;
-      background-color: #0F0F1A;
-      border: 2px solid #00FFFF;
-      border-radius: 16px;
-      box-shadow: 0 0 20px rgba(0,255,255,0.3);
-      color: white;
-      text-align: center;
-    }
+    
   </style>
 </head>
 <body>
