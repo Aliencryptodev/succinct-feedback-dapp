@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,35 +7,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
     const BACKEND_URL = 'http://217.65.144.64:3000';
+    function showSection(id) {
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('create').style.display = 'none';
+      document.getElementById('vote').style.display = 'none';
+      document.getElementById(id).style.display = 'block';
+    }
   </script>
   <style>
-    :root {
-      --neon-pink: #FE11C5;
-      --deep-plum: #781961;
-      --baby-blue: #90DCFF;
-      --pastel-yellow: #F9E766;
-      --background-dark: #0A0A0A;
-    }
     body {
       margin: 0;
       padding: 0;
-      background-color: var(--background-dark);
+      background-color: #0A0A0A;
       color: white;
       font-family: sans-serif;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
     }
     .sidebar {
-      background-color: var(--deep-plum);
+      position: fixed;
+      left: 0;
+      top: 0;
       width: 220px;
-      padding: 1rem;
+      height: 100%;
+      background-color: #781961;
       display: flex;
       flex-direction: column;
+      padding: 1rem;
       gap: 1rem;
     }
     .sidebar button {
-      background-color: var(--neon-pink);
+      background-color: #FE11C5;
       color: white;
       border: none;
       border-radius: 10px;
@@ -43,40 +44,14 @@
       cursor: pointer;
     }
     .main-content {
-      flex: 1;
+      margin-left: 240px;
       padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      overflow-y: auto;
     }
     .section {
-      background-color: #111;
-      border: 1px solid var(--baby-blue);
-      border-radius: 15px;
-      padding: 1.5rem;
-      box-shadow: 0 0 20px #90DCFF33;
-    }
-    .section h2 {
-      color: var(--pastel-yellow);
-    }
-    .idea-card {
-      background-color: #181818;
-      border: 1px solid var(--neon-pink);
-      border-radius: 12px;
-      padding: 1rem;
-      color: white;
-      box-shadow: 0 0 10px var(--neon-pink);
-      margin-bottom: 1rem;
-    }
-    .profile-card {
       display: none;
-      background-color: #0F0F1A;
-      border: 2px solid #00FFFF;
-      border-radius: 16px;
-      padding: 1.5rem;
-      text-align: center;
-      margin-top: 1rem;
+    }
+    .section.active {
+      display: block;
     }
   </style>
 </head>
@@ -86,22 +61,17 @@
     <button onclick="showSection('create')">💡 Create Idea</button>
     <button onclick="showSection('vote')">🗳️ Vote</button>
   </div>
+
   <div class="main-content">
-    <div id="dashboard" class="section">
-      <h2>Welcome</h2>
+    <div id="dashboard" class="section active">
+      <h1>Shape Succinct’s future</h1>
       <p>Backed by your ideas, verified by zero-knowledge proofs.</p>
       <a href="https://discord.com/api/oauth2/authorize?client_id=1371930922877849651&redirect_uri=http%3A%2F%2F217.65.144.64%3A3000%2Fcallback&response_type=code&scope=identify%20guilds.members.read">
         <button>Connect with Discord</button>
       </a>
-      <div class="profile-card" id="profileCard">
-        <img id="discordAvatar" style="width:100px; height:100px; border-radius:100%; border:3px solid var(--neon-pink);">
-        <h3 id="discordUsername">@usuario</h3>
-        <div id="roleTags"></div>
-        <div id="voteCountDisplay"></div>
-      </div>
     </div>
 
-    <div id="create" class="section" style="display:none;">
+    <div id="create" class="section">
       <h2>Submit Your Idea</h2>
       <form id="ideaForm">
         <textarea id="ideaText" placeholder="Describe your idea..." required></textarea><br>
@@ -109,21 +79,10 @@
       </form>
     </div>
 
-    <div id="vote" class="section" style="display:none;">
+    <div id="vote" class="section">
       <h2>Leaderboard</h2>
       <div id="ideaCards"><p>Loading...</p></div>
-      <div id="voteCounter" style="margin-top:1rem;"></div>
-      <h2 style="color:#FF5555;">Discarded Ideas</h2>
-      <div id="discardedIdeas"><p>Loading...</p></div>
     </div>
   </div>
-  <script>
-    function showSection(id) {
-      ['dashboard', 'create', 'vote'].forEach(sec => {
-        document.getElementById(sec).style.display = 'none';
-      });
-      document.getElementById(id).style.display = 'block';
-    }
-  </script>
 </body>
 </html>
