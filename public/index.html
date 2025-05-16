@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,169 +7,63 @@
   <script>
     const BACKEND_URL = 'http://217.65.144.64:3000';
   </script>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #0A0A0A;
-      color: white;
-      font-family: sans-serif;
-    }
-    .hero {
-      padding: 4rem 2rem 2rem;
-      text-align: center;
-    }
-    .hero h1 {
-      font-size: 2.5rem;
-      color: #FE11C5;
-      margin-bottom: 1rem;
-    }
-    .hero p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin: 0 auto;
-      color: #90DCFF;
-    }
-    .leaderboard {
-      padding: 2rem;
-      text-align: center;
-    }
-    .leaderboard h2 {
-      color: #F9E766;
-    }
-    .cards {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      padding-top: 1rem;
-    }
-    .idea-card {
-      background-color: #111;
-      border: 1px solid #FE11C5;
-      border-radius: 12px;
-      padding: 1rem;
-      width: 300px;
-      text-align: left;
-      box-shadow: 0 0 10px #FE11C533;
-      transition: transform 0.2s ease;
-    }
-    .idea-card:hover {
-      transform: scale(1.02);
-    }
-    .idea-text {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-    .username {
-      color: #90DCFF;
-      font-size: 0.9rem;
-    }
-    .votes {
-      display: block;
-      margin-top: 0.5rem;
-      font-size: 0.95rem;
-      color: #F9E766;
-      font-weight: bold;
-    }
-    .submit-idea {
-      padding: 3rem 2rem;
-      text-align: center;
-    }
-    textarea {
-      width: 90%;
-      max-width: 500px;
-      height: 100px;
-      border-radius: 8px;
-      border: none;
-      padding: 1rem;
-      font-size: 1rem;
-    }
-    button {
-      background-color: #FE11C5;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      margin-top: 1rem;
-    }
-    #notification {
-      display: none;
-      background-color: #F9E766;
-      color: black;
-      padding: 1rem;
-      text-align: center;
-      font-weight: bold;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-    }
-    .profile-card {
-      display: none;
-      max-width: 500px;
-      margin: 3rem auto;
-      padding: 2rem;
-      background-color: #0F0F1A;
-      border: 2px solid #00FFFF;
-      border-radius: 16px;
-      box-shadow: 0 0 20px rgba(0,255,255,0.3);
-      color: white;
-      text-align: center;
-    }
-  </style>
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
   <div id="notification">✅ Idea submitted successfully!</div>
+  <div class="dashboard-layout">
 
-  <section class="hero">
-    <h1>Shape Succinct’s future</h1>
-    <p>Backed by your ideas, verified by zero-knowledge proofs.</p>
-    <a href="https://discord.com/api/oauth2/authorize?client_id=1371930922877849651&redirect_uri=http%3A%2F%2F217.65.144.64%3A3000%2Fcallback&response_type=code&scope=identify%20guilds.members.read">
-      <button>Connect with Discord</button>
-    </a>
-  </section>
+    <!-- Sidebar/Profile -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>Succinct DApp</h2>
+      </div>
+      <div class="profile-card" id="profileCard" style="display:none;">
+        <img id="discordAvatar" alt="avatar" class="profile-avatar">
+        <h2 id="discordUsername">@usuario</h2>
+        <div class="roles-section">
+          <div id="roleTags" class="role-tags"></div>
+          <div id="voteCountDisplay" class="vote-available"></div>
+        </div>
+      </div>
+      <a href="https://discord.com/api/oauth2/authorize?client_id=1371930922877849651&redirect_uri=http%3A%2F%2F217.65.144.64%3A3000%2Fcallback&response_type=code&scope=identify%20guilds.members.read">
+        <button class="discord-btn">Connect with Discord</button>
+      </a>
+    </aside>
 
-  <div class="profile-card">
-    <div class="avatar-section">
-      <img id="discordAvatar" alt="avatar" style="width:100px; height:100px; border-radius:100%; border:3px solid #FE11C5;">
-      <h2 id="discordUsername" style="margin-top:1rem; color:#FE11C5; font-size:1.4rem;">@usuario</h2>
-    </div>
-    <div class="roles-section">
-      <h3 style="color: #90DCFF; margin-bottom: 0.5rem;">Roles:</h3>
-      <div id="roleTags" style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem;"></div>
-      <div id="voteCountDisplay" style="margin-top:1rem; font-size:1rem; color:#F9E766;"></div>
-    </div>
+    <!-- Main Content -->
+    <main class="main-content">
+      <section class="hero">
+        <h1>Shape Succinct’s Future</h1>
+        <p>Backed by your ideas, verified by zero-knowledge proofs.</p>
+      </section>
+
+      <section class="leaderboard">
+        <h2>Leaderboard</h2>
+        <div id="ideaCards" class="cards">
+          <p>Loading...</p>
+        </div>
+        <div id="voteCounter" class="vote-counter"></div>
+      </section>
+
+      <section class="submit-idea" id="ideaSubmitSection" style="display:none;">
+        <h2>Submit your idea</h2>
+        <form id="ideaForm">
+          <textarea id="ideaText" placeholder="Describe your idea..." required></textarea><br>
+          <button type="submit">Submit Idea</button>
+        </form>
+      </section>
+
+      <section class="leaderboard" id="discardedSection" style="display: none;">
+        <h2 class="discarded-title">Discarded Ideas</h2>
+        <div id="discardedIdeas" class="cards">
+          <p>Loading...</p>
+        </div>
+      </section>
+    </main>
   </div>
-
-  <section class="leaderboard">
-    <h2>Leaderboard</h2>
-    <div id="ideaCards" class="cards">
-      <p>Loading...</p>
-    </div>
-  </section>
-
-  <section class="submit-idea" id="ideaSubmitSection" style="display:none;">
-  <h2 style="color: #F9E766;">Submit your idea</h2>
-  <form id="ideaForm">
-    <textarea id="ideaText" placeholder="Describe your idea..." required></textarea><br>
-    <button type="submit">Submit Idea</button>
-  </form>
-</section>
-
-  <div id="voteCounter" style="text-align:center; font-size:1.2rem; color:#00FFFF; margin-top:1rem;"></div>
-
-  <section class="leaderboard" id="discardedSection" style="display: none;">
-  <h2 style="color:#FF5555;">Discarded Ideas</h2>
-  <div id="discardedIdeas" class="cards">
-    <p>Loading...</p>
-  </div>
-</section>
-
-<script>
+  <script>
+    // === Tu JS tal cual, puedes copiar el de tu index anterior aquí ===
 let userId = '', username = '', userRoles = [];
 
 async function getUser() {
@@ -181,7 +74,6 @@ async function getUser() {
     username = data.username;
     userRoles = data.roles || [];
 
-    // Mostrar todo solo si está logueado
     document.querySelector('.leaderboard').style.display = 'block';
     document.getElementById('discardedIdeas').parentElement.style.display = 'block';
 
@@ -192,7 +84,6 @@ async function getUser() {
 
     return data;
   } catch {
-    // Si no está autenticado, ocultar todo
     document.querySelector('.leaderboard').style.display = 'none';
     document.getElementById('discardedIdeas').parentElement.style.display = 'none';
     document.getElementById('ideaSubmitSection').style.display = 'none';
@@ -251,7 +142,6 @@ async function loadIdeas() {
   });
 }
 
-
 async function loadDiscardedIdeas() {
   const res = await fetch(`${BACKEND_URL}/message.json`);
   const messages = await res.json();
@@ -307,7 +197,7 @@ async function loadUserProfileCard() {
       `;
       roleTags.appendChild(tag);
     });
-    document.querySelector('.profile-card').style.display = 'block';
+    document.getElementById('profileCard').style.display = 'block';
   } catch (e) {
     console.log('User not authenticated or unauthorized for profile card.');
   }
@@ -350,7 +240,6 @@ async function voteIdea(index, button) {
   }
 }
 
-
 async function updateRemainingVotesDisplay() {
     const res = await fetch(`${BACKEND_URL}/api/user`);
     const user = await res.json();
@@ -367,6 +256,7 @@ async function updateRemainingVotesDisplay() {
     loadUserProfileCard();
     updateRemainingVotesDisplay(); // ✅ Aquí se actualiza en tiempo real
   });
-</script>
+
+  </script>
 </body>
 </html>

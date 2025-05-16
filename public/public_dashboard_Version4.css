@@ -1,0 +1,267 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(115deg, #0A0A0A 75%, #14142E 100%);
+  color: #fafaff;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+#notification {
+  display: none;
+  background-color: #F9E766;
+  color: black;
+  padding: 1rem;
+  text-align: center;
+  font-weight: bold;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  border-bottom: 2px solid #FE11C5;
+}
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 270px;
+  background: linear-gradient(180deg, #800080 70%, #FE11C5 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 1rem 1.5rem;
+  gap: 1.5rem;
+  box-shadow: 4px 0 24px #0006;
+}
+.sidebar-header h2 {
+  margin: 0 0 2.2rem 0;
+  font-size: 1.45rem;
+  color: #fff;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 12px #0008;
+}
+
+.discord-btn, .sidebar button {
+  background: #FE11C5;
+  color: #fff;
+  padding: 0.85rem 1.3rem;
+  border: none;
+  border-radius: 11px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0.6rem 0;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 12px #fe11c558;
+}
+.discord-btn:hover, .sidebar button:hover {
+  background: #e10fad;
+}
+
+.profile-card {
+  display: none;
+  max-width: 340px;
+  width: 100%;
+  margin: 0 auto 1.5rem auto;
+  padding: 1.5rem 1rem 1.1rem 1rem;
+  background: #151526;
+  border: 2px solid #FE11C5;
+  border-radius: 20px;
+  box-shadow: 0 0 32px #FE11C533;
+  color: #fff;
+  text-align: center;
+}
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid #FE11C5;
+  margin-bottom: 1.1rem;
+}
+#discordUsername {
+  color: #FE11C5;
+  font-weight: 700;
+  letter-spacing: 1px;
+  font-size: 1.22rem;
+  margin-bottom: 0.4rem;
+}
+.role-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.role-tags span {
+  background: #1A1A2B;
+  color: #90DCFF;
+  border: 1px solid #90DCFF;
+  border-radius: 14px;
+  padding: 0.32rem 0.8rem;
+  font-size: 0.96rem;
+  font-weight: 500;
+}
+.vote-available {
+  margin-top: 1.2rem;
+  color: #F9E766;
+  font-size: 1.06rem;
+  font-weight: 700;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2.5rem 2rem 2rem 2rem;
+  background: rgba(24,24,36,0.97);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.hero {
+  text-align: center;
+  padding-bottom: 1.2rem;
+}
+.hero h1 {
+  font-size: 2.4rem;
+  color: #FE11C5;
+  margin-bottom: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.hero p {
+  font-size: 1.19rem;
+  max-width: 520px;
+  margin: 0 auto;
+  color: #90DCFF;
+}
+
+.leaderboard {
+  text-align: center;
+  background: transparent;
+}
+.leaderboard h2 {
+  color: #F9E766;
+  font-size: 1.32rem;
+  margin-bottom: 0.9rem;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.15rem;
+  padding-top: 0.3rem;
+}
+
+.idea-card {
+  background: #18182b;
+  border: 1.6px solid #FE11C5;
+  border-radius: 16px;
+  padding: 1.15rem 1.15rem 0.85rem 1.15rem;
+  width: 320px;
+  box-shadow: 0 0 16px #FE11C533;
+  color: #fff;
+  text-align: left;
+  font-size: 1.04rem;
+  transition: transform 0.2s ease;
+}
+.idea-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 22px #FE11C5aa;
+}
+.idea-text {
+  font-size: 1.11rem;
+  margin-bottom: 0.47rem;
+}
+.username {
+  color: #90DCFF;
+  font-size: 0.94rem;
+}
+.votes {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.98rem;
+  color: #F9E766;
+  font-weight: bold;
+}
+.idea-card input[type="number"] {
+  margin: 0.7rem 0.5rem 0.7rem 0;
+  background: #22223a;
+  color: #fff;
+  border-radius: 7px;
+  border: 1px solid #FE11C5;
+  padding: 0.4rem 0.7rem;
+  width: 60px;
+}
+.idea-card button {
+  background: #FE11C5;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  padding: 0.5rem 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 0.2rem;
+  transition: background 0.2s;
+}
+.idea-card button:hover {
+  background: #e10fad;
+}
+
+.submit-idea {
+  text-align: center;
+  background: transparent;
+}
+.submit-idea h2 {
+  color: #F9E766;
+  font-size: 1.16rem;
+  margin-bottom: 1.2rem;
+}
+textarea {
+  width: 94%;
+  max-width: 480px;
+  height: 110px;
+  border-radius: 10px;
+  border: none;
+  background: #18182b;
+  color: #fff;
+  padding: 1rem;
+  font-size: 1.04rem;
+  margin-bottom: 0.8rem;
+  border: 1.5px solid #FE11C5;
+}
+.vote-counter {
+  text-align: center;
+  margin-top: 1.3rem;
+  color: #00FFFF;
+  font-size: 1.09rem;
+  font-weight: 600;
+}
+.discarded-title {
+  color: #FF5555;
+  margin-top: 2.2rem;
+  font-size: 1.13rem;
+  text-align: center;
+}
+
+@media (max-width: 1100px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+  .sidebar {
+    flex-direction: row;
+    width: 100vw;
+    min-width: unset;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 1rem 0.2rem;
+    box-shadow: 0 4px 22px #000a;
+    border-radius: 0 0 15px 15px;
+  }
+  .main-content {
+    padding: 1.5rem 0.3rem;
+  }
+}
