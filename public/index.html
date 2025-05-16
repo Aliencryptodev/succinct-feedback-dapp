@@ -325,15 +325,25 @@ async function loadUserProfileCard() {
   try {
     const res = await fetch(`${BACKEND_URL}/api/user`);
     if (!res.ok) throw new Error('Not authenticated');
+
     const user = await res.json();
     const allowedRoles = ['Proof Verified', "Let's pruv it"];
     const hasAccess = user.roles.some(role =>
       allowedRoles.map(r => r.toLowerCase()).includes(role.toLowerCase())
     );
     if (!hasAccess) return;
-    document.getElementById('voteCountDisplay').textContent = `🗳️ Votos disponibles: ${user.remaining_votes}`;
+
+    // 🔥 ACTUALIZA EL NOMBRE DEL USUARIO
+    document.getElementById('discordUsername').textContent = `@${user.username}`;
+
+    // 🔄 FOTO Y VOTOS
     document.getElementById('discordAvatar').src = user.avatar_url;
+    document.getElementById('voteCountDisplay').textContent = `🗳️ Votos disponibles: ${user.remaining_votes}`;
+
+    // 🎯 ROLES
     const roleTags = document.getElementById('roleTags');
+    roleTags.innerHTML = ''; // Limpia antes de agregar nuevos
+
     user.roles.forEach(role => {
       const tag = document.createElement('span');
       tag.textContent = role;
@@ -348,11 +358,13 @@ async function loadUserProfileCard() {
       `;
       roleTags.appendChild(tag);
     });
+
     document.querySelector('.profile-card').style.display = 'block';
   } catch (e) {
     console.log('User not authenticated or unauthorized for profile card.');
   }
 }
+
 
 async function voteIdea(index, button) {
   const input = document.getElementById(`voteInput${index}`);
