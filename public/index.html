@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,84 +15,110 @@
       background: radial-gradient(circle at top center, #0A0A0A, #050010 80%);
       color: white;
       font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
     }
+
     .hero {
+      padding: 4rem 2rem 2rem;
       text-align: center;
-      padding: 3rem 1rem;
     }
+
     .hero h1 {
       font-size: 2.5rem;
       color: #FE11C5;
       margin-bottom: 1rem;
     }
+
     .hero p {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
       color: #90DCFF;
     }
-    .hero a button {
-      margin-top: 1rem;
+
+    .leaderboard {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .leaderboard h2 {
+      color: #F9E766;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      padding-top: 1rem;
+      margin: 0 auto;
+      max-width: 1000px;
+    }
+
+    .idea-card {
+      background: rgba(17, 17, 17, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid #FE11C5;
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: 0 0 15px #FE11C566;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .idea-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 20px #FE11C599;
+    }
+
+    .idea-text {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .username {
+      color: #90DCFF;
+      font-size: 0.9rem;
+    }
+
+    .votes {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      color: #F9E766;
+      font-weight: bold;
+    }
+
+    .submit-idea {
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    textarea {
+      width: 90%;
+      max-width: 500px;
+      height: 100px;
+      border-radius: 8px;
+      border: none;
+      padding: 1rem;
+      font-size: 1rem;
+    }
+
+    button {
       background: linear-gradient(135deg, #FE11C5, #F9E766);
       color: black;
       padding: 0.8rem 1.6rem;
       border-radius: 16px;
       font-weight: bold;
       font-size: 1rem;
-      border: none;
       cursor: pointer;
-    }
-    .layout {
-      display: flex;
-      flex: 1;
-    }
-    .sidebar {
-      width: 220px;
-      background: #1B1E36;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      border-right: 2px solid #FE11C5;
-    }
-    .sidebar h2 {
-      color: #FE11C5;
-      font-size: 1.4rem;
-      margin-bottom: 1rem;
-    }
-    .sidebar button {
-      background: none;
       border: none;
-      color: #90DCFF;
-      font-size: 1rem;
-      text-align: left;
-      cursor: pointer;
-      padding: 0.5rem;
-      border-radius: 8px;
-      transition: background 0.2s;
+      margin-top: 1rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .sidebar button:hover {
-      background: #2A2D4D;
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #F9E766;
     }
-    .main {
-      flex: 1;
-      padding: 2rem;
-    }
-    .profile-panel {
-      width: 300px;
-      background: #121222;
-      border-left: 2px solid #00FFFF;
-      padding: 2rem;
-    }
-    .profile-card {
-      background: rgba(15, 15, 26, 0.8);
-      border: 2px solid #00FFFF;
-      border-radius: 16px;
-      padding: 2rem;
-      text-align: center;
-      box-shadow: 0 0 30px rgba(0,255,255,0.4);
-    }
+
     #notification {
       display: none;
       background-color: #F9E766;
@@ -104,18 +131,36 @@
       width: 100%;
       z-index: 1000;
     }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-    }
-    .idea-card {
-      background: rgba(17, 17, 17, 0.6);
-      backdrop-filter: blur(10px);
-      border: 1px solid #FE11C5;
+
+    .profile-card {
+      display: none;
+      max-width: 500px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: rgba(15, 15, 26, 0.8);
+      border: 2px solid #00FFFF;
       border-radius: 16px;
-      padding: 1rem;
-      box-shadow: 0 0 15px #FE11C566;
+      box-shadow: 0 0 30px rgba(0,255,255,0.4);
+      text-align: center;
+      animation: neonPulse 2s infinite alternate;
+    }
+
+    @keyframes neonPulse {
+      from { box-shadow: 0 0 20px #00FFFF; }
+      to { box-shadow: 0 0 40px #00FFFF; }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -130,53 +175,44 @@
     </a>
   </section>
 
-  <div class="layout">
-    <aside class="sidebar">
-      <h2>Succinct</h2>
-      <button onclick="showSection('dashboard')">🏠 Dashboard</button>
-      <button onclick="showSection('create')">💡 Create Idea</button>
-      <button onclick="showSection('discarded')">🗑️ Discarded</button>
-    </aside>
-
-    <main class="main">
-      <section id="dashboardSection" class="section">
-        <h2>Leaderboard</h2>
-        <div id="ideaCards" class="cards"><p>Loading...</p></div>
-        <div id="voteCounter" style="margin-top: 1rem; color: #00FFFF;"></div>
-      </section>
-      <section id="createSection" class="section" style="display:none;">
-        <h2 style="color: #F9E766;">Submit your idea</h2>
-        <form id="ideaForm">
-          <textarea id="ideaText" placeholder="Describe your idea..." required></textarea><br>
-          <button type="submit">Submit Idea</button>
-        </form>
-      </section>
-      <section id="discardedSection" class="section" style="display:none;">
-        <h2 style="color:#FF5555;">Discarded Ideas</h2>
-        <div id="discardedIdeas" class="cards"><p>Loading...</p></div>
-      </section>
-    </main>
-
-    <aside class="profile-panel">
-      <div class="profile-card">
-        <img id="discordAvatar" alt="avatar" style="width:100px; height:100px; border-radius:100%; border:3px solid #FE11C5;">
-        <h2 id="discordUsername" style="margin-top:1rem; color:#FE11C5; font-size:1.4rem;">@usuario</h2>
-        <div id="voteCountDisplay" style="margin-top:1rem; font-size:1rem; color:#F9E766;"></div>
-        <div id="roleTags" style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem; margin-top:1rem;"></div>
-      </div>
-    </aside>
+  <div class="profile-card">
+    <div class="avatar-section">
+      <img id="discordAvatar" alt="avatar" style="width:100px; height:100px; border-radius:100%; border:3px solid #FE11C5;">
+      <h2 id="discordUsername" style="margin-top:1rem; color:#FE11C5; font-size:1.4rem;">@usuario</h2>
+    </div>
+    <div class="roles-section">
+      <h3 style="color: #90DCFF; margin-bottom: 0.5rem;">Roles:</h3>
+      <div id="roleTags" style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem;"></div>
+      <div id="voteCountDisplay" style="margin-top:1rem; font-size:1rem; color:#F9E766;"></div>
+    </div>
   </div>
 
-  <!-- Aquí se insertará el script completo -->
-<script>
-// 👇 JavaScript funcional completo insertado aquí
-const BACKEND_URL = 'http://217.65.144.64:3000';
-let userId = '', username = '', userRoles = [];
+  <section class="leaderboard">
+    <h2>Leaderboard</h2>
+    <div id="ideaCards" class="cards">
+      <p>Loading...</p>
+    </div>
+  </section>
 
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
-  document.getElementById(`${id}Section`).style.display = 'block';
-}
+  <section class="submit-idea" id="ideaSubmitSection" style="display:none;">
+    <h2 style="color: #F9E766;">Submit your idea</h2>
+    <form id="ideaForm">
+      <textarea id="ideaText" placeholder="Describe your idea..." required></textarea><br>
+      <button type="submit">Submit Idea</button>
+    </form>
+  </section>
+
+  <div id="voteCounter" style="text-align:center; font-size:1.2rem; color:#00FFFF; margin-top:1rem;"></div>
+
+  <section class="leaderboard">
+    <h2 style="color:#FF5555;">Discarded Ideas</h2>
+    <div id="discardedIdeas" class="cards">
+      <p>Loading...</p>
+    </div>
+  </section>
+
+  <script>
+let userId = '', username = '', userRoles = [];
 
 async function getUser() {
   try {
@@ -186,49 +222,44 @@ async function getUser() {
     username = data.username;
     userRoles = data.roles || [];
 
-    document.getElementById('dashboardSection').style.display = 'block';
-    document.getElementById('discardedSection').style.display = 'block';
+    // Mostrar todo solo si está logueado
+    document.querySelector('.leaderboard').style.display = 'block';
+    document.getElementById('discardedIdeas').parentElement.style.display = 'block';
 
     const canSubmit = userRoles.some(r => r.toLowerCase().includes("lets pruv it"));
-    if (canSubmit) document.getElementById('createSection').style.display = 'block';
+    if (canSubmit) {
+      document.getElementById('ideaSubmitSection').style.display = 'block';
+    }
 
     return data;
   } catch {
-    document.getElementById('dashboardSection').style.display = 'none';
-    document.getElementById('discardedSection').style.display = 'none';
-    document.getElementById('createSection').style.display = 'none';
+    // Si no está autenticado, ocultar todo
+    document.querySelector('.leaderboard').style.display = 'none';
+    document.getElementById('discardedIdeas').parentElement.style.display = 'none';
+    document.getElementById('ideaSubmitSection').style.display = 'none';
     return null;
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  getUser().then(() => {
+document.getElementById('ideaForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const ideaText = document.getElementById('ideaText').value.trim();
+  if (!ideaText) return;
+
+  const res = await fetch(`${BACKEND_URL}/submit-idea`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
+  });
+
+  const data = await res.json();
+  if (data.success) {
+    alert('✅ Idea submitted and verified!');
+    document.getElementById('ideaText').value = '';
     loadIdeas();
-    loadDiscardedIdeas();
-    loadUserProfileCard();
-    updateRemainingVotesDisplay();
-  });
-
-  document.getElementById('ideaForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const ideaText = document.getElementById('ideaText').value.trim();
-    if (!ideaText) return;
-
-    const res = await fetch(`${BACKEND_URL}/submit-idea`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
-    });
-
-    const data = await res.json();
-    if (data.success) {
-      alert('✅ Idea submitted and verified!');
-      document.getElementById('ideaText').value = '';
-      loadIdeas();
-    } else {
-      alert(data.error || '❌ Submission failed.');
-    }
-  });
+  } else {
+    alert(data.error || '❌ Submission failed.');
+  }
 });
 
 async function loadIdeas() {
@@ -249,15 +280,18 @@ async function loadIdeas() {
       <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
       ${
         userRoles.some(r => r.toLowerCase() === 'proof verified' || r.toLowerCase() === 'proof of verify')
-          ? `<input type="number" id="voteInput${idx}" min="1" placeholder="Votes" style="width: 60px; margin-top: 0.5rem;" />
-             <br />
-             <button onclick="voteIdea(${idx}, this)">🔎 Vote</button>`
+          ? `
+        <input type="number" id="voteInput${idx}" min="1" placeholder="Votes" style="width: 60px; margin-top: 0.5rem;" />
+        <br />
+        <button onclick="voteIdea(${idx}, this)">🔎 Vote</button>
+        `
           : ''
       }
     `;
     container.appendChild(card);
   });
 }
+
 
 async function loadDiscardedIdeas() {
   const res = await fetch(`${BACKEND_URL}/message.json`);
@@ -291,13 +325,25 @@ async function loadUserProfileCard() {
   try {
     const res = await fetch(`${BACKEND_URL}/api/user`);
     if (!res.ok) throw new Error('Not authenticated');
+
     const user = await res.json();
+    const allowedRoles = ['Proof Verified', "Let's pruv it"];
+    const hasAccess = user.roles.some(role =>
+      allowedRoles.map(r => r.toLowerCase()).includes(role.toLowerCase())
+    );
+    if (!hasAccess) return;
+
+    // 🔥 ACTUALIZA EL NOMBRE DEL USUARIO
     document.getElementById('discordUsername').textContent = `@${user.username}`;
+
+    // 🔄 FOTO Y VOTOS
     document.getElementById('discordAvatar').src = user.avatar_url;
     document.getElementById('voteCountDisplay').textContent = `🗳️ Votos disponibles: ${user.remaining_votes}`;
 
+    // 🎯 ROLES
     const roleTags = document.getElementById('roleTags');
-    roleTags.innerHTML = '';
+    roleTags.innerHTML = ''; // Limpia antes de agregar nuevos
+
     user.roles.forEach(role => {
       const tag = document.createElement('span');
       tag.textContent = role;
@@ -312,28 +358,39 @@ async function loadUserProfileCard() {
       `;
       roleTags.appendChild(tag);
     });
+
+    document.querySelector('.profile-card').style.display = 'block';
   } catch (e) {
     console.log('User not authenticated or unauthorized for profile card.');
   }
 }
 
+
 async function voteIdea(index, button) {
   const input = document.getElementById(`voteInput${index}`);
   const amount = parseInt(input?.value || '1', 10);
+
   if (!amount || amount < 1) {
     alert('❌ Ingresa una cantidad válida de votos');
     return;
   }
+
   button.disabled = true;
   button.textContent = 'Verificando...';
 
   const res = await fetch(`${BACKEND_URL}/vote`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ index, discord_id: userId, username, amount })
+    body: JSON.stringify({
+      index,
+      discord_id: userId,
+      username,
+      amount
+    })
   });
 
   const data = await res.json();
+
   if (data.success) {
     alert(`✅ Votaste con ${amount} voto${amount === 1 ? '' : 's'}`);
     input.value = '';
@@ -346,12 +403,23 @@ async function voteIdea(index, button) {
   }
 }
 
+
 async function updateRemainingVotesDisplay() {
-  const res = await fetch(`${BACKEND_URL}/api/user`);
-  const user = await res.json();
-  const voteCountDisplay = document.getElementById('voteCountDisplay');
-  if (voteCountDisplay) voteCountDisplay.textContent = `🗳️ Votos disponibles: ${user.remaining_votes}`;
-}
+    const res = await fetch(`${BACKEND_URL}/api/user`);
+    const user = await res.json();
+
+    const voteCountDisplay = document.getElementById('voteCountDisplay');
+    if (voteCountDisplay) {
+      voteCountDisplay.textContent = `🗳️ Votos disponibles: ${user.remaining_votes}`;
+    }
+  }
+
+    getUser().then(() => {
+    loadIdeas();
+    loadDiscardedIdeas();
+    loadUserProfileCard();
+    updateRemainingVotesDisplay(); // ✅ Aquí se actualiza en tiempo real
+  });
 </script>
 </body>
 </html>
