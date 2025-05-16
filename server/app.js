@@ -88,7 +88,7 @@ app.get('/callback', async (req, res) => {
   });
   const userData = await userRes.json();
   req.session.user = userData;
-  res.redirect('/dashboard');
+  res.redirect('https://succinct-feedback-dapp.vercel.app');
 });
 
 app.get('/dashboard', (req, res) => {
