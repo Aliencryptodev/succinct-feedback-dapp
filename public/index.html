@@ -12,60 +12,72 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #0A0A0A;
+      background: radial-gradient(circle at top center, #0A0A0A, #050010 80%);
       color: white;
-      font-family: sans-serif;
+      font-family: 'Segoe UI', sans-serif;
     }
+
     .hero {
       padding: 4rem 2rem 2rem;
       text-align: center;
     }
+
     .hero h1 {
       font-size: 2.5rem;
       color: #FE11C5;
       margin-bottom: 1rem;
     }
+
     .hero p {
       font-size: 1.2rem;
       max-width: 600px;
       margin: 0 auto;
       color: #90DCFF;
     }
+
     .leaderboard {
       padding: 2rem;
       text-align: center;
     }
+
     .leaderboard h2 {
       color: #F9E766;
     }
+
     .cards {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1rem;
       padding-top: 1rem;
+      margin: 0 auto;
+      max-width: 1000px;
     }
+
     .idea-card {
-      background-color: #111;
+      background: rgba(17, 17, 17, 0.6);
+      backdrop-filter: blur(10px);
       border: 1px solid #FE11C5;
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 1rem;
-      width: 300px;
-      text-align: left;
-      box-shadow: 0 0 10px #FE11C533;
-      transition: transform 0.2s ease;
+      box-shadow: 0 0 15px #FE11C566;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
+
     .idea-card:hover {
-      transform: scale(1.02);
+      transform: scale(1.03);
+      box-shadow: 0 0 20px #FE11C599;
     }
+
     .idea-text {
       font-size: 1.1rem;
       margin-bottom: 0.5rem;
     }
+
     .username {
       color: #90DCFF;
       font-size: 0.9rem;
     }
+
     .votes {
       display: block;
       margin-top: 0.5rem;
@@ -73,10 +85,12 @@
       color: #F9E766;
       font-weight: bold;
     }
+
     .submit-idea {
       padding: 3rem 2rem;
       text-align: center;
     }
+
     textarea {
       width: 90%;
       max-width: 500px;
@@ -86,17 +100,25 @@
       padding: 1rem;
       font-size: 1rem;
     }
+
     button {
-      background-color: #FE11C5;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 12px;
+      background: linear-gradient(135deg, #FE11C5, #F9E766);
+      color: black;
+      padding: 0.8rem 1.6rem;
+      border-radius: 16px;
       font-weight: bold;
       font-size: 1rem;
       cursor: pointer;
       border: none;
       margin-top: 1rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #F9E766;
+    }
+
     #notification {
       display: none;
       background-color: #F9E766;
@@ -109,17 +131,36 @@
       width: 100%;
       z-index: 1000;
     }
+
     .profile-card {
       display: none;
       max-width: 500px;
       margin: 3rem auto;
       padding: 2rem;
-      background-color: #0F0F1A;
+      background: rgba(15, 15, 26, 0.8);
       border: 2px solid #00FFFF;
       border-radius: 16px;
-      box-shadow: 0 0 20px rgba(0,255,255,0.3);
-      color: white;
+      box-shadow: 0 0 30px rgba(0,255,255,0.4);
       text-align: center;
+      animation: neonPulse 2s infinite alternate;
+    }
+
+    @keyframes neonPulse {
+      from { box-shadow: 0 0 20px #00FFFF; }
+      to { box-shadow: 0 0 40px #00FFFF; }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -154,23 +195,23 @@
   </section>
 
   <section class="submit-idea" id="ideaSubmitSection" style="display:none;">
-  <h2 style="color: #F9E766;">Submit your idea</h2>
-  <form id="ideaForm">
-    <textarea id="ideaText" placeholder="Describe your idea..." required></textarea><br>
-    <button type="submit">Submit Idea</button>
-  </form>
-</section>
+    <h2 style="color: #F9E766;">Submit your idea</h2>
+    <form id="ideaForm">
+      <textarea id="ideaText" placeholder="Describe your idea..." required></textarea><br>
+      <button type="submit">Submit Idea</button>
+    </form>
+  </section>
 
   <div id="voteCounter" style="text-align:center; font-size:1.2rem; color:#00FFFF; margin-top:1rem;"></div>
 
-  <section class="leaderboard" id="discardedSection" style="display: none;">
-  <h2 style="color:#FF5555;">Discarded Ideas</h2>
-  <div id="discardedIdeas" class="cards">
-    <p>Loading...</p>
-  </div>
-</section>
+  <section class="leaderboard">
+    <h2 style="color:#FF5555;">Discarded Ideas</h2>
+    <div id="discardedIdeas" class="cards">
+      <p>Loading...</p>
+    </div>
+  </section>
 
-<script>
+  <script>
 let userId = '', username = '', userRoles = [];
 
 async function getUser() {
