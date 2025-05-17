@@ -1301,50 +1301,79 @@ async function loadVotableIdeas() {
   }
 }
 
-async function loadDiscardedIdeas() {
-  const container = document.getElementById('discardedIdeas');
+async function loadVotableIdeas() {
+  const container = document.getElementById('voteIdeasCards');
   
   // Show skeleton loader
   container.innerHTML = '';
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 3; i++) {
     container.appendChild(createSkeletonCard());
   }
-  
+
   try {
-    const res = await fetch(`${BACKEND_URL}/message.json`);
-    const messages = await res.json();
-    
+    const res = await fetch(`${BACKEND_URL}/ideas`);
+    const { ideas } = await res.json();
+
     // Clear container
     container.innerHTML = '';
-    
-    if (messages.length === 0) {
+
+    if (ideas.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 8v4M12 16h.01"></path>
           </svg>
-          <h3>No discarded ideas</h3>
-          <p>There are no discarded ideas at this time.</p>
+          <h3>No ideas to vote on</h3>
+          <p>There are no ideas available for voting at this time.</p>
         </div>
       `;
       return;
     }
-    
-    // Create cards for each discarded idea
-    messages.forEach((msg) => {
+
+    const canVote = userRoles.some(r => 
+      r.toLowerCase() === 'proof verified' || 
+      r.toLowerCase() === 'proof of verify'
+    );
+
+    // Create cards for each idea with voting option
+    ideas.forEach((i, idx) => {
       const card = document.createElement('div');
       card.className = 'idea-card';
       card.innerHTML = `
-        <p class="idea-text">🗑️ ${msg.idea}</p>
-        <span class="votes" style="color: var(--danger);">Reason: ${msg.reason}</span>
+        <p class="idea-text">${i.idea}</p>
+        <span class="username">by @${i.username || 'unknown'}</span>
+        <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
+        ${
+          canVote
+            ? `
+            <div style="margin-top: 1rem;">
+              <input type="number" id="voteInput${idx}" min="1" max="10" placeholder="Votes" />
+              <button class="vote-btn" data-idx="${idx}" style="padding: 0.5rem 1rem; margin-top: 0.5rem;">
+                🔎 Vote
+              </button>
+            </div>
+            `
+            : '<p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">You need the "Proof Verified" role to vote</p>'
+        }
       `;
+
+      const voteBtn = card.querySelector('.vote-btn');
+      if (voteBtn) {
+        voteBtn.addEventListener('click', function () {
+          voteIdea(idx, voteBtn);
+        });
+      }
+
       container.appendChild(card);
     });
+
   } catch (error) {
-    console.error('Error loading discarded ideas:', error);
-    container.innerHTML = '<p>Failed to load discarded ideas. Please try again later.</p>';
+    console.error('Error loading ideas:', error);
+    container.innerHTML = '<p>Failed to load ideas. Please try again later.</p>';
   }
 }
+
 
 // Helper function to convert hex to rgb
 function hexToRgb(hex) {
