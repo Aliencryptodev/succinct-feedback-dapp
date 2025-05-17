@@ -1220,14 +1220,14 @@ async function loadVotableIdeas() {
   for (let i = 0; i < 3; i++) {
     container.appendChild(createSkeletonCard());
   }
-  
+
   try {
     const res = await fetch(`${BACKEND_URL}/ideas`);
     const { ideas } = await res.json();
-    
+
     // Clear container
     container.innerHTML = '';
-    
+
     if (ideas.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
@@ -1241,12 +1241,12 @@ async function loadVotableIdeas() {
       `;
       return;
     }
-    
+
     const canVote = userRoles.some(r => 
       r.toLowerCase() === 'proof verified' || 
       r.toLowerCase() === 'proof of verify'
     );
-    
+
     // Create cards for each idea with voting option
     ideas.forEach((i, idx) => {
       const card = document.createElement('div');
@@ -1260,7 +1260,7 @@ async function loadVotableIdeas() {
             ? `
             <div style="margin-top: 1rem;">
               <input type="number" id="voteInput${idx}" min="1" max="10" placeholder="Votes" />
-              <button onclick="voteIdea(${idx}, this)" class="vote-btn" style="padding: 0.5rem 1rem; margin-top: 0.5rem;">
+              <button class="vote-btn" data-idx="${idx}" style="padding: 0.5rem 1rem; margin-top: 0.5rem;">
                 🔎 Vote
               </button>
             </div>
@@ -1268,6 +1268,31 @@ async function loadVotableIdeas() {
             : '<p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">You need the "Proof Verified" role to vote</p>'
         }
       `;
+
+      const voteBtn = card.querySelector('.vote-btn');
+      if (voteBtn) {
+        voteBtn.addEventListener('click', function () {
+          voteIdea(idx, voteBtn);
+        });
+      }
+
+      container.appendChild(card);
+    });
+
+  } catch (error) {
+    console.error('Error loading ideas:', error);
+    container.innerHTML = '<p>Failed to load ideas. Please try again later.</p>';
+  }
+}
+
+
+      const voteBtn = card.querySelector('.vote-btn');
+      if (voteBtn) {
+        voteBtn.addEventListener('click', function () {
+          voteIdea(idx, voteBtn);
+        });
+      }
+
       container.appendChild(card);
     });
   } catch (error) {
