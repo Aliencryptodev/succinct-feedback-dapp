@@ -1112,11 +1112,6 @@ function updateProfileCard(user) {
   });
 }
 
-// Fix the form submission event listener
-// Fix the form submission event listener
-document.addEventListener('DOMContentLoaded', function () {
-  const ideaForm = document.getElementById('ideaForm');
-// Fix the form submission event listener
 document.addEventListener('DOMContentLoaded', function () {
   const ideaForm = document.getElementById('ideaForm');
   ideaForm.addEventListener('submit', async function (e) {
@@ -1145,7 +1140,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (data.success) {
         showNotification('✅ Idea submitted and verified!');
         document.getElementById('ideaText').value = '';
-        loadIdeas();
+        loadIdeas(); // Refresca el leaderboard
       } else {
         showNotification(data.error || '❌ Submission failed.', 'error');
       }
