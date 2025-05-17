@@ -1114,10 +1114,9 @@ function updateProfileCard(user) {
 
 document.getElementById('ideaForm').addEventListener('submit', async function (e) {
   e.preventDefault();
-
   const ideaText = document.getElementById('ideaText').value.trim();
   if (!ideaText) return;
-
+  
   const submitButton = this.querySelector('button');
   const originalText = submitButton.textContent;
   submitButton.disabled = true;
@@ -1146,7 +1145,6 @@ document.getElementById('ideaForm').addEventListener('submit', async function (e
   }
 });
 
-
 function createSkeletonCard() {
   const card = document.createElement('div');
   card.className = 'idea-card';
@@ -1173,7 +1171,7 @@ async function loadIdeas() {
     const res = await fetch(`${BACKEND_URL}/ideas`);
     const { ideas, totalVotes } = await res.json();
     
-    // Update vote counter  
+    // Update vote counter
     const counter = document.getElementById('voteCounter');
     if (counter) counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
     
