@@ -1,177 +1,856 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Succinct Feedback DApp</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <script>
     const BACKEND_URL = 'http://217.65.144.64:3000';
   </script>
   <style>
+    :root {
+      --primary: #FE11C5;
+      --primary-dark: #c20e99;
+      --primary-light: #ff5cdc;
+      --primary-glow: rgba(254, 17, 197, 0.3);
+      --secondary: #90DCFF;
+      --secondary-dark: #5fa8c9;
+      --secondary-light: #c5edff;
+      --accent: #F9E766;
+      --accent-dark: #d9c954;
+      --accent-light: #fcf0a3;
+      --danger: #FF5555;
+      --success: #55d6aa;
+      --bg-dark: #0A0A0A;
+      --bg-card: #111111;
+      --bg-card-hover: #1a1a1a;
+      --bg-profile: #0F0F1A;
+      --text-primary: #ffffff;
+      --text-secondary: #cccccc;
+      --border-radius-sm: 8px;
+      --border-radius-md: 12px;
+      --border-radius-lg: 16px;
+      --border-radius-xl: 24px;
+      --border-radius-full: 9999px;
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+      --spacing-xxl: 48px;
+      --transition-fast: 0.2s;
+      --transition-medium: 0.3s;
+      --transition-slow: 0.5s;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+      --shadow-glow: 0 0 20px;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
     body {
       margin: 0;
       padding: 0;
-      background-color: #0A0A0A;
-      color: white;
-      font-family: sans-serif;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(254, 17, 197, 0.05) 0%, transparent 25%),
+        radial-gradient(circle at 80% 70%, rgba(144, 220, 255, 0.05) 0%, transparent 25%);
+      color: var(--text-primary);
+      font-family: var(--font-family);
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
     }
-    .hero {
-      padding: 4rem 2rem 2rem;
-      text-align: center;
-    }
-    .hero h1 {
-      font-size: 2.5rem;
-      color: #FE11C5;
-      margin-bottom: 1rem;
-    }
-    .hero p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin: 0 auto;
-      color: #90DCFF;
-    }
-    .leaderboard {
-      padding: 2rem;
-      text-align: center;
-    }
-    .leaderboard h2 {
-      color: #F9E766;
-    }
-    .cards {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      padding-top: 1rem;
-    }
-    .idea-card {
-      background-color: #111;
-      border: 1px solid #FE11C5;
-      border-radius: 12px;
-      padding: 1rem;
-      width: 300px;
-      text-align: left;
-      box-shadow: 0 0 10px #FE11C533;
-      transition: transform 0.2s ease;
-    }
-    .idea-card:hover {
-      transform: scale(1.02);
-    }
-    .idea-text {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-    .username {
-      color: #90DCFF;
-      font-size: 0.9rem;
-    }
-    .votes {
-      display: block;
-      margin-top: 0.5rem;
-      font-size: 0.95rem;
-      color: #F9E766;
-      font-weight: bold;
-    }
-    .submit-idea {
-      padding: 3rem 2rem;
-      text-align: center;
-    }
-    textarea {
-      width: 90%;
-      max-width: 500px;
-      height: 100px;
-      border-radius: 8px;
-      border: none;
-      padding: 1rem;
-      font-size: 1rem;
-    }
-    button {
-      background-color: #FE11C5;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      margin-top: 1rem;
-    }
-    #notification {
-      display: none;
-      background-color: #F9E766;
-      color: black;
-      padding: 1rem;
-      text-align: center;
-      font-weight: bold;
+    
+    body::before {
+      content: '';
       position: fixed;
       top: 0;
-      width: 100%;
-      z-index: 1000;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(to bottom right, transparent 49.5%, rgba(254, 17, 197, 0.05) 50%, transparent 50.5%),
+        linear-gradient(to bottom left, transparent 49.5%, rgba(144, 220, 255, 0.05) 50%, transparent 50.5%);
+      background-size: 60px 60px;
+      z-index: -1;
+      opacity: 0.3;
+      pointer-events: none;
     }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-md);
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+    
+    /* Notification styles */
+    #notification {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 15, 26, 0.9);
+      backdrop-filter: blur(10px);
+      border-left: 4px solid var(--accent);
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-md), 0 0 15px var(--accent-glow);
+      color: var(--text-primary);
+      z-index: 1000;
+      font-weight: 600;
+      max-width: 90%;
+      width: 400px;
+      text-align: left;
+      animation: slideIn 0.3s ease;
+    }
+    
+    #notification.error {
+      border-left-color: var(--danger);
+      box-shadow: var(--shadow-md), 0 0 15px rgba(255, 85, 85, 0.3);
+    }
+    
+    #notification.success {
+      border-left-color: var(--success);
+      box-shadow: var(--shadow-md), 0 0 15px rgba(85, 214, 170, 0.3);
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translate(-50%, -20px);
+        opacity: 0;
+      }
+      to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+      }
+    }
+    
+    /* Hero styles */
+    .hero {
+      padding: var(--spacing-xxl) var(--spacing-lg) var(--spacing-xl);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 600px;
+      height: 600px;
+      border-radius: 100%;
+      background: radial-gradient(circle, rgba(254, 17, 197, 0.1) 0%, transparent 70%);
+      transform: translateX(-50%);
+      z-index: -1;
+      animation: pulse 10s infinite alternate;
+    }
+    
+    @keyframes pulse {
+      0% {
+        opacity: 0.2;
+        transform: translateX(-50%) scale(1);
+      }
+      100% {
+        opacity: 0.4;
+        transform: translateX(-50%) scale(1.1);
+      }
+    }
+    
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      color: var(--primary);
+      margin-bottom: var(--spacing-md);
+      text-transform: uppercase;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .hero h1::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -8px;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--primary), transparent);
+    }
+    
+    .hero p {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      max-width: 600px;
+      margin: 0 auto var(--spacing-xl);
+      color: var(--secondary);
+      font-weight: 400;
+    }
+    
+    /* Button styles */
+    button {
+      background-color: var(--primary);
+      color: white;
+      font-family: var(--font-family);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: var(--spacing-md) var(--spacing-xl);
+      border-radius: var(--border-radius-md);
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-fast) ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+    
+    button:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px var(--primary-glow);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0.2),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0.2)
+      );
+      transform: rotate(45deg);
+      opacity: 0;
+      transition: opacity var(--transition-medium) ease;
+    }
+    
+    button:hover::after {
+      opacity: 1;
+      animation: shine 1.5s ease;
+    }
+    
+    @keyframes shine {
+      from {
+        left: -100%;
+      }
+      to {
+        left: 100%;
+      }
+    }
+    
+    button:disabled {
+      background-color: #666;
+      cursor: not-allowed;
+      opacity: 0.7;
+      box-shadow: none;
+      transform: none;
+    }
+    
+    /* Discord connect button */
+    .discord-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      background-color: #5865F2;
+      position: relative;
+    }
+    
+    .discord-btn:hover {
+      background-color: #4752C4;
+    }
+    
+    .discord-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+    
+    /* Profile card styles */
     .profile-card {
       display: none;
       max-width: 500px;
-      margin: 3rem auto;
-      padding: 2rem;
-      background-color: #0F0F1A;
-      border: 2px solid #00FFFF;
-      border-radius: 16px;
-      box-shadow: 0 0 20px rgba(0,255,255,0.3);
-      color: white;
+      margin: var(--spacing-xl) auto;
+      padding: var(--spacing-xl);
+      background-color: var(--bg-profile);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 255, 255, 0.2);
+      color: var(--text-primary);
       text-align: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(0, 255, 255, 0.2);
+    }
+    
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      z-index: 1;
+    }
+    
+    .avatar-section {
+      margin-bottom: var(--spacing-lg);
+      position: relative;
+      z-index: 2;
+    }
+    
+    .avatar-section img {
+      width: 100px;
+      height: 100px;
+      border-radius: var(--border-radius-full);
+      border: 3px solid var(--primary);
+      object-fit: cover;
+      box-shadow: 0 0 15px var(--primary-glow);
+      transition: transform var(--transition-medium) ease;
+    }
+    
+    .avatar-section img:hover {
+      transform: scale(1.05);
+    }
+    
+    #discordUsername {
+      margin-top: var(--spacing-md);
+      color: var(--primary);
+      font-size: 1.4rem;
+    }
+    
+    .roles-section h3 {
+      color: var(--secondary);
+      margin-bottom: var(--spacing-sm);
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    
+    #roleTags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    #voteCountDisplay {
+      margin-top: var(--spacing-md);
+      font-size: 1.1rem;
+      color: var(--accent);
+      font-weight: 600;
+      padding: var(--spacing-sm) var(--spacing-md);
+      background-color: rgba(249, 231, 102, 0.1);
+      border-radius: var(--border-radius-md);
+      display: inline-block;
+    }
+    
+    /* Leaderboard styles */
+    .leaderboard {
+      padding: var(--spacing-xl) var(--spacing-lg);
+      text-align: center;
+      position: relative;
+    }
+    
+    .leaderboard h2 {
+      color: var(--accent);
+      font-size: 2rem;
+      margin-bottom: var(--spacing-xl);
+      position: relative;
+      display: inline-block;
+    }
+    
+    .leaderboard h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: var(--accent);
+      border-radius: var(--border-radius-full);
+    }
+    
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--spacing-lg);
+      padding-top: var(--spacing-lg);
+      justify-content: center;
+    }
+    
+    /* Card styles */
+    .idea-card {
+      background-color: var(--bg-card);
+      border: 1px solid rgba(254, 17, 197, 0.3);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-xl);
+      text-align: left;
+      box-shadow: var(--shadow-md), 0 0 20px rgba(254, 17, 197, 0.1);
+      transition: all var(--transition-medium) ease;
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .idea-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom right, rgba(254, 17, 197, 0.05), transparent);
+      pointer-events: none;
+    }
+    
+    .idea-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg), 0 0 25px rgba(254, 17, 197, 0.15);
+      border-color: rgba(254, 17, 197, 0.5);
+      background-color: var(--bg-card-hover);
+    }
+    
+    .idea-text {
+      font-size: 1.1rem;
+      margin-bottom: var(--spacing-md);
+      color: var(--text-primary);
+      font-weight: 400;
+      line-height: 1.5;
+      flex-grow: 1;
+    }
+    
+    .username {
+      color: var(--secondary);
+      font-size: 0.9rem;
+      margin-bottom: var(--spacing-xs);
+      display: block;
+      font-weight: 600;
+    }
+    
+    .votes {
+      display: inline-block;
+      margin-top: var(--spacing-sm);
+      font-size: 1rem;
+      color: var(--accent);
+      font-weight: 600;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      background-color: rgba(249, 231, 102, 0.1);
+      border-radius: var(--border-radius-sm);
+    }
+    
+    /* Submit idea section */
+    .submit-idea {
+      padding: var(--spacing-xxl) var(--spacing-lg);
+      text-align: center;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(254, 17, 197, 0.03) 30%,
+        rgba(254, 17, 197, 0.03) 70%, 
+        transparent
+      );
+    }
+    
+    .submit-idea h2 {
+      color: var(--accent);
+      font-size: 2rem;
+      margin-bottom: var(--spacing-xl);
+      position: relative;
+      display: inline-block;
+    }
+    
+    .submit-idea h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: var(--accent);
+      border-radius: var(--border-radius-full);
+    }
+    
+    #ideaForm {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      border-radius: var(--border-radius-md);
+      border: 1px solid rgba(144, 220, 255, 0.3);
+      background-color: rgba(15, 15, 26, 0.8);
+      padding: var(--spacing-md);
+      font-size: 1rem;
+      color: var(--text-primary);
+      font-family: var(--font-family);
+      margin-bottom: var(--spacing-md);
+      resize: vertical;
+      transition: all var(--transition-fast) ease;
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 2px rgba(144, 220, 255, 0.2);
+    }
+    
+    textarea::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+    
+    /* Vote input styles */
+    input[type="number"] {
+      width: 80px;
+      padding: var(--spacing-sm);
+      border-radius: var(--border-radius-sm);
+      border: 1px solid rgba(144, 220, 255, 0.3);
+      background-color: rgba(15, 15, 26, 0.8);
+      color: var(--text-primary);
+      font-family: var(--font-family);
+      font-size: 0.9rem;
+      margin: var(--spacing-sm) 0;
+      text-align: center;
+      transition: all var(--transition-fast) ease;
+    }
+    
+    input[type="number"]:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 2px rgba(144, 220, 255, 0.2);
+    }
+    
+    /* Vote counter */
+    #voteCounter {
+      text-align: center;
+      font-size: 1.2rem;
+      color: var(--secondary);
+      margin: var(--spacing-md) 0 var(--spacing-xl);
+      font-weight: 600;
+      padding: var(--spacing-md);
+      background-color: rgba(144, 220, 255, 0.05);
+      border-radius: var(--border-radius-md);
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    #voteCounter::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to right,
+        transparent,
+        rgba(144, 220, 255, 0.1),
+        transparent
+      );
+      animation: shimmer 2s infinite;
+      transform: skewX(-20deg);
+    }
+    
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%) skewX(-20deg);
+      }
+      100% {
+        transform: translateX(100%) skewX(-20deg);
+      }
+    }
+    
+    /* Discarded ideas section */
+    #discardedSection h2 {
+      color: var(--danger);
+    }
+    
+    #discardedSection h2::after {
+      background-color: var(--danger);
+    }
+    
+    #discardedSection .idea-card {
+      border-color: rgba(255, 85, 85, 0.3);
+      box-shadow: var(--shadow-md), 0 0 20px rgba(255, 85, 85, 0.1);
+    }
+    
+    #discardedSection .idea-card::before {
+      background: linear-gradient(to bottom right, rgba(255, 85, 85, 0.05), transparent);
+    }
+    
+    #discardedSection .idea-card:hover {
+      box-shadow: var(--shadow-lg), 0 0 25px rgba(255, 85, 85, 0.15);
+      border-color: rgba(255, 85, 85, 0.5);
+    }
+    
+    /* Loading animation */
+    .loading {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin: var(--spacing-xl) auto;
+    }
+    
+    .loading div {
+      position: absolute;
+      top: 33px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--primary);
+      animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    }
+    
+    .loading div:nth-child(1) {
+      left: 8px;
+      animation: loading1 0.6s infinite;
+    }
+    
+    .loading div:nth-child(2) {
+      left: 8px;
+      animation: loading2 0.6s infinite;
+    }
+    
+    .loading div:nth-child(3) {
+      left: 32px;
+      animation: loading2 0.6s infinite;
+    }
+    
+    .loading div:nth-child(4) {
+      left: 56px;
+      animation: loading3 0.6s infinite;
+    }
+    
+    @keyframes loading1 {
+      0% {
+        transform: scale(0);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    
+    @keyframes loading3 {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(0);
+      }
+    }
+    
+    @keyframes loading2 {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(24px, 0);
+      }
+    }
+    
+    /* Loading text */
+    .cards p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      text-align: center;
+      width: 100%;
+      padding: var(--spacing-xl);
+    }
+    
+    /* Custom elements */
+    .glow-text {
+      text-shadow: 0 0 5px currentColor;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero {
+        padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
+      }
+      
+      .profile-card {
+        padding: var(--spacing-lg);
+        margin: var(--spacing-lg) var(--spacing-md);
+      }
+      
+      .cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .idea-card {
+        padding: var(--spacing-lg);
+      }
+      
+      #notification {
+        width: 90%;
+      }
+    }
+    
+    /* Loading skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, 
+        var(--bg-card) 25%, 
+        rgba(255, 255, 255, 0.05) 50%, 
+        var(--bg-card) 75%);
+      background-size: 200% 100%;
+      animation: loading-skeleton 1.5s infinite;
+      border-radius: var(--border-radius-md);
+      height: 1em;
+      margin-bottom: 0.5em;
+    }
+    
+    @keyframes loading-skeleton {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+    
+    /* Footer animation */
+    .footer {
+      text-align: center;
+      padding: var(--spacing-xl) var(--spacing-md);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-top: var(--spacing-xl);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--primary-light), transparent);
     }
   </style>
 </head>
 <body>
   <div id="notification">✅ Idea submitted successfully!</div>
 
-  <section class="hero">
-    <h1>Shape Succinct’s future</h1>
-    <p>Backed by your ideas, verified by zero-knowledge proofs.</p>
-    <a href="https://discord.com/api/oauth2/authorize?client_id=1371930922877849651&redirect_uri=http%3A%2F%2F217.65.144.64%3A3000%2Fcallback&response_type=code&scope=identify%20guilds.members.read">
-      <button>Connect with Discord</button>
-    </a>
-  </section>
+  <div class="container">
+    <section class="hero">
+      <h1 class="glow-text">Shape Succinct's future</h1>
+      <p>Backed by your ideas, verified by zero-knowledge proofs.</p>
+      <a href="https://discord.com/api/oauth2/authorize?client_id=1371930922877849651&redirect_uri=http%3A%2F%2F217.65.144.64%3A3000%2Fcallback&response_type=code&scope=identify%20guilds.members.read">
+        <button class="discord-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.419c0 1.334-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.419c0 1.334-.946 2.419-2.157 2.419z"/>
+          </svg>
+          Connect with Discord
+        </button>
+      </a>
+    </section>
 
-  <div class="profile-card">
-    <div class="avatar-section">
-      <img id="discordAvatar" alt="avatar" style="width:100px; height:100px; border-radius:100%; border:3px solid #FE11C5;">
-      <h2 id="discordUsername" style="margin-top:1rem; color:#FE11C5; font-size:1.4rem;">@usuario</h2>
+    <div class="profile-card">
+      <div class="avatar-section">
+        <img id="discordAvatar" alt="Discord Avatar" src="" />
+        <h2 id="discordUsername">@username</h2>
+      </div>
+      <div class="roles-section">
+        <h3>Roles:</h3>
+        <div id="roleTags"></div>
+        <div id="voteCountDisplay"></div>
+      </div>
     </div>
-    <div class="roles-section">
-      <h3 style="color: #90DCFF; margin-bottom: 0.5rem;">Roles:</h3>
-      <div id="roleTags" style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem;"></div>
-      <div id="voteCountDisplay" style="margin-top:1rem; font-size:1rem; color:#F9E766;"></div>
+
+    <section class="leaderboard">
+      <h2>Leaderboard</h2>
+      <div id="ideaCards" class="cards">
+        <div class="loading">
+          <div></div><div></div><div></div><div></div>
+        </div>
+      </div>
+      <div id="voteCounter"></div>
+    </section>
+
+    <section class="submit-idea" id="ideaSubmitSection" style="display:none;">
+      <h2>Submit your idea</h2>
+      <form id="ideaForm">
+        <textarea id="ideaText" placeholder="Describe your innovative idea for Succinct..." required></textarea>
+        <button type="submit">
+          Submit Idea
+        </button>
+      </form>
+    </section>
+
+    <section class="leaderboard" id="discardedSection" style="display: none;">
+      <h2>Discarded Ideas</h2>
+      <div id="discardedIdeas" class="cards">
+        <div class="loading">
+          <div></div><div></div><div></div><div></div>
+        </div>
+      </div>
+    </section>
+    
+    <div class="footer">
+      Powered by zero-knowledge proofs • Succinct 2025
     </div>
   </div>
-
-  <section class="leaderboard">
-    <h2>Leaderboard</h2>
-    <div id="ideaCards" class="cards">
-      <p>Loading...</p>
-    </div>
-  </section>
-
-  <section class="submit-idea" id="ideaSubmitSection" style="display:none;">
-  <h2 style="color: #F9E766;">Submit your idea</h2>
-  <form id="ideaForm">
-    <textarea id="ideaText" placeholder="Describe your idea..." required></textarea><br>
-    <button type="submit">Submit Idea</button>
-  </form>
-</section>
-
-  <div id="voteCounter" style="text-align:center; font-size:1.2rem; color:#00FFFF; margin-top:1rem;"></div>
-
-  <section class="leaderboard" id="discardedSection" style="display: none;">
-  <h2 style="color:#FF5555;">Discarded Ideas</h2>
-  <div id="discardedIdeas" class="cards">
-    <p>Loading...</p>
-  </div>
-</section>
 
 <script>
 let userId = '', username = '', userRoles = [];
+
+// Show notification function
+function showNotification(message, type = 'success') {
+  const notif = document.getElementById('notification');
+  notif.textContent = message;
+  notif.className = type;
+  notif.style.display = 'block';
+  
+  // Add animation
+  notif.style.animation = 'none';
+  setTimeout(() => {
+    notif.style.animation = 'slideIn 0.3s ease';
+  }, 10);
+  
+  setTimeout(() => {
+    notif.style.opacity = '0';
+    notif.style.transform = 'translate(-50%, -20px)';
+    setTimeout(() => {
+      notif.style.display = 'none';
+      notif.style.opacity = '1';
+      notif.style.transform = 'translate(-50%, 0)';
+    }, 300);
+  }, 3000);
+}
 
 async function getUser() {
   try {
@@ -181,20 +860,31 @@ async function getUser() {
     username = data.username;
     userRoles = data.roles || [];
 
-    // Mostrar todo solo si está logueado
+    // Show UI elements when user is logged in
     document.querySelector('.leaderboard').style.display = 'block';
-    document.getElementById('discardedIdeas').parentElement.style.display = 'block';
+    
+    // Check if discarded section exists before changing its display
+    const discardedSection = document.getElementById('discardedSection');
+    if (discardedSection) {
+      discardedSection.style.display = 'block';
+    }
 
     const canSubmit = userRoles.some(r => r.toLowerCase().includes("lets pruv it"));
     if (canSubmit) {
       document.getElementById('ideaSubmitSection').style.display = 'block';
     }
 
+    showNotification(`Welcome, ${username}!`);
     return data;
   } catch {
-    // Si no está autenticado, ocultar todo
+    // Hide UI elements when user is not logged in
     document.querySelector('.leaderboard').style.display = 'none';
-    document.getElementById('discardedIdeas').parentElement.style.display = 'none';
+    
+    const discardedSection = document.getElementById('discardedSection');
+    if (discardedSection) {
+      discardedSection.style.display = 'none';
+    }
+    
     document.getElementById('ideaSubmitSection').style.display = 'none';
     return null;
   }
@@ -204,68 +894,141 @@ document.getElementById('ideaForm').addEventListener('submit', async function (e
   e.preventDefault();
   const ideaText = document.getElementById('ideaText').value.trim();
   if (!ideaText) return;
+  
+  const submitButton = this.querySelector('button');
+  const originalText = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = 'Submitting...';
 
-  const res = await fetch(`${BACKEND_URL}/submit-idea`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
-  });
+  try {
+    const res = await fetch(`${BACKEND_URL}/submit-idea`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
+    });
 
-  const data = await res.json();
-  if (data.success) {
-    alert('✅ Idea submitted and verified!');
-    document.getElementById('ideaText').value = '';
-    loadIdeas();
-  } else {
-    alert(data.error || '❌ Submission failed.');
+    const data = await res.json();
+    if (data.success) {
+      showNotification('✅ Idea submitted and verified!');
+      document.getElementById('ideaText').value = '';
+      loadIdeas();
+    } else {
+      showNotification(data.error || '❌ Submission failed.', 'error');
+    }
+  } catch (error) {
+    showNotification('❌ Network error. Please try again.', 'error');
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalText;
   }
 });
 
-async function loadIdeas() {
-  const res = await fetch(`${BACKEND_URL}/ideas`);
-  const { ideas, totalVotes } = await res.json();
-  const container = document.getElementById('ideaCards');
-  container.innerHTML = '';
-
-  const counter = document.getElementById('voteCounter');
-  if (counter) counter.textContent = `🔎 Total verified SP1 votes: ${totalVotes}`;
-
-  ideas.forEach((i, idx) => {
-    const card = document.createElement('div');
-    card.className = 'idea-card';
-    card.innerHTML = `
-      <p class="idea-text">#${idx + 1} — ${i.idea}</p>
-      <span class="username">by @${i.username || 'unknown'}</span>
-      <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
-      ${
-        userRoles.some(r => r.toLowerCase() === 'proof verified' || r.toLowerCase() === 'proof of verify')
-          ? `
-        <input type="number" id="voteInput${idx}" min="1" placeholder="Votes" style="width: 60px; margin-top: 0.5rem;" />
-        <br />
-        <button onclick="voteIdea(${idx}, this)">🔎 Vote</button>
-        `
-          : ''
-      }
-    `;
-    container.appendChild(card);
-  });
+function createSkeletonCard() {
+  const card = document.createElement('div');
+  card.className = 'idea-card';
+  card.innerHTML = `
+    <div class="skeleton" style="width: 90%; height: 1.2rem;"></div>
+    <div class="skeleton" style="width: 80%; height: 1.2rem;"></div>
+    <div class="skeleton" style="width: 60%; height: 1.2rem;"></div>
+    <div class="skeleton" style="width: 40%; height: 0.9rem; margin-top: 1rem;"></div>
+    <div class="skeleton" style="width: 30%; height: 0.9rem;"></div>
+  `;
+  return card;
 }
 
+async function loadIdeas() {
+  const container = document.getElementById('ideaCards');
+  
+  // Show skeleton loader
+  container.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    container.appendChild(createSkeletonCard());
+  }
+  
+  try {
+    const res = await fetch(`${BACKEND_URL}/ideas`);
+    const { ideas, totalVotes } = await res.json();
+    
+    // Update vote counter
+    const counter = document.getElementById('voteCounter');
+    if (counter) counter.textContent = `🔎 Total verified SP1 votes: ${totalVotes}`;
+    
+    // Clear container
+    container.innerHTML = '';
+    
+    if (ideas.length === 0) {
+      const emptyMessage = document.createElement('p');
+      emptyMessage.textContent = 'No ideas submitted yet. Be the first!';
+      container.appendChild(emptyMessage);
+      return;
+    }
+    
+    // Create cards for each idea
+    ideas.forEach((i, idx) => {
+      const card = document.createElement('div');
+      card.className = 'idea-card';
+      card.innerHTML = `
+        <p class="idea-text">#${idx + 1} — ${i.idea}</p>
+        <span class="username">by @${i.username || 'unknown'}</span>
+        <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
+        ${
+          userRoles.some(r => r.toLowerCase() === 'proof verified' || r.toLowerCase() === 'proof of verify')
+            ? `
+          <div style="margin-top: 1rem;">
+            <input type="number" id="voteInput${idx}" min="1" max="10" placeholder="Votes" />
+            <button onclick="voteIdea(${idx}, this)" class="vote-btn" style="padding: 0.5rem 1rem; margin-top: 0.5rem;">
+              🔎 Vote
+            </button>
+          </div>
+          `
+            : ''
+        }
+      `;
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error('Error loading ideas:', error);
+    container.innerHTML = '<p>Failed to load ideas. Please try again later.</p>';
+  }
+}
 
 async function loadDiscardedIdeas() {
-  const res = await fetch(`${BACKEND_URL}/message.json`);
-  const messages = await res.json();
   const container = document.getElementById('discardedIdeas');
+  
+  // Show skeleton loader
   container.innerHTML = '';
-  messages.forEach((msg) => {
-    const card = document.createElement('div');
-    card.className = 'idea-card';
-    card.innerHTML = `
-      <p class="idea-text">🗑️ ${msg.idea}</p>
-      <span class="votes" style="color: #FF8888;">Reason: ${msg.reason}</span>
-    `;
-    container.appendChild(card);
-  });
+  for (let i = 0; i < 2; i++) {
+    container.appendChild(createSkeletonCard());
+  }
+  
+  try {
+    const res = await fetch(`${BACKEND_URL}/message.json`);
+    const messages = await res.json();
+    
+    // Clear container
+    container.innerHTML = '';
+    
+    if (messages.length === 0) {
+      const emptyMessage = document.createElement('p');
+      emptyMessage.textContent = 'No discarded ideas yet.';
+      container.appendChild(emptyMessage);
+      return;
+    }
+    
+    // Create cards for each discarded idea
+    messages.forEach((msg) => {
+      const card = document.createElement('div');
+      card.className = 'idea-card';
+      card.innerHTML = `
+        <p class="idea-text">🗑️ ${msg.idea}</p>
+        <span class="votes" style="color: var(--danger);">Reason: ${msg.reason}</span>
+      `;
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error('Error loading discarded ideas:', error);
+    container.innerHTML = '<p>Failed to load discarded ideas. Please try again later.</p>';
+  }
 }
 
 const ROLE_STYLES = {
@@ -284,33 +1047,76 @@ async function loadUserProfileCard() {
   try {
     const res = await fetch(`${BACKEND_URL}/api/user`);
     if (!res.ok) throw new Error('Not authenticated');
+    
     const user = await res.json();
     const allowedRoles = ['Proof Verified', "Let's pruv it"];
     const hasAccess = user.roles.some(role =>
       allowedRoles.map(r => r.toLowerCase()).includes(role.toLowerCase())
     );
+    
     if (!hasAccess) return;
-    document.getElementById('voteCountDisplay').textContent = `🗳️ Votos disponibles: ${user.remaining_votes}`;
-    document.getElementById('discordAvatar').src = user.avatar_url;
+    
+    document.getElementById('voteCountDisplay').textContent = `🗳️ Available votes: ${user.remaining_votes}`;
+    document.getElementById('discordAvatar').src = user.avatar_url || 'https://cdn.discordapp.com/embed/avatars/0.png';
+    document.getElementById('discordUsername').textContent = `@${user.username}`;
+    
     const roleTags = document.getElementById('roleTags');
+    roleTags.innerHTML = '';
+    
     user.roles.forEach(role => {
       const tag = document.createElement('span');
       tag.textContent = role;
       const color = ROLE_STYLES[role.toUpperCase()] || ROLE_STYLES[role] || '#90DCFF';
       tag.style.cssText = `
-        background-color: #1A1A2B;
+        background-color: rgba(26, 26, 43, 0.8);
         color: ${color};
         border: 1px solid ${color};
         border-radius: 12px;
         padding: 0.3rem 0.7rem;
         font-size: 0.9rem;
+        display: inline-block;
+        backdrop-filter: blur(5px);
+        transition: all 0.2s ease;
       `;
+      
+      // Add hover effect
+      tag.addEventListener('mouseenter', () => {
+        tag.style.backgroundColor = 'rgba(26, 26, 43, 1)';
+        tag.style.transform = 'translateY(-2px)';
+        tag.style.boxShadow = `0 2px 8px rgba(${hexToRgb(color)}, 0.3)`;
+      });
+      
+      tag.addEventListener('mouseleave', () => {
+        tag.style.backgroundColor = 'rgba(26, 26, 43, 0.8)';
+        tag.style.transform = 'translateY(0)';
+        tag.style.boxShadow = 'none';
+      });
+      
       roleTags.appendChild(tag);
     });
+    
     document.querySelector('.profile-card').style.display = 'block';
   } catch (e) {
     console.log('User not authenticated or unauthorized for profile card.');
   }
+}
+
+// Helper function to convert hex to rgb
+function hexToRgb(hex) {
+  // Remove # if present
+  hex = hex.replace('#', '');
+  
+  // Convert 3-digit hex to 6-digit
+  if (hex.length === 3) {
+    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+  }
+  
+  // Parse the hex values
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  
+  return `${r}, ${g}, ${b}`;
 }
 
 async function voteIdea(index, button) {
@@ -318,55 +1124,71 @@ async function voteIdea(index, button) {
   const amount = parseInt(input?.value || '1', 10);
 
   if (!amount || amount < 1) {
-    alert('❌ Ingresa una cantidad válida de votos');
+    showNotification('❌ Please enter a valid number of votes', 'error');
     return;
   }
 
+  const originalText = button.textContent;
   button.disabled = true;
-  button.textContent = 'Verificando...';
+  button.textContent = 'Verifying...';
 
-  const res = await fetch(`${BACKEND_URL}/vote`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      index,
-      discord_id: userId,
-      username,
-      amount
-    })
-  });
+  try {
+    const res = await fetch(`${BACKEND_URL}/vote`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        index,
+        discord_id: userId,
+        username,
+        amount
+      })
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (data.success) {
-    alert(`✅ Votaste con ${amount} voto${amount === 1 ? '' : 's'}`);
-    input.value = '';
-    loadIdeas();
-    updateRemainingVotesDisplay();
-  } else {
-    alert(data.error || '❌ Falló el voto');
+    if (data.success) {
+      showNotification(`✅ Voted with ${amount} vote${amount === 1 ? '' : 's'}`);
+      input.value = '';
+      loadIdeas();
+      updateRemainingVotesDisplay();
+    } else {
+      showNotification(data.error || '❌ Vote failed', 'error');
+    }
+  } catch (error) {
+    showNotification('❌ Network error. Please try again.', 'error');
+  } finally {
     button.disabled = false;
-    button.textContent = '🔎 Vote';
+    button.textContent = originalText;
   }
 }
 
-
 async function updateRemainingVotesDisplay() {
+  try {
     const res = await fetch(`${BACKEND_URL}/api/user`);
     const user = await res.json();
 
     const voteCountDisplay = document.getElementById('voteCountDisplay');
     if (voteCountDisplay) {
-      voteCountDisplay.textContent = `🗳️ Votos disponibles: ${user.remaining_votes}`;
+      voteCountDisplay.textContent = `🗳️ Available votes: ${user.remaining_votes}`;
+      
+      // Add animation
+      voteCountDisplay.style.animation = 'none';
+      setTimeout(() => {
+        voteCountDisplay.style.animation = 'pulse 1s';
+      }, 10);
     }
+  } catch (error) {
+    console.error('Error updating vote count:', error);
   }
+}
 
-    getUser().then(() => {
-    loadIdeas();
-    loadDiscardedIdeas();
-    loadUserProfileCard();
-    updateRemainingVotesDisplay(); // ✅ Aquí se actualiza en tiempo real
-  });
+// Initialize application
+getUser().then(() => {
+  loadIdeas();
+  loadDiscardedIdeas();
+  loadUserProfileCard();
+  updateRemainingVotesDisplay();
+});
 </script>
 </body>
 </html>
