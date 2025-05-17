@@ -1214,20 +1214,19 @@ async function loadIdeas() {
 
 async function loadVotableIdeas() {
   const container = document.getElementById('voteIdeasCards');
-  
+
   // Show skeleton loader
   container.innerHTML = '';
   for (let i = 0; i < 3; i++) {
     container.appendChild(createSkeletonCard());
   }
-  
+
   try {
     const res = await fetch(`${BACKEND_URL}/ideas`);
     const { ideas } = await res.json();
-    
-    // Clear container
+
     container.innerHTML = '';
-    
+
     if (ideas.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
@@ -1241,59 +1240,60 @@ async function loadVotableIdeas() {
       `;
       return;
     }
-    
-    const canVote = userRoles.some(r => 
-      r.toLowerCase() === 'proof verified' || 
+
+    const canVote = userRoles.some(r =>
+      r.toLowerCase() === 'proof verified' ||
       r.toLowerCase() === 'proof of verify'
     );
-    
-    // Create cards for each idea with voting option
-    // Create cards for each idea with voting option
-ideas.forEach((i, idx) => {
-  const card = document.createElement('div');
-  card.className = 'idea-card';
 
-  // Parte base del contenido
-  card.innerHTML = `
-    <p class="idea-text">${i.idea}</p>
-    <span class="username">by @${i.username || 'unknown'}</span>
-    <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
-  `;
+    ideas.forEach((i, idx) => {
+      const card = document.createElement('div');
+      card.className = 'idea-card';
 
-  if (canVote) {
-    // Crear input y botón de votar dinámicamente
-    const voteWrapper = document.createElement('div');
-    voteWrapper.style.marginTop = '1rem';
+      card.innerHTML = `
+        <p class="idea-text">${i.idea}</p>
+        <span class="username">by @${i.username || 'unknown'}</span>
+        <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
+      `;
 
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.id = `voteInput${idx}`;
-    input.min = 1;
-    input.max = 10;
-    input.placeholder = 'Votes';
+      if (canVote) {
+        const voteWrapper = document.createElement('div');
+        voteWrapper.style.marginTop = '1rem';
 
-    const button = document.createElement('button');
-    button.className = 'vote-btn';
-    button.style.padding = '0.5rem 1rem';
-    button.style.marginTop = '0.5rem';
-    button.textContent = '🔎 Vote';
-    button.onclick = () => voteIdea(idx, button);
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.id = `voteInput${idx}`;
+        input.min = 1;
+        input.max = 10;
+        input.placeholder = 'Votes';
 
-    voteWrapper.appendChild(input);
-    voteWrapper.appendChild(button);
-    card.appendChild(voteWrapper);
-  } else {
-    const msg = document.createElement('p');
-    msg.textContent = 'You need the "Proof Verified" role to vote';
-    msg.style.marginTop = '1rem';
-    msg.style.color = 'var(--text-secondary)';
-    msg.style.fontSize = '0.9rem';
-    card.appendChild(msg);
+        const button = document.createElement('button');
+        button.className = 'vote-btn';
+        button.style.padding = '0.5rem 1rem';
+        button.style.marginTop = '0.5rem';
+        button.textContent = '🔎 Vote';
+        button.onclick = () => voteIdea(idx, button);
+
+        voteWrapper.appendChild(input);
+        voteWrapper.appendChild(button);
+        card.appendChild(voteWrapper);
+      } else {
+        const msg = document.createElement('p');
+        msg.textContent = 'You need the "Proof Verified" role to vote';
+        msg.style.marginTop = '1rem';
+        msg.style.color = 'var(--text-secondary)';
+        msg.style.fontSize = '0.9rem';
+        card.appendChild(msg);
+      }
+
+      container.appendChild(card);
+    });
+
+  } catch (error) {
+    console.error('Error loading ideas:', error);
+    container.innerHTML = '<p>Failed to load ideas. Please try again later.</p>';
   }
-
-  container.appendChild(card);
-});
-
+}
 
 // Helper function to convert hex to rgb
 function hexToRgb(hex) {
