@@ -1248,78 +1248,52 @@ async function loadVotableIdeas() {
     );
     
     // Create cards for each idea with voting option
-    ideas.forEach((i, idx) => {
-      const card = document.createElement('div');
-      card.className = 'idea-card';
-      card.innerHTML = `
-        <p class="idea-text">${i.idea}</p>
-        <span class="username">by @${i.username || 'unknown'}</span>
-        <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
-        ${
-          canVote
-            ? `
-            <div style="margin-top: 1rem;">
-              <input type="number" id="voteInput${idx}" min="1" max="10" placeholder="Votes" />
-              <button onclick="voteIdea(${idx}, this)" class="vote-btn" style="padding: 0.5rem 1rem; margin-top: 0.5rem;">
-                🔎 Vote
-              </button>
-            </div>
-            `
-            : '<p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">You need the "Proof Verified" role to vote</p>'
-        }
-      `;
-      container.appendChild(card);
-    });
-  } catch (error) {
-    console.error('Error loading ideas:', error);
-    container.innerHTML = '<p>Failed to load ideas. Please try again later.</p>';
-  }
-}
+    // Create cards for each idea with voting option
+ideas.forEach((i, idx) => {
+  const card = document.createElement('div');
+  card.className = 'idea-card';
 
-async function loadDiscardedIdeas() {
-  const container = document.getElementById('discardedIdeas');
-  
-  // Show skeleton loader
-  container.innerHTML = '';
-  for (let i = 0; i < 2; i++) {
-    container.appendChild(createSkeletonCard());
+  // Parte base del contenido
+  card.innerHTML = `
+    <p class="idea-text">${i.idea}</p>
+    <span class="username">by @${i.username || 'unknown'}</span>
+    <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
+  `;
+
+  if (canVote) {
+    // Crear input y botón de votar dinámicamente
+    const voteWrapper = document.createElement('div');
+    voteWrapper.style.marginTop = '1rem';
+
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.id = `voteInput${idx}`;
+    input.min = 1;
+    input.max = 10;
+    input.placeholder = 'Votes';
+
+    const button = document.createElement('button');
+    button.className = 'vote-btn';
+    button.style.padding = '0.5rem 1rem';
+    button.style.marginTop = '0.5rem';
+    button.textContent = '🔎 Vote';
+    button.onclick = () => voteIdea(idx, button);
+
+    voteWrapper.appendChild(input);
+    voteWrapper.appendChild(button);
+    card.appendChild(voteWrapper);
+  } else {
+    const msg = document.createElement('p');
+    msg.textContent = 'You need the "Proof Verified" role to vote';
+    msg.style.marginTop = '1rem';
+    msg.style.color = 'var(--text-secondary)';
+    msg.style.fontSize = '0.9rem';
+    card.appendChild(msg);
   }
-  
-  try {
-    const res = await fetch(`${BACKEND_URL}/message.json`);
-    const messages = await res.json();
-    
-    // Clear container
-    container.innerHTML = '';
-    
-    if (messages.length === 0) {
-      container.innerHTML = `
-        <div class="empty-state">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-          </svg>
-          <h3>No discarded ideas</h3>
-          <p>There are no discarded ideas at this time.</p>
-        </div>
-      `;
-      return;
-    }
-    
-    // Create cards for each discarded idea
-    messages.forEach((msg) => {
-      const card = document.createElement('div');
-      card.className = 'idea-card';
-      card.innerHTML = `
-        <p class="idea-text">🗑️ ${msg.idea}</p>
-        <span class="votes" style="color: var(--danger);">Reason: ${msg.reason}</span>
-      `;
-      container.appendChild(card);
-    });
-  } catch (error) {
-    console.error('Error loading discarded ideas:', error);
-    container.innerHTML = '<p>Failed to load discarded ideas. Please try again later.</p>';
-  }
-}
+
+  container.appendChild(card);
+});
+
 
 // Helper function to convert hex to rgb
 function hexToRgb(hex) {
