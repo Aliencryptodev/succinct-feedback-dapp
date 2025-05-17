@@ -53,17 +53,16 @@
       --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
       --shadow-glow: 0 0 20px;
     }
-    
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
+
     body {
       margin: 0;
       padding: 0;
-      background-color: #0A0A0A;
       background-color: var(--bg-dark);
       background-image: 
         radial-gradient(circle at 20% 30%, rgba(254, 17, 197, 0.05) 0%, transparent 25%),
@@ -75,7 +74,7 @@
       overflow-x: hidden;
       position: relative;
     }
-    
+
     body::before {
       content: '';
       position: fixed;
@@ -91,7 +90,7 @@
       opacity: 0.3;
       pointer-events: none;
     }
-    
+
     /* Notification styles */
     #notification {
       display: none;
@@ -113,17 +112,17 @@
       text-align: left;
       animation: slideIn 0.3s ease;
     }
-    
+
     #notification.error {
       border-left-color: var(--danger);
       box-shadow: var(--shadow-md), 0 0 15px rgba(255, 85, 85, 0.3);
     }
-    
+
     #notification.success {
       border-left-color: var(--success);
       box-shadow: var(--shadow-md), 0 0 15px rgba(85, 214, 170, 0.3);
     }
-    
+
     @keyframes slideIn {
       from {
         transform: translate(-50%, -20px);
@@ -134,14 +133,14 @@
         opacity: 1;
       }
     }
-    
+
     /* App layout styles */
     .app-container {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
     }
-    
+
     .main-layout {
       display: grid;
       grid-template-columns: 1fr 350px;
@@ -151,13 +150,13 @@
       padding: var(--spacing-lg);
       flex-grow: 1;
     }
-    
+
     @media (max-width: 992px) {
       .main-layout {
         grid-template-columns: 1fr;
       }
     }
-    
+
     /* Header styles */
     .app-header {
       padding: var(--spacing-md) var(--spacing-lg);
@@ -165,7 +164,7 @@
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(254, 17, 197, 0.2);
     }
-    
+
     .header-container {
       max-width: 1400px;
       margin: 0 auto;
@@ -173,7 +172,7 @@
       align-items: center;
       justify-content: space-between;
     }
-    
+
     .logo {
       font-size: 1.5rem;
       font-weight: 800;
@@ -182,12 +181,12 @@
       align-items: center;
       gap: var(--spacing-sm);
     }
-    
+
     .logo svg {
       width: 24px;
       height: 24px;
     }
-    
+
     /* Tab navigation */
     .tabs-container {
       background-color: var(--bg-nav);
@@ -197,12 +196,12 @@
       box-shadow: var(--shadow-md);
       border: 1px solid rgba(254, 17, 197, 0.2);
     }
-    
+
     .tabs-nav {
       display: flex;
       border-bottom: 1px solid rgba(254, 17, 197, 0.2);
     }
-    
+
     .tab-btn {
       flex: 1;
       padding: var(--spacing-md);
@@ -217,7 +216,7 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     .tab-btn::after {
       content: '';
       position: absolute;
@@ -229,30 +228,30 @@
       transition: all var(--transition-medium);
       transform: translateX(-50%);
     }
-    
+
     .tab-btn:hover {
       background-color: rgba(254, 17, 197, 0.1);
     }
-    
+
     .tab-btn.active {
       background-color: var(--bg-tab-active);
       color: var(--primary);
     }
-    
+
     .tab-btn.active::after {
       width: 80%;
     }
-    
+
     .tab-content {
       display: none;
       padding: var(--spacing-lg);
     }
-    
+
     .tab-content.active {
       display: block;
       animation: fadeIn 0.3s ease;
     }
-    
+
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -263,12 +262,11 @@
         transform: translateY(0);
       }
     }
-    
+
     /* Button styles */
     button {
       background-color: var(--primary);
       color: white;
-      font-family: sans-serif;
       font-family: var(--font-family);
       font-weight: 600;
       font-size: 1rem;
@@ -281,17 +279,17 @@
       overflow: hidden;
       box-shadow: 0 4px 12px var(--primary-glow);
     }
-    
+
     button:hover {
       background-color: var(--primary-dark);
       transform: translateY(-2px);
       box-shadow: 0 6px 16px var(--primary-glow);
     }
-    
+
     button:active {
       transform: translateY(0);
     }
-    
+
     button::after {
       content: '';
       position: absolute;
@@ -310,14 +308,12 @@
       opacity: 0;
       transition: opacity var(--transition-medium) ease;
     }
-    
+
     button:hover::after {
       opacity: 1;
       animation: shine 1.5s ease;
     }
-    .hero {
-      padding: 4rem 2rem 2rem;
-    
+
     @keyframes shine {
       from {
         left: -100%;
@@ -326,7 +322,7 @@
         left: 100%;
       }
     }
-    
+
     button:disabled {
       background-color: #666;
       cursor: not-allowed;
@@ -334,7 +330,7 @@
       box-shadow: none;
       transform: none;
     }
-    
+
     /* Discord connect button */
     .discord-btn {
       display: inline-flex;
@@ -343,26 +339,22 @@
       background-color: #5865F2;
       position: relative;
     }
-    
+
     .discord-btn:hover {
       background-color: #4752C4;
     }
-    
+
     .discord-btn svg {
       width: 24px;
       height: 24px;
     }
-    
+
     /* Welcome hero section */
     .welcome-hero {
       text-align: center;
       padding-bottom: var(--spacing-xl);
     }
-    .hero h1 {
-      font-size: 2.5rem;
-      color: #FE11C5;
-      margin-bottom: 1rem;
-    
+
     .welcome-hero h1 {
       font-size: clamp(2rem, 4vw, 3rem);
       color: var(--primary);
@@ -371,9 +363,7 @@
       position: relative;
       display: inline-block;
     }
-    .hero p {
-      font-size: 1.2rem;
-    
+
     .welcome-hero h1::after {
       content: '';
       position: absolute;
@@ -383,19 +373,15 @@
       height: 2px;
       background: linear-gradient(to right, transparent, var(--primary), transparent);
     }
-    
+
     .welcome-hero p {
       font-size: clamp(1rem, 2vw, 1.2rem);
       max-width: 600px;
-      margin: 0 auto;
-      color: #90DCFF;
       margin: 0 auto var(--spacing-lg);
       color: var(--secondary);
       font-weight: 400;
     }
-    .leaderboard {
-      padding: 2rem;
-    
+
     /* User sidebar styles */
     .user-sidebar {
       background-color: var(--bg-sidebar);
@@ -405,30 +391,27 @@
       border: 1px solid rgba(144, 220, 255, 0.2);
       height: fit-content;
     }
-    
+
     .sidebar-header {
       padding: var(--spacing-lg);
       background: linear-gradient(135deg, rgba(254, 17, 197, 0.1), rgba(144, 220, 255, 0.1));
       border-bottom: 1px solid rgba(254, 17, 197, 0.2);
       text-align: center;
     }
-    .leaderboard h2 {
-      color: #F9E766;
-    
+
     .sidebar-header h2 {
       color: var(--secondary);
       font-size: 1.3rem;
       margin-bottom: var(--spacing-sm);
     }
-    .cards {
-    
+
     /* Profile card styles */
     .profile-card {
       padding: var(--spacing-lg);
       color: var(--text-primary);
       text-align: center;
     }
-    
+
     .profile-card.not-logged-in {
       padding: var(--spacing-xl);
       display: flex;
@@ -437,13 +420,13 @@
       justify-content: center;
       gap: var(--spacing-lg);
     }
-    
+
     .avatar-section {
       margin-bottom: var(--spacing-lg);
       position: relative;
       z-index: 2;
     }
-    
+
     .avatar-section img {
       width: 100px;
       height: 100px;
@@ -453,34 +436,32 @@
       box-shadow: 0 0 15px var(--primary-glow);
       transition: transform var(--transition-medium) ease;
     }
-    
+
     .avatar-section img:hover {
       transform: scale(1.05);
     }
-    
+
     #discordUsername {
       margin-top: var(--spacing-md);
       color: var(--primary);
       font-size: 1.4rem;
     }
-    
+
     .roles-section h3 {
       color: var(--secondary);
       margin-bottom: var(--spacing-sm);
       font-weight: 600;
       font-size: 1.1rem;
     }
-    
+
     #roleTags {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1rem;
-      padding-top: 1rem;
       gap: var(--spacing-sm);
       margin-bottom: var(--spacing-md);
     }
-    
+
     .vote-counter {
       margin-top: var(--spacing-lg);
       padding: var(--spacing-md);
@@ -493,12 +474,12 @@
       justify-content: center;
       gap: var(--spacing-sm);
     }
-    
+
     .vote-counter svg {
       width: 20px;
       height: 20px;
     }
-    
+
     /* Create idea form styles */
     .idea-form {
       background-color: var(--bg-card);
@@ -508,13 +489,13 @@
       border: 1px solid rgba(254, 17, 197, 0.2);
       box-shadow: var(--shadow-md);
     }
-    
+
     .idea-form h3 {
       color: var(--secondary);
       margin-bottom: var(--spacing-md);
       font-size: 1.2rem;
     }
-    
+
     textarea {
       width: 100%;
       min-height: 150px;
@@ -529,18 +510,18 @@
       resize: vertical;
       transition: all var(--transition-fast) ease;
     }
-    
+
     textarea:focus {
       outline: none;
       border-color: var(--secondary);
       box-shadow: 0 0 0 2px rgba(144, 220, 255, 0.2);
     }
-    
+
     textarea::placeholder {
       color: var(--text-secondary);
       opacity: 0.6;
     }
-    
+
     /* Voting input styles */
     input[type="number"] {
       width: 80px;
@@ -555,27 +536,27 @@
       text-align: center;
       transition: all var(--transition-fast) ease;
     }
-    
+
     input[type="number"]:focus {
       outline: none;
       border-color: var(--secondary);
       box-shadow: 0 0 0 2px rgba(144, 220, 255, 0.2);
     }
-    
+
     /* Leaderboard section */
     .section-header {
       margin-bottom: var(--spacing-xl);
       position: relative;
       text-align: center;
     }
-    
+
     .section-header h2 {
       font-size: 1.8rem;
       color: var(--accent);
       display: inline-block;
       position: relative;
     }
-    
+
     .section-header h2::after {
       content: '';
       position: absolute;
@@ -587,27 +568,20 @@
       background-color: var(--accent);
       border-radius: var(--border-radius-full);
     }
-    
+
     /* Card styles */
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: var(--spacing-lg);
     }
-    
+
     .idea-card {
-      background-color: #111;
-      border: 1px solid #FE11C5;
-      border-radius: 12px;
-      padding: 1rem;
-      width: 300px;
       background-color: var(--bg-card);
       border: 1px solid rgba(254, 17, 197, 0.3);
       border-radius: var(--border-radius-lg);
       padding: var(--spacing-xl);
       text-align: left;
-      box-shadow: 0 0 10px #FE11C533;
-      transition: transform 0.2s ease;
       box-shadow: var(--shadow-md), 0 0 20px rgba(254, 17, 197, 0.1);
       transition: all var(--transition-medium) ease;
       position: relative;
@@ -616,7 +590,7 @@
       display: flex;
       flex-direction: column;
     }
-    
+
     .idea-card::before {
       content: '';
       position: absolute;
@@ -627,40 +601,32 @@
       background: linear-gradient(to bottom right, rgba(254, 17, 197, 0.05), transparent);
       pointer-events: none;
     }
-    
+
     .idea-card:hover {
-      transform: scale(1.02);
       transform: translateY(-5px);
       box-shadow: var(--shadow-lg), 0 0 25px rgba(254, 17, 197, 0.15);
       border-color: rgba(254, 17, 197, 0.5);
       background-color: var(--bg-card-hover);
     }
-    
+
     .idea-text {
       font-size: 1.1rem;
-      margin-bottom: 0.5rem;
       margin-bottom: var(--spacing-md);
       color: var(--text-primary);
       font-weight: 400;
       line-height: 1.5;
       flex-grow: 1;
     }
-    
+
     .username {
-      color: #90DCFF;
       color: var(--secondary);
       font-size: 0.9rem;
       margin-bottom: var(--spacing-xs);
       display: block;
       font-weight: 600;
     }
-    
+
     .votes {
-      display: block;
-      margin-top: 0.5rem;
-      font-size: 0.95rem;
-      color: #F9E766;
-      font-weight: bold;
       display: inline-block;
       margin-top: var(--spacing-sm);
       font-size: 1rem;
@@ -670,10 +636,7 @@
       background-color: rgba(249, 231, 102, 0.1);
       border-radius: var(--border-radius-sm);
     }
-    .submit-idea {
-      padding: 3rem 2rem;
-      text-align: center;
-    
+
     /* Loading animation */
     .loading {
       display: inline-block;
@@ -682,15 +645,7 @@
       height: 80px;
       margin: var(--spacing-xl) auto;
     }
-    textarea {
-      width: 90%;
-      max-width: 500px;
-      height: 100px;
-      border-radius: 8px;
-      border: none;
-      padding: 1rem;
-      font-size: 1rem;
-    
+
     .loading div {
       position: absolute;
       top: 33px;
@@ -700,42 +655,27 @@
       background: var(--primary);
       animation-timing-function: cubic-bezier(0, 1, 1, 0);
     }
-    button {
-      background-color: #FE11C5;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      margin-top: 1rem;
-    
+
     .loading div:nth-child(1) {
       left: 8px;
       animation: loading1 0.6s infinite;
     }
-    #notification {
-      display: none;
-      background-color: #F9E766;
-      color: black;
-      padding: 1rem;
-    
+
     .loading div:nth-child(2) {
       left: 8px;
       animation: loading2 0.6s infinite;
     }
-    
+
     .loading div:nth-child(3) {
       left: 32px;
       animation: loading2 0.6s infinite;
     }
-    
+
     .loading div:nth-child(4) {
       left: 56px;
       animation: loading3 0.6s infinite;
     }
-    
+
     @keyframes loading1 {
       0% {
         transform: scale(0);
@@ -744,7 +684,7 @@
         transform: scale(1);
       }
     }
-    
+
     @keyframes loading3 {
       0% {
         transform: scale(1);
@@ -753,7 +693,7 @@
         transform: scale(0);
       }
     }
-    
+
     @keyframes loading2 {
       0% {
         transform: translate(0, 0);
@@ -762,42 +702,28 @@
         transform: translate(24px, 0);
       }
     }
-    
+
     /* Loading text */
     .cards p {
       font-size: 1.1rem;
       color: var(--text-secondary);
       text-align: center;
-      font-weight: bold;
-      position: fixed;
-      top: 0;
       width: 100%;
-      z-index: 1000;
       padding: var(--spacing-xl);
     }
-    .profile-card {
-      display: none;
-      max-width: 500px;
-      margin: 3rem auto;
-      padding: 2rem;
-      background-color: #0F0F1A;
-      border: 2px solid #00FFFF;
-      border-radius: 16px;
-      box-shadow: 0 0 20px rgba(0,255,255,0.3);
-      color: white;
-    
+
     /* Custom elements */
     .glow-text {
       text-shadow: 0 0 5px currentColor;
     }
-    
+
     /* Empty state */
     .empty-state {
       text-align: center;
       padding: var(--spacing-xxl);
       color: var(--text-secondary);
     }
-    
+
     .empty-state svg {
       width: 64px;
       height: 64px;
@@ -805,37 +731,37 @@
       color: var(--primary-light);
       opacity: 0.5;
     }
-    
+
     .empty-state h3 {
       font-size: 1.2rem;
       margin-bottom: var(--spacing-md);
       color: var(--secondary);
     }
-    
+
     .empty-state p {
       max-width: 400px;
       margin: 0 auto;
     }
-    
+
     /* Responsive */
     @media (max-width: 768px) {
       .main-layout {
         padding: var(--spacing-md);
       }
-      
+
       .cards {
         grid-template-columns: 1fr;
       }
-      
+
       .tabs-nav {
         flex-direction: column;
       }
-      
+
       .tab-btn {
         text-align: left;
         border-bottom: 1px solid rgba(254, 17, 197, 0.1);
       }
-      
+
       .tab-btn::after {
         left: 0;
         bottom: 50%;
@@ -843,17 +769,17 @@
         height: 0;
         transform: translateY(50%);
       }
-      
+
       .tab-btn.active::after {
         height: 80%;
         width: 3px;
       }
-      
+
       #notification {
         width: 90%;
       }
     }
-    
+
     /* Loading skeleton */
     .skeleton {
       background: linear-gradient(90deg, 
@@ -866,7 +792,7 @@
       height: 1em;
       margin-bottom: 0.5em;
     }
-    
+
     @keyframes loading-skeleton {
       0% {
         background-position: 200% 0;
@@ -875,7 +801,7 @@
         background-position: -200% 0;
       }
     }
-    
+
     /* Footer */
     .footer {
       text-align: center;
@@ -886,7 +812,7 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     .footer::before {
       content: '';
       position: absolute;
@@ -901,13 +827,6 @@
 <body>
   <div id="notification">✅ Idea submitted successfully!</div>
 
-  <section class="hero">
-    <h1>Shape Succinct’s future</h1>
-    <p>Backed by your ideas, verified by zero-knowledge proofs.</p>
-    <a href="https://discord.com/api/oauth2/authorize?client_id=1371930922877849651&redirect_uri=http%3A%2F%2F217.65.144.64%3A3000%2Fcallback&response_type=code&scope=identify%20guilds.members.read">
-      <button>Connect with Discord</button>
-    </a>
-  </section>
   <div class="app-container">
     <header class="app-header">
       <div class="header-container">
@@ -930,15 +849,6 @@
       </div>
     </header>
 
-  <div class="profile-card">
-    <div class="avatar-section">
-      <img id="discordAvatar" alt="avatar" style="width:100px; height:100px; border-radius:100%; border:3px solid #FE11C5;">
-      <h2 id="discordUsername" style="margin-top:1rem; color:#FE11C5; font-size:1.4rem;">@usuario</h2>
-    </div>
-    <div class="roles-section">
-      <h3 style="color: #90DCFF; margin-bottom: 0.5rem;">Roles:</h3>
-      <div id="roleTags" style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem;"></div>
-      <div id="voteCountDisplay" style="margin-top:1rem; font-size:1rem; color:#F9E766;"></div>
     <div class="main-layout">
       <main class="content-area">
         <div class="welcome-hero" id="welcomeSection">
@@ -1029,33 +939,11 @@
         </div>
       </aside>
     </div>
-  </div>
 
-  <section class="leaderboard">
-    <h2>Leaderboard</h2>
-    <div id="ideaCards" class="cards">
-      <p>Loading...</p>
     <div class="footer">
       Powered by zero-knowledge proofs • Succinct 2025
     </div>
-  </section>
-
-  <section class="submit-idea" id="ideaSubmitSection" style="display:none;">
-  <h2 style="color: #F9E766;">Submit your idea</h2>
-  <form id="ideaForm">
-    <textarea id="ideaText" placeholder="Describe your idea..." required></textarea><br>
-    <button type="submit">Submit Idea</button>
-  </form>
-</section>
-
-  <div id="voteCounter" style="text-align:center; font-size:1.2rem; color:#00FFFF; margin-top:1rem;"></div>
-
-  <section class="leaderboard" id="discardedSection" style="display: none;">
-  <h2 style="color:#FF5555;">Discarded Ideas</h2>
-  <div id="discardedIdeas" class="cards">
-    <p>Loading...</p>
   </div>
-</section>
 
 <script>
 let userId = '', username = '', userRoles = [];
@@ -1066,13 +954,13 @@ function showNotification(message, type = 'success') {
   notif.textContent = message;
   notif.className = type;
   notif.style.display = 'block';
-  
+
   // Add animation
   notif.style.animation = 'none';
   setTimeout(() => {
     notif.style.animation = 'slideIn 0.3s ease';
   }, 10);
-  
+
   setTimeout(() => {
     notif.style.opacity = '0';
     notif.style.transform = 'translate(-50%, -20px)';
@@ -1088,18 +976,18 @@ function showNotification(message, type = 'success') {
 function setupTabs() {
   const tabButtons = document.querySelectorAll('.tab-btn');
   const tabContents = document.querySelectorAll('.tab-content');
-  
+
   tabButtons.forEach(button => {
     button.addEventListener('click', () => {
       // Remove active class from all tabs
       tabButtons.forEach(btn => btn.classList.remove('active'));
       tabContents.forEach(content => content.classList.remove('active'));
-      
+
       // Add active class to clicked tab
       button.classList.add('active');
       const tabName = button.getAttribute('data-tab');
       document.getElementById(`${tabName}-tab`).classList.add('active');
-      
+
       // Load tab-specific content
       if (tabName === 'vote') {
         loadVotableIdeas();
@@ -1120,45 +1008,33 @@ async function getUser() {
     username = data.username;
     userRoles = data.roles || [];
 
-    // Mostrar todo solo si está logueado
-    document.querySelector('.leaderboard').style.display = 'block';
-    document.getElementById('discardedIdeas').parentElement.style.display = 'block';
-
     // Hide auth button when logged in
     document.getElementById('authSection').style.display = 'none';
-    
+
     // Check permissions
     const canSubmit = userRoles.some(r => r.toLowerCase().includes("lets pruv it"));
-    if (canSubmit) {
-      document.getElementById('ideaSubmitSection').style.display = 'block';
-    }
-
     const canVote = userRoles.some(r => 
       r.toLowerCase() === 'proof verified' || 
       r.toLowerCase() === 'proof of verify'
     );
-    
+
     // Update UI based on permissions
     document.getElementById('ideaSubmitSection').style.display = canSubmit ? 'block' : 'none';
-    
+
     // Update profile card when logged in
     updateProfileCard(data);
-    
+
     showNotification(`Welcome, ${username}!`);
     return data;
-  } catch {
-    // Si no está autenticado, ocultar todo
-    document.querySelector('.leaderboard').style.display = 'none';
-    document.getElementById('discardedIdeas').parentElement.style.display = 'none';
   } catch (error) {
     console.error('User not authenticated', error);
     document.getElementById('ideaSubmitSection').style.display = 'none';
     document.getElementById('authSection').style.display = 'block';
-    
+
     // Show not logged in profile card
     const profileContainer = document.getElementById('profileCardContainer');
     profileContainer.classList.add('not-logged-in');
-    
+
     return null;
   }
 }
@@ -1166,7 +1042,7 @@ async function getUser() {
 function updateProfileCard(user) {
   const profileContainer = document.getElementById('profileCardContainer');
   profileContainer.classList.remove('not-logged-in');
-  
+
   profileContainer.innerHTML = `
     <div class="avatar-section">
       <img id="discordAvatar" alt="Discord Avatar" src="${user.avatar_url || 'https://cdn.discordapp.com/embed/avatars/0.png'}" />
@@ -1184,10 +1060,10 @@ function updateProfileCard(user) {
       <span id="voteCountDisplay">Available votes: ${user.remaining_votes || 0}</span>
     </div>
   `;
-  
+
   const roleTags = document.getElementById('roleTags');
   roleTags.innerHTML = '';
-  
+
   // Style for role tags
   const ROLE_STYLES = {
     "PROVED UR LUV": "#ff66cc", "PROOF OF ART": "#00e6e6", "PROOF OF DEV": "#9999ff",
@@ -1200,7 +1076,7 @@ function updateProfileCard(user) {
     "🇵🇱・polski": "#cccccc", "🇧🇷・português": "#cccccc", "🇮🇳・हिन्दी": "#cccccc",
     "Dev Helper": "#8888ff", "Beta Prover": "#cc00cc"
   };
-  
+
   user.roles.forEach(role => {
     const tag = document.createElement('span');
     tag.textContent = role;
@@ -1217,39 +1093,36 @@ function updateProfileCard(user) {
       transition: all 0.2s ease;
       margin-bottom: 0.5rem;
     `;
-    
+
     // Add hover effect
     tag.addEventListener('mouseenter', () => {
       tag.style.backgroundColor = 'rgba(26, 26, 43, 1)';
       tag.style.transform = 'translateY(-2px)';
       tag.style.boxShadow = `0 2px 8px rgba(${hexToRgb(color)}, 0.3)`;
     });
-    
+
     tag.addEventListener('mouseleave', () => {
       tag.style.backgroundColor = 'rgba(26, 26, 43, 0.8)';
       tag.style.transform = 'translateY(0)';
       tag.style.boxShadow = 'none';
     });
-    
+
     roleTags.appendChild(tag);
   });
 }
 
 document.getElementById('ideaForm').addEventListener('submit', async function (e) {
   e.preventDefault();
+
   const ideaText = document.getElementById('ideaText').value.trim();
   if (!ideaText) return;
   
+
   const submitButton = this.querySelector('button');
   const originalText = submitButton.textContent;
   submitButton.disabled = true;
   submitButton.textContent = 'Submitting...';
 
-  const res = await fetch(`${BACKEND_URL}/submit-idea`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
-  });
   try {
     const res = await fetch(`${BACKEND_URL}/submit-idea`, {
       method: 'POST',
@@ -1257,13 +1130,23 @@ document.getElementById('ideaForm').addEventListener('submit', async function (e
       body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
     });
 
-  const data = await res.json();
-  if (data.success) {
-    alert('✅ Idea submitted and verified!');
-    document.getElementById('ideaText').value = '';
-    loadIdeas();
-  } else {
-    alert(data.error || '❌ Submission failed.');
+    const data = await res.json();
+    if (data.success) {
+      showNotification('✅ Idea submitted and verified!');
+      document.getElementById('ideaText').value = '';
+      loadIdeas();
+    } else {
+      showNotification(data.error || '❌ Submission failed.', 'error');
+    }
+  } catch (error) {
+    showNotification('❌ Network error. Please try again.', 'error');
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalText;
+  }
+});
+
+
     const data = await res.json();
     if (data.success) {
       showNotification('✅ Idea submitted and verified!');
@@ -1294,50 +1177,26 @@ function createSkeletonCard() {
 }
 
 async function loadIdeas() {
-  const res = await fetch(`${BACKEND_URL}/ideas`);
-  const { ideas, totalVotes } = await res.json();
   const container = document.getElementById('ideaCards');
-  
+
   // Show skeleton loader
   container.innerHTML = '';
-
-  const counter = document.getElementById('voteCounter');
-  if (counter) counter.textContent = `🔎 Total verified SP1 votes: ${totalVotes}`;
-
-  ideas.forEach((i, idx) => {
-    const card = document.createElement('div');
-    card.className = 'idea-card';
-    card.innerHTML = `
-      <p class="idea-text">#${idx + 1} — ${i.idea}</p>
-      <span class="username">by @${i.username || 'unknown'}</span>
-      <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
-      ${
-        userRoles.some(r => r.toLowerCase() === 'proof verified' || r.toLowerCase() === 'proof of verify')
-          ? `
-        <input type="number" id="voteInput${idx}" min="1" placeholder="Votes" style="width: 60px; margin-top: 0.5rem;" />
-        <br />
-        <button onclick="voteIdea(${idx}, this)">🔎 Vote</button>
-        `
-          : ''
-      }
-    `;
-    container.appendChild(card);
-  });
   for (let i = 0; i < 3; i++) {
     container.appendChild(createSkeletonCard());
   }
-  
+
   try {
     const res = await fetch(`${BACKEND_URL}/ideas`);
     const { ideas, totalVotes } = await res.json();
-    
+
     // Update vote counter
+    // Update vote counter  
     const counter = document.getElementById('voteCounter');
     if (counter) counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
-    
+
     // Clear container
     container.innerHTML = '';
-    
+
     if (ideas.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
@@ -1350,7 +1209,7 @@ async function loadIdeas() {
       `;
       return;
     }
-    
+
     // Create cards for each idea
     ideas.forEach((i, idx) => {
       const card = document.createElement('div');
@@ -1370,20 +1229,20 @@ async function loadIdeas() {
 
 async function loadVotableIdeas() {
   const container = document.getElementById('voteIdeasCards');
-  
+
   // Show skeleton loader
   container.innerHTML = '';
   for (let i = 0; i < 3; i++) {
     container.appendChild(createSkeletonCard());
   }
-  
+
   try {
     const res = await fetch(`${BACKEND_URL}/ideas`);
     const { ideas } = await res.json();
-    
+
     // Clear container
     container.innerHTML = '';
-    
+
     if (ideas.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
@@ -1397,12 +1256,12 @@ async function loadVotableIdeas() {
       `;
       return;
     }
-    
+
     const canVote = userRoles.some(r => 
       r.toLowerCase() === 'proof verified' || 
       r.toLowerCase() === 'proof of verify'
     );
-    
+
     // Create cards for each idea with voting option
     ideas.forEach((i, idx) => {
       const card = document.createElement('div');
@@ -1433,69 +1292,21 @@ async function loadVotableIdeas() {
 }
 
 async function loadDiscardedIdeas() {
-  const res = await fetch(`${BACKEND_URL}/message.json`);
-  const messages = await res.json();
   const container = document.getElementById('discardedIdeas');
-  
+
   // Show skeleton loader
   container.innerHTML = '';
-  messages.forEach((msg) => {
-    const card = document.createElement('div');
-    card.className = 'idea-card';
-    card.innerHTML = `
-      <p class="idea-text">🗑️ ${msg.idea}</p>
-      <span class="votes" style="color: #FF8888;">Reason: ${msg.reason}</span>
-    `;
-    container.appendChild(card);
-  });
-}
-
-const ROLE_STYLES = {
-  "PROVED UR LUV": "#ff66cc", "PROOF OF ART": "#00e6e6", "PROOF OF DEV": "#9999ff",
-  "PROOF OF MUSIC": "#66cccc", "PROOF OF VIDEO": "#cc99ff", "PROOF VERIFIED": "#55d6aa",
-  "LET'S PRUV IT": "#ff9999", "ZK EVENTS": "#ff6699", "X PROVER": "#ff4da6",
-  "DEV CHANNEL": "#6666ff", "ALL IN SUCCINCT": "#ffcc66", "RUSTACEAN": "#cc6600",
-  "SUCCINCT CRACKED EMPLOYEE": "#ff0066", "HELPER PROVER": "#ffcc00", "STAFF PROVER": "#ff3399",
-  "🇪🇸・español": "#cccccc", "🇨🇳・中文": "#cccccc", "🇻🇳・tiếng-việt": "#cccccc",
-  "🇮🇩・indonesia": "#cccccc", "🇹🇷・türkçe": "#cccccc", "🇷🇺・русский": "#cccccc",
-  "🇵🇱・polski": "#cccccc", "🇧🇷・português": "#cccccc", "🇮🇳・हिन्दी": "#cccccc",
-  "Dev Helper": "#8888ff", "Beta Prover": "#cc00cc"
-};
-
-async function loadUserProfileCard() {
   for (let i = 0; i < 2; i++) {
     container.appendChild(createSkeletonCard());
   }
-  
+
   try {
-    const res = await fetch(`${BACKEND_URL}/api/user`);
-    if (!res.ok) throw new Error('Not authenticated');
-    const user = await res.json();
-    const allowedRoles = ['Proof Verified', "Let's pruv it"];
-    const hasAccess = user.roles.some(role =>
-      allowedRoles.map(r => r.toLowerCase()).includes(role.toLowerCase())
-    );
-    if (!hasAccess) return;
-    document.getElementById('voteCountDisplay').textContent = `🗳️ Votos disponibles: ${user.remaining_votes}`;
-    document.getElementById('discordAvatar').src = user.avatar_url;
-    const roleTags = document.getElementById('roleTags');
-    user.roles.forEach(role => {
-      const tag = document.createElement('span');
-      tag.textContent = role;
-      const color = ROLE_STYLES[role.toUpperCase()] || ROLE_STYLES[role] || '#90DCFF';
-      tag.style.cssText = `
-        background-color: #1A1A2B;
-        color: ${color};
-        border: 1px solid ${color};
-        border-radius: 12px;
-        padding: 0.3rem 0.7rem;
-        font-size: 0.9rem;
     const res = await fetch(`${BACKEND_URL}/message.json`);
     const messages = await res.json();
-    
+
     // Clear container
     container.innerHTML = '';
-    
+
     if (messages.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
@@ -1508,7 +1319,7 @@ async function loadUserProfileCard() {
       `;
       return;
     }
-    
+
     // Create cards for each discarded idea
     messages.forEach((msg) => {
       const card = document.createElement('div');
@@ -1517,12 +1328,8 @@ async function loadUserProfileCard() {
         <p class="idea-text">🗑️ ${msg.idea}</p>
         <span class="votes" style="color: var(--danger);">Reason: ${msg.reason}</span>
       `;
-      roleTags.appendChild(tag);
       container.appendChild(card);
     });
-    document.querySelector('.profile-card').style.display = 'block';
-  } catch (e) {
-    console.log('User not authenticated or unauthorized for profile card.');
   } catch (error) {
     console.error('Error loading discarded ideas:', error);
     container.innerHTML = '<p>Failed to load discarded ideas. Please try again later.</p>';
@@ -1533,17 +1340,17 @@ async function loadUserProfileCard() {
 function hexToRgb(hex) {
   // Remove # if present
   hex = hex.replace('#', '');
-  
+
   // Convert 3-digit hex to 6-digit
   if (hex.length === 3) {
     hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
   }
-  
+
   // Parse the hex values
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
-  
+
   return `${r}, ${g}, ${b}`;
 }
 
@@ -1552,28 +1359,14 @@ async function voteIdea(index, button) {
   const amount = parseInt(input?.value || '1', 10);
 
   if (!amount || amount < 1) {
-    alert('❌ Ingresa una cantidad válida de votos');
     showNotification('❌ Please enter a valid number of votes', 'error');
     return;
   }
 
   const originalText = button.textContent;
   button.disabled = true;
-  button.textContent = 'Verificando...';
-
-  const res = await fetch(`${BACKEND_URL}/vote`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      index,
-      discord_id: userId,
-      username,
-      amount
-    })
-  });
   button.textContent = 'Verifying...';
 
-  const data = await res.json();
   try {
     const res = await fetch(`${BACKEND_URL}/vote`, {
       method: 'POST',
@@ -1586,13 +1379,6 @@ async function voteIdea(index, button) {
       })
     });
 
-  if (data.success) {
-    alert(`✅ Votaste con ${amount} voto${amount === 1 ? '' : 's'}`);
-    input.value = '';
-    loadIdeas();
-    updateRemainingVotesDisplay();
-  } else {
-    alert(data.error || '❌ Falló el voto');
     const data = await res.json();
 
     if (data.success) {
@@ -1608,11 +1394,9 @@ async function voteIdea(index, button) {
     showNotification('❌ Network error. Please try again.', 'error');
   } finally {
     button.disabled = false;
-    button.textContent = '🔎 Vote';
     button.textContent = originalText;
   }
 }
-
 
 async function updateRemainingVotesDisplay() {
   try {
@@ -1621,9 +1405,8 @@ async function updateRemainingVotesDisplay() {
 
     const voteCountDisplay = document.getElementById('voteCountDisplay');
     if (voteCountDisplay) {
-      voteCountDisplay.textContent = `🗳️ Votos disponibles: ${user.remaining_votes}`;
       voteCountDisplay.textContent = `Available votes: ${user.remaining_votes}`;
-      
+
       // Add animation
       voteCountDisplay.style.animation = 'none';
       setTimeout(() => {
@@ -1635,15 +1418,12 @@ async function updateRemainingVotesDisplay() {
   }
 }
 
-    getUser().then(() => {
 // Initialize application
 document.addEventListener('DOMContentLoaded', function() {
   setupTabs();
   getUser().then(() => {
     loadIdeas();
     loadDiscardedIdeas();
-    loadUserProfileCard();
-    updateRemainingVotesDisplay(); // ✅ Aquí se actualiza en tiempo real
     updateRemainingVotesDisplay();
   });
 });
