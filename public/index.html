@@ -53,13 +53,13 @@
       --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
       --shadow-glow: 0 0 20px;
     }
-
+    
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
+    
     body {
       margin: 0;
       padding: 0;
@@ -74,7 +74,7 @@
       overflow-x: hidden;
       position: relative;
     }
-
+    
     body::before {
       content: '';
       position: fixed;
@@ -90,7 +90,7 @@
       opacity: 0.3;
       pointer-events: none;
     }
-
+    
     /* Notification styles */
     #notification {
       display: none;
@@ -112,17 +112,17 @@
       text-align: left;
       animation: slideIn 0.3s ease;
     }
-
+    
     #notification.error {
       border-left-color: var(--danger);
       box-shadow: var(--shadow-md), 0 0 15px rgba(255, 85, 85, 0.3);
     }
-
+    
     #notification.success {
       border-left-color: var(--success);
       box-shadow: var(--shadow-md), 0 0 15px rgba(85, 214, 170, 0.3);
     }
-
+    
     @keyframes slideIn {
       from {
         transform: translate(-50%, -20px);
@@ -133,14 +133,14 @@
         opacity: 1;
       }
     }
-
+    
     /* App layout styles */
     .app-container {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
     }
-
+    
     .main-layout {
       display: grid;
       grid-template-columns: 1fr 350px;
@@ -150,13 +150,13 @@
       padding: var(--spacing-lg);
       flex-grow: 1;
     }
-
+    
     @media (max-width: 992px) {
       .main-layout {
         grid-template-columns: 1fr;
       }
     }
-
+    
     /* Header styles */
     .app-header {
       padding: var(--spacing-md) var(--spacing-lg);
@@ -164,7 +164,7 @@
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(254, 17, 197, 0.2);
     }
-
+    
     .header-container {
       max-width: 1400px;
       margin: 0 auto;
@@ -172,7 +172,7 @@
       align-items: center;
       justify-content: space-between;
     }
-
+    
     .logo {
       font-size: 1.5rem;
       font-weight: 800;
@@ -181,12 +181,12 @@
       align-items: center;
       gap: var(--spacing-sm);
     }
-
+    
     .logo svg {
       width: 24px;
       height: 24px;
     }
-
+    
     /* Tab navigation */
     .tabs-container {
       background-color: var(--bg-nav);
@@ -196,12 +196,12 @@
       box-shadow: var(--shadow-md);
       border: 1px solid rgba(254, 17, 197, 0.2);
     }
-
+    
     .tabs-nav {
       display: flex;
       border-bottom: 1px solid rgba(254, 17, 197, 0.2);
     }
-
+    
     .tab-btn {
       flex: 1;
       padding: var(--spacing-md);
@@ -216,7 +216,7 @@
       position: relative;
       overflow: hidden;
     }
-
+    
     .tab-btn::after {
       content: '';
       position: absolute;
@@ -228,30 +228,30 @@
       transition: all var(--transition-medium);
       transform: translateX(-50%);
     }
-
+    
     .tab-btn:hover {
       background-color: rgba(254, 17, 197, 0.1);
     }
-
+    
     .tab-btn.active {
       background-color: var(--bg-tab-active);
       color: var(--primary);
     }
-
+    
     .tab-btn.active::after {
       width: 80%;
     }
-
+    
     .tab-content {
       display: none;
       padding: var(--spacing-lg);
     }
-
+    
     .tab-content.active {
       display: block;
       animation: fadeIn 0.3s ease;
     }
-
+    
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -262,7 +262,7 @@
         transform: translateY(0);
       }
     }
-
+    
     /* Button styles */
     button {
       background-color: var(--primary);
@@ -279,17 +279,17 @@
       overflow: hidden;
       box-shadow: 0 4px 12px var(--primary-glow);
     }
-
+    
     button:hover {
       background-color: var(--primary-dark);
       transform: translateY(-2px);
       box-shadow: 0 6px 16px var(--primary-glow);
     }
-
+    
     button:active {
       transform: translateY(0);
     }
-
+    
     button::after {
       content: '';
       position: absolute;
@@ -308,12 +308,12 @@
       opacity: 0;
       transition: opacity var(--transition-medium) ease;
     }
-
+    
     button:hover::after {
       opacity: 1;
       animation: shine 1.5s ease;
     }
-
+    
     @keyframes shine {
       from {
         left: -100%;
@@ -322,7 +322,7 @@
         left: 100%;
       }
     }
-
+    
     button:disabled {
       background-color: #666;
       cursor: not-allowed;
@@ -330,7 +330,7 @@
       box-shadow: none;
       transform: none;
     }
-
+    
     /* Discord connect button */
     .discord-btn {
       display: inline-flex;
@@ -339,22 +339,22 @@
       background-color: #5865F2;
       position: relative;
     }
-
+    
     .discord-btn:hover {
       background-color: #4752C4;
     }
-
+    
     .discord-btn svg {
       width: 24px;
       height: 24px;
     }
-
+    
     /* Welcome hero section */
     .welcome-hero {
       text-align: center;
       padding-bottom: var(--spacing-xl);
     }
-
+    
     .welcome-hero h1 {
       font-size: clamp(2rem, 4vw, 3rem);
       color: var(--primary);
@@ -363,7 +363,7 @@
       position: relative;
       display: inline-block;
     }
-
+    
     .welcome-hero h1::after {
       content: '';
       position: absolute;
@@ -373,7 +373,7 @@
       height: 2px;
       background: linear-gradient(to right, transparent, var(--primary), transparent);
     }
-
+    
     .welcome-hero p {
       font-size: clamp(1rem, 2vw, 1.2rem);
       max-width: 600px;
@@ -381,7 +381,7 @@
       color: var(--secondary);
       font-weight: 400;
     }
-
+    
     /* User sidebar styles */
     .user-sidebar {
       background-color: var(--bg-sidebar);
@@ -391,27 +391,27 @@
       border: 1px solid rgba(144, 220, 255, 0.2);
       height: fit-content;
     }
-
+    
     .sidebar-header {
       padding: var(--spacing-lg);
       background: linear-gradient(135deg, rgba(254, 17, 197, 0.1), rgba(144, 220, 255, 0.1));
       border-bottom: 1px solid rgba(254, 17, 197, 0.2);
       text-align: center;
     }
-
+    
     .sidebar-header h2 {
       color: var(--secondary);
       font-size: 1.3rem;
       margin-bottom: var(--spacing-sm);
     }
-
+    
     /* Profile card styles */
     .profile-card {
       padding: var(--spacing-lg);
       color: var(--text-primary);
       text-align: center;
     }
-
+    
     .profile-card.not-logged-in {
       padding: var(--spacing-xl);
       display: flex;
@@ -420,13 +420,13 @@
       justify-content: center;
       gap: var(--spacing-lg);
     }
-
+    
     .avatar-section {
       margin-bottom: var(--spacing-lg);
       position: relative;
       z-index: 2;
     }
-
+    
     .avatar-section img {
       width: 100px;
       height: 100px;
@@ -436,24 +436,24 @@
       box-shadow: 0 0 15px var(--primary-glow);
       transition: transform var(--transition-medium) ease;
     }
-
+    
     .avatar-section img:hover {
       transform: scale(1.05);
     }
-
+    
     #discordUsername {
       margin-top: var(--spacing-md);
       color: var(--primary);
       font-size: 1.4rem;
     }
-
+    
     .roles-section h3 {
       color: var(--secondary);
       margin-bottom: var(--spacing-sm);
       font-weight: 600;
       font-size: 1.1rem;
     }
-
+    
     #roleTags {
       display: flex;
       flex-wrap: wrap;
@@ -461,7 +461,7 @@
       gap: var(--spacing-sm);
       margin-bottom: var(--spacing-md);
     }
-
+    
     .vote-counter {
       margin-top: var(--spacing-lg);
       padding: var(--spacing-md);
@@ -474,12 +474,12 @@
       justify-content: center;
       gap: var(--spacing-sm);
     }
-
+    
     .vote-counter svg {
       width: 20px;
       height: 20px;
     }
-
+    
     /* Create idea form styles */
     .idea-form {
       background-color: var(--bg-card);
@@ -489,13 +489,13 @@
       border: 1px solid rgba(254, 17, 197, 0.2);
       box-shadow: var(--shadow-md);
     }
-
+    
     .idea-form h3 {
       color: var(--secondary);
       margin-bottom: var(--spacing-md);
       font-size: 1.2rem;
     }
-
+    
     textarea {
       width: 100%;
       min-height: 150px;
@@ -510,18 +510,18 @@
       resize: vertical;
       transition: all var(--transition-fast) ease;
     }
-
+    
     textarea:focus {
       outline: none;
       border-color: var(--secondary);
       box-shadow: 0 0 0 2px rgba(144, 220, 255, 0.2);
     }
-
+    
     textarea::placeholder {
       color: var(--text-secondary);
       opacity: 0.6;
     }
-
+    
     /* Voting input styles */
     input[type="number"] {
       width: 80px;
@@ -536,27 +536,27 @@
       text-align: center;
       transition: all var(--transition-fast) ease;
     }
-
+    
     input[type="number"]:focus {
       outline: none;
       border-color: var(--secondary);
       box-shadow: 0 0 0 2px rgba(144, 220, 255, 0.2);
     }
-
+    
     /* Leaderboard section */
     .section-header {
       margin-bottom: var(--spacing-xl);
       position: relative;
       text-align: center;
     }
-
+    
     .section-header h2 {
       font-size: 1.8rem;
       color: var(--accent);
       display: inline-block;
       position: relative;
     }
-
+    
     .section-header h2::after {
       content: '';
       position: absolute;
@@ -568,14 +568,14 @@
       background-color: var(--accent);
       border-radius: var(--border-radius-full);
     }
-
+    
     /* Card styles */
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: var(--spacing-lg);
     }
-
+    
     .idea-card {
       background-color: var(--bg-card);
       border: 1px solid rgba(254, 17, 197, 0.3);
@@ -590,7 +590,7 @@
       display: flex;
       flex-direction: column;
     }
-
+    
     .idea-card::before {
       content: '';
       position: absolute;
@@ -601,14 +601,14 @@
       background: linear-gradient(to bottom right, rgba(254, 17, 197, 0.05), transparent);
       pointer-events: none;
     }
-
+    
     .idea-card:hover {
       transform: translateY(-5px);
       box-shadow: var(--shadow-lg), 0 0 25px rgba(254, 17, 197, 0.15);
       border-color: rgba(254, 17, 197, 0.5);
       background-color: var(--bg-card-hover);
     }
-
+    
     .idea-text {
       font-size: 1.1rem;
       margin-bottom: var(--spacing-md);
@@ -617,7 +617,7 @@
       line-height: 1.5;
       flex-grow: 1;
     }
-
+    
     .username {
       color: var(--secondary);
       font-size: 0.9rem;
@@ -625,7 +625,7 @@
       display: block;
       font-weight: 600;
     }
-
+    
     .votes {
       display: inline-block;
       margin-top: var(--spacing-sm);
@@ -636,7 +636,7 @@
       background-color: rgba(249, 231, 102, 0.1);
       border-radius: var(--border-radius-sm);
     }
-
+    
     /* Loading animation */
     .loading {
       display: inline-block;
@@ -645,7 +645,7 @@
       height: 80px;
       margin: var(--spacing-xl) auto;
     }
-
+    
     .loading div {
       position: absolute;
       top: 33px;
@@ -655,27 +655,27 @@
       background: var(--primary);
       animation-timing-function: cubic-bezier(0, 1, 1, 0);
     }
-
+    
     .loading div:nth-child(1) {
       left: 8px;
       animation: loading1 0.6s infinite;
     }
-
+    
     .loading div:nth-child(2) {
       left: 8px;
       animation: loading2 0.6s infinite;
     }
-
+    
     .loading div:nth-child(3) {
       left: 32px;
       animation: loading2 0.6s infinite;
     }
-
+    
     .loading div:nth-child(4) {
       left: 56px;
       animation: loading3 0.6s infinite;
     }
-
+    
     @keyframes loading1 {
       0% {
         transform: scale(0);
@@ -684,7 +684,7 @@
         transform: scale(1);
       }
     }
-
+    
     @keyframes loading3 {
       0% {
         transform: scale(1);
@@ -693,7 +693,7 @@
         transform: scale(0);
       }
     }
-
+    
     @keyframes loading2 {
       0% {
         transform: translate(0, 0);
@@ -702,7 +702,7 @@
         transform: translate(24px, 0);
       }
     }
-
+    
     /* Loading text */
     .cards p {
       font-size: 1.1rem;
@@ -711,19 +711,19 @@
       width: 100%;
       padding: var(--spacing-xl);
     }
-
+    
     /* Custom elements */
     .glow-text {
       text-shadow: 0 0 5px currentColor;
     }
-
+    
     /* Empty state */
     .empty-state {
       text-align: center;
       padding: var(--spacing-xxl);
       color: var(--text-secondary);
     }
-
+    
     .empty-state svg {
       width: 64px;
       height: 64px;
@@ -731,37 +731,37 @@
       color: var(--primary-light);
       opacity: 0.5;
     }
-
+    
     .empty-state h3 {
       font-size: 1.2rem;
       margin-bottom: var(--spacing-md);
       color: var(--secondary);
     }
-
+    
     .empty-state p {
       max-width: 400px;
       margin: 0 auto;
     }
-
+    
     /* Responsive */
     @media (max-width: 768px) {
       .main-layout {
         padding: var(--spacing-md);
       }
-
+      
       .cards {
         grid-template-columns: 1fr;
       }
-
+      
       .tabs-nav {
         flex-direction: column;
       }
-
+      
       .tab-btn {
         text-align: left;
         border-bottom: 1px solid rgba(254, 17, 197, 0.1);
       }
-
+      
       .tab-btn::after {
         left: 0;
         bottom: 50%;
@@ -769,17 +769,17 @@
         height: 0;
         transform: translateY(50%);
       }
-
+      
       .tab-btn.active::after {
         height: 80%;
         width: 3px;
       }
-
+      
       #notification {
         width: 90%;
       }
     }
-
+    
     /* Loading skeleton */
     .skeleton {
       background: linear-gradient(90deg, 
@@ -792,7 +792,7 @@
       height: 1em;
       margin-bottom: 0.5em;
     }
-
+    
     @keyframes loading-skeleton {
       0% {
         background-position: 200% 0;
@@ -801,7 +801,7 @@
         background-position: -200% 0;
       }
     }
-
+    
     /* Footer */
     .footer {
       text-align: center;
@@ -812,7 +812,7 @@
       position: relative;
       overflow: hidden;
     }
-
+    
     .footer::before {
       content: '';
       position: absolute;
@@ -954,13 +954,13 @@ function showNotification(message, type = 'success') {
   notif.textContent = message;
   notif.className = type;
   notif.style.display = 'block';
-
+  
   // Add animation
   notif.style.animation = 'none';
   setTimeout(() => {
     notif.style.animation = 'slideIn 0.3s ease';
   }, 10);
-
+  
   setTimeout(() => {
     notif.style.opacity = '0';
     notif.style.transform = 'translate(-50%, -20px)';
@@ -976,18 +976,18 @@ function showNotification(message, type = 'success') {
 function setupTabs() {
   const tabButtons = document.querySelectorAll('.tab-btn');
   const tabContents = document.querySelectorAll('.tab-content');
-
+  
   tabButtons.forEach(button => {
     button.addEventListener('click', () => {
       // Remove active class from all tabs
       tabButtons.forEach(btn => btn.classList.remove('active'));
       tabContents.forEach(content => content.classList.remove('active'));
-
+      
       // Add active class to clicked tab
       button.classList.add('active');
       const tabName = button.getAttribute('data-tab');
-      document.getElementById(`${tabName}-tab`).classList.add('active');
-
+      document.getElementById(${tabName}-tab).classList.add('active');
+      
       // Load tab-specific content
       if (tabName === 'vote') {
         loadVotableIdeas();
@@ -1002,7 +1002,7 @@ function setupTabs() {
 
 async function getUser() {
   try {
-    const res = await fetch(`${BACKEND_URL}/api/user`);
+    const res = await fetch(${BACKEND_URL}/api/user);
     const data = await res.json();
     userId = data.discord_id;
     username = data.username;
@@ -1010,31 +1010,31 @@ async function getUser() {
 
     // Hide auth button when logged in
     document.getElementById('authSection').style.display = 'none';
-
+    
     // Check permissions
     const canSubmit = userRoles.some(r => r.toLowerCase().includes("lets pruv it"));
     const canVote = userRoles.some(r => 
       r.toLowerCase() === 'proof verified' || 
       r.toLowerCase() === 'proof of verify'
     );
-
+    
     // Update UI based on permissions
     document.getElementById('ideaSubmitSection').style.display = canSubmit ? 'block' : 'none';
-
+    
     // Update profile card when logged in
     updateProfileCard(data);
-
-    showNotification(`Welcome, ${username}!`);
+    
+    showNotification(Welcome, ${username}!);
     return data;
   } catch (error) {
     console.error('User not authenticated', error);
     document.getElementById('ideaSubmitSection').style.display = 'none';
     document.getElementById('authSection').style.display = 'block';
-
+    
     // Show not logged in profile card
     const profileContainer = document.getElementById('profileCardContainer');
     profileContainer.classList.add('not-logged-in');
-
+    
     return null;
   }
 }
@@ -1042,8 +1042,8 @@ async function getUser() {
 function updateProfileCard(user) {
   const profileContainer = document.getElementById('profileCardContainer');
   profileContainer.classList.remove('not-logged-in');
-
-  profileContainer.innerHTML = `
+  
+  profileContainer.innerHTML = 
     <div class="avatar-section">
       <img id="discordAvatar" alt="Discord Avatar" src="${user.avatar_url || 'https://cdn.discordapp.com/embed/avatars/0.png'}" />
       <h2 id="discordUsername">@${user.username}</h2>
@@ -1059,11 +1059,11 @@ function updateProfileCard(user) {
       </svg>
       <span id="voteCountDisplay">Available votes: ${user.remaining_votes || 0}</span>
     </div>
-  `;
-
+  ;
+  
   const roleTags = document.getElementById('roleTags');
   roleTags.innerHTML = '';
-
+  
   // Style for role tags
   const ROLE_STYLES = {
     "PROVED UR LUV": "#ff66cc", "PROOF OF ART": "#00e6e6", "PROOF OF DEV": "#9999ff",
@@ -1076,12 +1076,12 @@ function updateProfileCard(user) {
     "🇵🇱・polski": "#cccccc", "🇧🇷・português": "#cccccc", "🇮🇳・हिन्दी": "#cccccc",
     "Dev Helper": "#8888ff", "Beta Prover": "#cc00cc"
   };
-
+  
   user.roles.forEach(role => {
     const tag = document.createElement('span');
     tag.textContent = role;
     const color = ROLE_STYLES[role.toUpperCase()] || ROLE_STYLES[role] || '#90DCFF';
-    tag.style.cssText = `
+    tag.style.cssText = 
       background-color: rgba(26, 26, 43, 0.8);
       color: ${color};
       border: 1px solid ${color};
@@ -1092,39 +1092,37 @@ function updateProfileCard(user) {
       backdrop-filter: blur(5px);
       transition: all 0.2s ease;
       margin-bottom: 0.5rem;
-    `;
-
+    ;
+    
     // Add hover effect
     tag.addEventListener('mouseenter', () => {
       tag.style.backgroundColor = 'rgba(26, 26, 43, 1)';
       tag.style.transform = 'translateY(-2px)';
-      tag.style.boxShadow = `0 2px 8px rgba(${hexToRgb(color)}, 0.3)`;
+      tag.style.boxShadow = 0 2px 8px rgba(${hexToRgb(color)}, 0.3);
     });
-
+    
     tag.addEventListener('mouseleave', () => {
       tag.style.backgroundColor = 'rgba(26, 26, 43, 0.8)';
       tag.style.transform = 'translateY(0)';
       tag.style.boxShadow = 'none';
     });
-
+    
     roleTags.appendChild(tag);
   });
 }
 
 document.getElementById('ideaForm').addEventListener('submit', async function (e) {
   e.preventDefault();
-
   const ideaText = document.getElementById('ideaText').value.trim();
   if (!ideaText) return;
   
-
   const submitButton = this.querySelector('button');
   const originalText = submitButton.textContent;
   submitButton.disabled = true;
   submitButton.textContent = 'Submitting...';
 
   try {
-    const res = await fetch(`${BACKEND_URL}/submit-idea`, {
+    const res = await fetch(${BACKEND_URL}/submit-idea, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
@@ -1146,48 +1144,41 @@ document.getElementById('ideaForm').addEventListener('submit', async function (e
   }
 });
 
-  } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = originalText;
-  }
-});
-
 function createSkeletonCard() {
   const card = document.createElement('div');
   card.className = 'idea-card';
-  card.innerHTML = `
+  card.innerHTML = 
     <div class="skeleton" style="width: 90%; height: 1.2rem;"></div>
     <div class="skeleton" style="width: 80%; height: 1.2rem;"></div>
     <div class="skeleton" style="width: 60%; height: 1.2rem;"></div>
     <div class="skeleton" style="width: 40%; height: 0.9rem; margin-top: 1rem;"></div>
     <div class="skeleton" style="width: 30%; height: 0.9rem;"></div>
-  `;
+  ;
   return card;
 }
 
 async function loadIdeas() {
   const container = document.getElementById('ideaCards');
-
+  
   // Show skeleton loader
   container.innerHTML = '';
   for (let i = 0; i < 3; i++) {
     container.appendChild(createSkeletonCard());
   }
-
+  
   try {
-    const res = await fetch(`${BACKEND_URL}/ideas`);
+    const res = await fetch(${BACKEND_URL}/ideas);
     const { ideas, totalVotes } = await res.json();
-
+    
     // Update vote counter
-    // Update vote counter  
     const counter = document.getElementById('voteCounter');
-    if (counter) counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
-
+    if (counter) counter.querySelector('span').textContent = Total verified votes: ${totalVotes};
+    
     // Clear container
     container.innerHTML = '';
-
+    
     if (ideas.length === 0) {
-      container.innerHTML = `
+      container.innerHTML = 
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
@@ -1195,19 +1186,19 @@ async function loadIdeas() {
           <h3>No ideas yet</h3>
           <p>Be the first to submit an innovative idea for Succinct's future!</p>
         </div>
-      `;
+      ;
       return;
     }
-
+    
     // Create cards for each idea
     ideas.forEach((i, idx) => {
       const card = document.createElement('div');
       card.className = 'idea-card';
-      card.innerHTML = `
+      card.innerHTML = 
         <p class="idea-text">#${idx + 1} — ${i.idea}</p>
         <span class="username">by @${i.username || 'unknown'}</span>
         <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
-      `;
+      ;
       container.appendChild(card);
     });
   } catch (error) {
@@ -1218,22 +1209,22 @@ async function loadIdeas() {
 
 async function loadVotableIdeas() {
   const container = document.getElementById('voteIdeasCards');
-
+  
   // Show skeleton loader
   container.innerHTML = '';
   for (let i = 0; i < 3; i++) {
     container.appendChild(createSkeletonCard());
   }
-
+  
   try {
-    const res = await fetch(`${BACKEND_URL}/ideas`);
+    const res = await fetch(${BACKEND_URL}/ideas);
     const { ideas } = await res.json();
-
+    
     // Clear container
     container.innerHTML = '';
-
+    
     if (ideas.length === 0) {
-      container.innerHTML = `
+      container.innerHTML = 
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"></circle>
@@ -1242,36 +1233,36 @@ async function loadVotableIdeas() {
           <h3>No ideas to vote on</h3>
           <p>There are no ideas available for voting at this time.</p>
         </div>
-      `;
+      ;
       return;
     }
-
+    
     const canVote = userRoles.some(r => 
       r.toLowerCase() === 'proof verified' || 
       r.toLowerCase() === 'proof of verify'
     );
-
+    
     // Create cards for each idea with voting option
     ideas.forEach((i, idx) => {
       const card = document.createElement('div');
       card.className = 'idea-card';
-      card.innerHTML = `
+      card.innerHTML = 
         <p class="idea-text">${i.idea}</p>
         <span class="username">by @${i.username || 'unknown'}</span>
         <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
         ${
           canVote
-            ? `
+            ? 
             <div style="margin-top: 1rem;">
               <input type="number" id="voteInput${idx}" min="1" max="10" placeholder="Votes" />
               <button onclick="voteIdea(${idx}, this)" class="vote-btn" style="padding: 0.5rem 1rem; margin-top: 0.5rem;">
                 🔎 Vote
               </button>
             </div>
-            `
+            
             : '<p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">You need the "Proof Verified" role to vote</p>'
         }
-      `;
+      ;
       container.appendChild(card);
     });
   } catch (error) {
@@ -1282,22 +1273,22 @@ async function loadVotableIdeas() {
 
 async function loadDiscardedIdeas() {
   const container = document.getElementById('discardedIdeas');
-
+  
   // Show skeleton loader
   container.innerHTML = '';
   for (let i = 0; i < 2; i++) {
     container.appendChild(createSkeletonCard());
   }
-
+  
   try {
-    const res = await fetch(`${BACKEND_URL}/message.json`);
+    const res = await fetch(${BACKEND_URL}/message.json);
     const messages = await res.json();
-
+    
     // Clear container
     container.innerHTML = '';
-
+    
     if (messages.length === 0) {
-      container.innerHTML = `
+      container.innerHTML = 
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -1305,18 +1296,18 @@ async function loadDiscardedIdeas() {
           <h3>No discarded ideas</h3>
           <p>There are no discarded ideas at this time.</p>
         </div>
-      `;
+      ;
       return;
     }
-
+    
     // Create cards for each discarded idea
     messages.forEach((msg) => {
       const card = document.createElement('div');
       card.className = 'idea-card';
-      card.innerHTML = `
+      card.innerHTML = 
         <p class="idea-text">🗑️ ${msg.idea}</p>
         <span class="votes" style="color: var(--danger);">Reason: ${msg.reason}</span>
-      `;
+      ;
       container.appendChild(card);
     });
   } catch (error) {
@@ -1329,22 +1320,22 @@ async function loadDiscardedIdeas() {
 function hexToRgb(hex) {
   // Remove # if present
   hex = hex.replace('#', '');
-
+  
   // Convert 3-digit hex to 6-digit
   if (hex.length === 3) {
     hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
   }
-
+  
   // Parse the hex values
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
-
-  return `${r}, ${g}, ${b}`;
+  
+  return ${r}, ${g}, ${b};
 }
 
 async function voteIdea(index, button) {
-  const input = document.getElementById(`voteInput${index}`);
+  const input = document.getElementById(voteInput${index});
   const amount = parseInt(input?.value || '1', 10);
 
   if (!amount || amount < 1) {
@@ -1357,7 +1348,7 @@ async function voteIdea(index, button) {
   button.textContent = 'Verifying...';
 
   try {
-    const res = await fetch(`${BACKEND_URL}/vote`, {
+    const res = await fetch(${BACKEND_URL}/vote, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1371,7 +1362,7 @@ async function voteIdea(index, button) {
     const data = await res.json();
 
     if (data.success) {
-      showNotification(`✅ Voted with ${amount} vote${amount === 1 ? '' : 's'}`);
+      showNotification(✅ Voted with ${amount} vote${amount === 1 ? '' : 's'});
       input.value = '';
       loadVotableIdeas();
       loadIdeas();
@@ -1389,13 +1380,13 @@ async function voteIdea(index, button) {
 
 async function updateRemainingVotesDisplay() {
   try {
-    const res = await fetch(`${BACKEND_URL}/api/user`);
+    const res = await fetch(${BACKEND_URL}/api/user);
     const user = await res.json();
 
     const voteCountDisplay = document.getElementById('voteCountDisplay');
     if (voteCountDisplay) {
-      voteCountDisplay.textContent = `Available votes: ${user.remaining_votes}`;
-
+      voteCountDisplay.textContent = Available votes: ${user.remaining_votes};
+      
       // Add animation
       voteCountDisplay.style.animation = 'none';
       setTimeout(() => {
