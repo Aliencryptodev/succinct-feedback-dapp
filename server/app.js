@@ -119,9 +119,8 @@ app.get('/api/user', async (req, res) => {
 app.post('/submit-idea', async (req, res) => {
   const { idea, discord_id, username } = req.body;
 
-  console.log('===========================');
-  console.log('✍️ Intentando guardar idea:', idea);
-  console.log('🧑‍💻 Usuario:', username);
+  console.log('📩 [submit-idea] Recibida idea:', idea);
+  console.log('👤 Usuario:', username);
   console.log('🆔 Discord ID:', discord_id);
 
   const hasRole = await userHasRole(discord_id, COMMENT_ROLE);
@@ -145,13 +144,14 @@ app.post('/submit-idea', async (req, res) => {
     ideas.push(ideaEntry);
     saveIdeas(ideas);
 
-    console.log('✅ Idea guardada correctamente.');
+    console.log('✅ Idea guardada exitosamente:', ideaEntry);
     res.json({ success: true });
   } catch (err) {
     console.error('❌ Error al guardar la idea:', err);
     res.status(500).json({ success: false, error: 'Error al guardar la idea' });
   }
 });
+
 
 
 app.post('/vote', async (req, res) => {
