@@ -1146,17 +1146,6 @@ document.getElementById('ideaForm').addEventListener('submit', async function (e
   }
 });
 
-
-    const data = await res.json();
-    if (data.success) {
-      showNotification('✅ Idea submitted and verified!');
-      document.getElementById('ideaText').value = '';
-      loadIdeas();
-    } else {
-      showNotification(data.error || '❌ Submission failed.', 'error');
-    }
-  } catch (error) {
-    showNotification('❌ Network error. Please try again.', 'error');
   } finally {
     submitButton.disabled = false;
     submitButton.textContent = originalText;
