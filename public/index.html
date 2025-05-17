@@ -996,8 +996,6 @@ function setupTabs() {
         loadVotableIdeas();
       } else if (tabName === 'leaderboard') {
         loadIdeas();
-      } else if (tabName === 'create') {
-        loadDiscardedIdeas();
       }
     });
   });
@@ -1384,7 +1382,6 @@ document.addEventListener('DOMContentLoaded', function() {
   setupTabs();
   getUser().then(() => {
     loadIdeas();
-    loadDiscardedIdeas();
     updateRemainingVotesDisplay();
   });
 });
