@@ -1115,13 +1115,13 @@ function updateProfileCard(user) {
 // Fix the form submission event listener
 
 document.addEventListener('DOMContentLoaded', function() {
-  const ideaForm = document.getElementById('ideaForm'); // ❗ Necesario
+  const ideaForm = document.getElementById('ideaForm');
 
   ideaForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     const ideaText = document.getElementById('ideaText').value.trim();
     if (!ideaText) return;
-    
+
     const submitButton = this.querySelector('button');
     const originalText = submitButton.textContent;
     submitButton.disabled = true;
@@ -1150,6 +1150,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+
 
 
 function createSkeletonCard() {
