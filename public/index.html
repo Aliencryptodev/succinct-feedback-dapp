@@ -1114,13 +1114,14 @@ function updateProfileCard(user) {
 
 document.getElementById('ideaForm').addEventListener('submit', async function (e) {
   e.preventDefault();
-  const ideaText = document.getElementById('ideaText').value.trim();
+
+  const ideaText = document.getElementById('ideaText').value.trim();  // ✅ esta es la idea real
   if (!ideaText) return;
 
   const submitButton = this.querySelector('button');
-const originalText = submitButton.textContent;
-submitButton.disabled = true;
-submitButton.textContent = 'Submitting...';
+  const originalText = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = 'Submitting...';
 
   try {
     const res = await fetch(`${BACKEND_URL}/api/submit-idea`, {
@@ -1144,7 +1145,6 @@ submitButton.textContent = 'Submitting...';
     submitButton.textContent = originalText;
   }
 });
-
 
 function createSkeletonCard() {
   const card = document.createElement('div');
