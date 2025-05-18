@@ -1171,6 +1171,9 @@ async function loadIdeas() {
     const res = await fetch(`${BACKEND_URL}/ideas`);
     const { ideas, totalVotes } = await res.json();
     
+    // Sort ideas by votes in descending order
+    ideas.sort((a, b) => b.votes - a.votes);
+    
     // Update vote counter
     const counter = document.getElementById('voteCounter');
     if (counter) counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
