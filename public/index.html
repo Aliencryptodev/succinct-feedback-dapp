@@ -1120,9 +1120,9 @@ document.getElementById('ideaForm').addEventListener('submit', async function (e
   if (!ideaText) return;
 
   const submitButton = this.querySelector('button');
-  const originalText = submitButton.textContent;
-  submitButton.disabled = true;
-  submitButton.textContent = 'Submitting...';
+const originalText = submitButton.textContent;
+submitButton.disabled = true;
+submitButton.textContent = 'Submitting...';
 
   try {
     const res = await fetch(`${BACKEND_URL}/submit-idea`, {
