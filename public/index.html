@@ -9,9 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <script>
-    const BACKEND_URL = location.hostname === "localhost"
-  ? "http://localhost:3000"
-  : "http://217.65.144.64:3000";
+    const BACKEND_URL = 'http://217.65.144.64:3000';
   </script>
   <style>
     :root {
@@ -898,19 +896,25 @@
           </div>
 
           <!-- Tab 3: Create Idea -->
-           <!-- Tab 3: Create Idea -->
-       <div id="create-tab" class="tab-content">
-      <div id="ideaSubmitSection" class="idea-form">
-      <h3>Submit your innovative idea</h3>
-      <form id="ideaForm">
-       <textarea id="ideaText" placeholder="Describe your innovative idea for Succinct..." required></textarea>
-       <button type="submit">
-         Submit Idea
-       </button>
-      </form>
-     </div>
-    </div>
+          <div id="create-tab" class="tab-content">
+            <div id="ideaSubmitSection" class="idea-form">
+              <h3>Submit your innovative idea</h3>
+              <form id="ideaForm">
+                <textarea id="ideaText" placeholder="Describe your innovative idea for Succinct..." required></textarea>
+                <button type="submit">
+                  Submit Idea
+                </button>
+              </form>
+            </div>
 
+            <div class="section-header">
+              <h2>Discarded Ideas</h2>
+            </div>
+            <div id="discardedIdeas" class="cards">
+              <div class="loading">
+                <div></div><div></div><div></div><div></div>
+              </div>
+            </div>
           </div>
         </div>
       </main>
@@ -983,13 +987,15 @@ function setupTabs() {
       // Add active class to clicked tab
       button.classList.add('active');
       const tabName = button.getAttribute('data-tab');
-      document.getElementById(${tabName}-tab).classList.add('active');
+      document.getElementById(`${tabName}-tab`).classList.add('active');
       
       // Load tab-specific content
       if (tabName === 'vote') {
         loadVotableIdeas();
       } else if (tabName === 'leaderboard') {
         loadIdeas();
+      } else if (tabName === 'create') {
+        loadDiscardedIdeas();
       }
     });
   });
@@ -997,7 +1003,7 @@ function setupTabs() {
 
 async function getUser() {
   try {
-    const res = await fetch(${BACKEND_URL}/api/user);
+    const res = await fetch(`${BACKEND_URL}/api/user`);
     const data = await res.json();
     userId = data.discord_id;
     username = data.username;
@@ -1019,7 +1025,7 @@ async function getUser() {
     // Update profile card when logged in
     updateProfileCard(data);
     
-    showNotification(Welcome, ${username}!);
+    showNotification(`Welcome, ${username}!`);
     return data;
   } catch (error) {
     console.error('User not authenticated', error);
@@ -1038,7 +1044,7 @@ function updateProfileCard(user) {
   const profileContainer = document.getElementById('profileCardContainer');
   profileContainer.classList.remove('not-logged-in');
   
-  profileContainer.innerHTML = 
+  profileContainer.innerHTML = `
     <div class="avatar-section">
       <img id="discordAvatar" alt="Discord Avatar" src="${user.avatar_url || 'https://cdn.discordapp.com/embed/avatars/0.png'}" />
       <h2 id="discordUsername">@${user.username}</h2>
@@ -1054,7 +1060,7 @@ function updateProfileCard(user) {
       </svg>
       <span id="voteCountDisplay">Available votes: ${user.remaining_votes || 0}</span>
     </div>
-  ;
+  `;
   
   const roleTags = document.getElementById('roleTags');
   roleTags.innerHTML = '';
@@ -1076,7 +1082,7 @@ function updateProfileCard(user) {
     const tag = document.createElement('span');
     tag.textContent = role;
     const color = ROLE_STYLES[role.toUpperCase()] || ROLE_STYLES[role] || '#90DCFF';
-    tag.style.cssText = 
+    tag.style.cssText = `
       background-color: rgba(26, 26, 43, 0.8);
       color: ${color};
       border: 1px solid ${color};
@@ -1087,13 +1093,13 @@ function updateProfileCard(user) {
       backdrop-filter: blur(5px);
       transition: all 0.2s ease;
       margin-bottom: 0.5rem;
-    ;
+    `;
     
     // Add hover effect
     tag.addEventListener('mouseenter', () => {
       tag.style.backgroundColor = 'rgba(26, 26, 43, 1)';
       tag.style.transform = 'translateY(-2px)';
-      tag.style.boxShadow = 0 2px 8px rgba(${hexToRgb(color)}, 0.3);
+      tag.style.boxShadow = `0 2px 8px rgba(${hexToRgb(color)}, 0.3)`;
     });
     
     tag.addEventListener('mouseleave', () => {
@@ -1106,56 +1112,49 @@ function updateProfileCard(user) {
   });
 }
 
-// Fix the form submission event listener
+document.getElementById('ideaForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const ideaText = document.getElementById('ideaText').value.trim();
+  if (!ideaText) return;
+  
+  const submitButton = this.querySelector('button');
+  const originalText = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = 'Submitting...';
 
-document.addEventListener('DOMContentLoaded', function() {
-  const ideaForm = document.getElementById('ideaForm');
+  try {
+    const res = await fetch(`${BACKEND_URL}/submit-idea`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
+    });
 
-  ideaForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const ideaText = document.getElementById('ideaText').value.trim();
-    if (!ideaText) return;
-
-    const submitButton = this.querySelector('button');
-    const originalText = submitButton.textContent;
-    submitButton.disabled = true;
-    submitButton.textContent = 'Submitting...';
-
-    try {
-      const res = await fetch(${BACKEND_URL}/submit-idea, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        showNotification('✅ Idea submitted and verified!');
-        document.getElementById('ideaText').value = '';
-        loadIdeas();
-      } else {
-        showNotification(data.error || '❌ Submission failed.', 'error');
-      }
-    } catch (error) {
-      showNotification('❌ Network error. Please try again.', 'error');
-    } finally {
-      submitButton.disabled = false;
-      submitButton.textContent = originalText;
+    const data = await res.json();
+    if (data.success) {
+      showNotification('✅ Idea submitted and verified!');
+      document.getElementById('ideaText').value = '';
+      loadIdeas();
+    } else {
+      showNotification(data.error || '❌ Submission failed.', 'error');
     }
-  });
+  } catch (error) {
+    showNotification('❌ Network error. Please try again.', 'error');
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalText;
+  }
 });
-
 
 function createSkeletonCard() {
   const card = document.createElement('div');
   card.className = 'idea-card';
-  card.innerHTML = 
+  card.innerHTML = `
     <div class="skeleton" style="width: 90%; height: 1.2rem;"></div>
     <div class="skeleton" style="width: 80%; height: 1.2rem;"></div>
     <div class="skeleton" style="width: 60%; height: 1.2rem;"></div>
     <div class="skeleton" style="width: 40%; height: 0.9rem; margin-top: 1rem;"></div>
     <div class="skeleton" style="width: 30%; height: 0.9rem;"></div>
-  ;
+  `;
   return card;
 }
 
@@ -1169,18 +1168,18 @@ async function loadIdeas() {
   }
   
   try {
-    const res = await fetch(${BACKEND_URL}/ideas);
+    const res = await fetch(`${BACKEND_URL}/ideas`);
     const { ideas, totalVotes } = await res.json();
     
     // Update vote counter
     const counter = document.getElementById('voteCounter');
-    if (counter) counter.querySelector('span').textContent = Total verified votes: ${totalVotes};
+    if (counter) counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
     
     // Clear container
     container.innerHTML = '';
     
     if (ideas.length === 0) {
-      container.innerHTML = 
+      container.innerHTML = `
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
@@ -1188,7 +1187,7 @@ async function loadIdeas() {
           <h3>No ideas yet</h3>
           <p>Be the first to submit an innovative idea for Succinct's future!</p>
         </div>
-      ;
+      `;
       return;
     }
     
@@ -1196,11 +1195,11 @@ async function loadIdeas() {
     ideas.forEach((i, idx) => {
       const card = document.createElement('div');
       card.className = 'idea-card';
-      card.innerHTML = 
+      card.innerHTML = `
         <p class="idea-text">#${idx + 1} — ${i.idea}</p>
         <span class="username">by @${i.username || 'unknown'}</span>
         <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
-      ;
+      `;
       container.appendChild(card);
     });
   } catch (error) {
@@ -1211,21 +1210,22 @@ async function loadIdeas() {
 
 async function loadVotableIdeas() {
   const container = document.getElementById('voteIdeasCards');
-
+  
   // Show skeleton loader
   container.innerHTML = '';
   for (let i = 0; i < 3; i++) {
     container.appendChild(createSkeletonCard());
   }
-
+  
   try {
-    const res = await fetch(${BACKEND_URL}/ideas);
+    const res = await fetch(`${BACKEND_URL}/ideas`);
     const { ideas } = await res.json();
-
+    
+    // Clear container
     container.innerHTML = '';
-
+    
     if (ideas.length === 0) {
-      container.innerHTML = 
+      container.innerHTML = `
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"></circle>
@@ -1234,61 +1234,86 @@ async function loadVotableIdeas() {
           <h3>No ideas to vote on</h3>
           <p>There are no ideas available for voting at this time.</p>
         </div>
-      ;
+      `;
       return;
     }
-
-    const canVote = userRoles.some(r =>
-      r.toLowerCase() === 'proof verified' ||
+    
+    const canVote = userRoles.some(r => 
+      r.toLowerCase() === 'proof verified' || 
       r.toLowerCase() === 'proof of verify'
     );
-
+    
+    // Create cards for each idea with voting option
     ideas.forEach((i, idx) => {
       const card = document.createElement('div');
       card.className = 'idea-card';
-
-      card.innerHTML = 
+      card.innerHTML = `
         <p class="idea-text">${i.idea}</p>
         <span class="username">by @${i.username || 'unknown'}</span>
         <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
-      ;
-
-      if (canVote) {
-        const voteWrapper = document.createElement('div');
-        voteWrapper.style.marginTop = '1rem';
-
-        const input = document.createElement('input');
-        input.type = 'number';
-        input.id = voteInput${idx};
-        input.min = 1;
-        input.max = 10;
-        input.placeholder = 'Votes';
-
-        const button = document.createElement('button');
-        button.className = 'vote-btn';
-        button.style.padding = '0.5rem 1rem';
-        button.style.marginTop = '0.5rem';
-        button.textContent = '🔎 Vote';
-        button.onclick = () => voteIdea(idx, button);
-
-        voteWrapper.appendChild(input);
-        voteWrapper.appendChild(button);
-        card.appendChild(voteWrapper);
-      } else {
-        const msg = document.createElement('p');
-        msg.textContent = 'You need the "Proof Verified" role to vote';
-        msg.style.marginTop = '1rem';
-        msg.style.color = 'var(--text-secondary)';
-        msg.style.fontSize = '0.9rem';
-        card.appendChild(msg);
-      }
-
+        ${
+          canVote
+            ? `
+            <div style="margin-top: 1rem;">
+              <input type="number" id="voteInput${idx}" min="1" max="10" placeholder="Votes" />
+              <button onclick="voteIdea(${idx}, this)" class="vote-btn" style="padding: 0.5rem 1rem; margin-top: 0.5rem;">
+                🔎 Vote
+              </button>
+            </div>
+            `
+            : '<p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">You need the "Proof Verified" role to vote</p>'
+        }
+      `;
       container.appendChild(card);
     });
-
   } catch (error) {
     console.error('Error loading ideas:', error);
     container.innerHTML = '<p>Failed to load ideas. Please try again later.</p>';
+  }
+}
+
+async function loadDiscardedIdeas() {
+  const container = document.getElementById('discardedIdeas');
+  
+  // Show skeleton loader
+  container.innerHTML = '';
+  for (let i = 0; i < 2; i++) {
+    container.appendChild(createSkeletonCard());
+  }
+  
+  try {
+    const res = await fetch(`${BACKEND_URL}/message.json`);
+    const messages = await res.json();
+    
+    // Clear container
+    container.innerHTML = '';
+    
+    if (messages.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <h3>No discarded ideas</h3>
+          <p>There are no discarded ideas at this time.</p>
+        </div>
+      `;
+      return;
+    }
+    
+    // Create cards for each discarded idea
+    messages.forEach((msg) => {
+      const card = document.createElement('div');
+      card.className = 'idea-card';
+      card.innerHTML = `
+        <p class="idea-text">🗑️ ${msg.idea}</p>
+        <span class="votes" style="color: var(--danger);">Reason: ${msg.reason}</span>
+      `;
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error('Error loading discarded ideas:', error);
+    container.innerHTML = '<p>Failed to load discarded ideas. Please try again later.</p>';
   }
 }
 
@@ -1307,11 +1332,11 @@ function hexToRgb(hex) {
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
   
-  return ${r}, ${g}, ${b};
+  return `${r}, ${g}, ${b}`;
 }
 
 async function voteIdea(index, button) {
-  const input = document.getElementById(voteInput${index});
+  const input = document.getElementById(`voteInput${index}`);
   const amount = parseInt(input?.value || '1', 10);
 
   if (!amount || amount < 1) {
@@ -1324,7 +1349,7 @@ async function voteIdea(index, button) {
   button.textContent = 'Verifying...';
 
   try {
-    const res = await fetch(${BACKEND_URL}/vote, {
+    const res = await fetch(`${BACKEND_URL}/vote`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1338,7 +1363,7 @@ async function voteIdea(index, button) {
     const data = await res.json();
 
     if (data.success) {
-      showNotification(✅ Voted with ${amount} vote${amount === 1 ? '' : 's'});
+      showNotification(`✅ Voted with ${amount} vote${amount === 1 ? '' : 's'}`);
       input.value = '';
       loadVotableIdeas();
       loadIdeas();
@@ -1356,12 +1381,12 @@ async function voteIdea(index, button) {
 
 async function updateRemainingVotesDisplay() {
   try {
-    const res = await fetch(${BACKEND_URL}/api/user);
+    const res = await fetch(`${BACKEND_URL}/api/user`);
     const user = await res.json();
 
     const voteCountDisplay = document.getElementById('voteCountDisplay');
     if (voteCountDisplay) {
-      voteCountDisplay.textContent = Available votes: ${user.remaining_votes};
+      voteCountDisplay.textContent = `Available votes: ${user.remaining_votes}`;
       
       // Add animation
       voteCountDisplay.style.animation = 'none';
@@ -1379,6 +1404,7 @@ document.addEventListener('DOMContentLoaded', function() {
   setupTabs();
   getUser().then(() => {
     loadIdeas();
+    loadDiscardedIdeas();
     updateRemainingVotesDisplay();
   });
 });
