@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <script>
-    const BACKEND_URL = location.protocol === 'https:' 
-  ? 'https://succinct-feedback-dapp.vercel.app/api' 
+   const BACKEND_URL = location.protocol === 'https:' 
+  ? 'https://succinct-feedback-dapp.vercel.app' 
   : 'http://217.65.144.64:3000';
   </script>
   <style>
@@ -1005,7 +1005,7 @@ function setupTabs() {
 
 async function getUser() {
   try {
-    const res = await fetch(`${BACKEND_URL}/user`);
+    const res = await fetch(`${BACKEND_URL}api/user`);
     const data = await res.json();
     userId = data.discord_id;
     username = data.username;
@@ -1125,7 +1125,7 @@ submitButton.disabled = true;
 submitButton.textContent = 'Submitting...';
 
   try {
-    const res = await fetch(`${BACKEND_URL}/submit-idea`, {
+    const res = await fetch(`${BACKEND_URL}api/submit-idea`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
@@ -1171,7 +1171,7 @@ async function loadIdeas() {
   }
   
   try {
-    const res = await fetch(`${BACKEND_URL}/ideas`);
+    const res = await fetch(`${BACKEND_URL}api/ideas`);
     const { ideas, totalVotes } = await res.json();
     
     // Update vote counter
@@ -1285,7 +1285,7 @@ async function loadDiscardedIdeas() {
   }
   
   try {
-    const res = await fetch(`${BACKEND_URL}/message.json`);
+    const res = await fetch(`${BACKEND_URL}api/message.json`);
     const messages = await res.json();
     
     // Clear container
@@ -1352,7 +1352,7 @@ async function voteIdea(index, button) {
   button.textContent = 'Verifying...';
 
   try {
-    const res = await fetch(`${BACKEND_URL}/vote`, {
+    const res = await fetch(`${BACKEND_URL}api/vote`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
