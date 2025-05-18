@@ -142,19 +142,19 @@
     }
     
     .main-layout {
-      display: grid;
-      grid-template-columns: 1fr 350px;
-      gap: var(--spacing-lg);
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: var(--spacing-lg);
-      flex-grow: 1;
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: var(--spacing-lg);
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+    flex-grow: 1;
     }
-    
+
     @media (max-width: 992px) {
-      .main-layout {
-        grid-template-columns: 1fr;
-      }
+    .main-layout {
+    grid-template-columns: 1fr;
+     }
     }
     
     /* Header styles */
