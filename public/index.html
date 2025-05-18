@@ -1005,7 +1005,7 @@ function setupTabs() {
 
 async function getUser() {
   try {
-    const res = await fetch(`${BACKEND_URL}/api/user`);
+    const res = await fetch(`${BACKEND_URL}/user`);
     const data = await res.json();
     userId = data.discord_id;
     username = data.username;
@@ -1384,7 +1384,7 @@ async function voteIdea(index, button) {
 
 async function updateRemainingVotesDisplay() {
   try {
-    const res = await fetch(`${BACKEND_URL}/api/user`);
+    const res = await fetch(`${BACKEND_URL}/user`);
     const user = await res.json();
 
     const voteCountDisplay = document.getElementById('voteCountDisplay');
