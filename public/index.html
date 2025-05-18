@@ -1003,7 +1003,7 @@ function setupTabs() {
 
 async function getUser() {
   try {
-    const res = await fetch(`${BACKEND_URL}/api/user`);
+    const res = await fetch(`http://217.65.144.64:3000/api/user`);
     const data = await res.json();
     userId = data.discord_id;
     username = data.username;
@@ -1124,7 +1124,7 @@ document.getElementById('ideaForm').addEventListener('submit', async function (e
   submitButton.textContent = 'Submitting...';
 
   try {
-    const res = await fetch(`${BACKEND_URL}/api/submit-idea`, {
+    const res = await fetch(`http://217.65.144.64:3000/api/submit-idea`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
@@ -1169,7 +1169,7 @@ async function loadIdeas() {
   }
   
   try {
-    const res = await fetch(`${BACKEND_URL}/api/ideas`);
+    const res = await fetch(`http://217.65.144.64:3000/api/ideas`);
     const { ideas, totalVotes } = await res.json();
     
     // Update vote counter
@@ -1219,7 +1219,7 @@ async function loadVotableIdeas() {
   }
   
   try {
-    const res = await fetch(`${BACKEND_URL}/ideas`);
+    const res = await fetch(`http://217.65.144.64:3000/ideas`);
     const { ideas } = await res.json();
     
     // Clear container
@@ -1283,7 +1283,7 @@ async function loadDiscardedIdeas() {
   }
   
   try {
-    const res = await fetch(`${BACKEND_URL}/api/message.json`);
+    const res = await fetch(`http://217.65.144.64:3000/api/message.json`);
     const messages = await res.json();
     
     // Clear container
@@ -1350,7 +1350,7 @@ async function voteIdea(index, button) {
   button.textContent = 'Verifying...';
 
   try {
-    const res = await fetch(`${BACKEND_URL}/api/vote`, {
+    const res = await fetch(`http://217.65.144.64:3000/api/vote`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1382,7 +1382,7 @@ async function voteIdea(index, button) {
 
 async function updateRemainingVotesDisplay() {
   try {
-    const res = await fetch(`${BACKEND_URL}/api/user`);
+    const res = await fetch(`http://217.65.144.64:3000/api/user`);
     const user = await res.json();
 
     const voteCountDisplay = document.getElementById('voteCountDisplay');
