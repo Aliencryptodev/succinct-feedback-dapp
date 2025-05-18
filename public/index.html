@@ -1112,38 +1112,23 @@ function updateProfileCard(user) {
   });
 }
 
-document.getElementById('ideaForm').addEventListener('submit', async function (e) {
-  e.preventDefault();
-  const ideaText = document.getElementById('ideaText').value.trim();
-  if (!ideaText) return;
+// Helper function to convert hex to rgb
+function hexToRgb(hex) {
+  // Remove # if present
+  hex = hex.replace('#', '');
   
-  const submitButton = this.querySelector('button');
-  const originalText = submitButton.textContent;
-  submitButton.disabled = true;
-  submitButton.textContent = 'Submitting...';
-
-  try {
-    const res = await fetch(`${BACKEND_URL}/submit-idea`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
-    });
-
-    const data = await res.json();
-    if (data.success) {
-      showNotification('✅ Idea submitted and verified!');
-      document.getElementById('ideaText').value = '';
-      loadIdeas();
-    } else {
-      showNotification(data.error || '❌ Submission failed.', 'error');
-    }
-  } catch (error) {
-    showNotification('❌ Network error. Please try again.', 'error');
-  } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = originalText;
+  // Convert 3-digit hex to 6-digit
+  if (hex.length === 3) {
+    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
   }
-});
+  
+  // Parse the hex values
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  
+  return `${r}, ${g}, ${b}`;
+}
 
 function createSkeletonCard() {
   const card = document.createElement('div');
@@ -1320,24 +1305,6 @@ async function loadDiscardedIdeas() {
   }
 }
 
-// Helper function to convert hex to rgb
-function hexToRgb(hex) {
-  // Remove # if present
-  hex = hex.replace('#', '');
-  
-  // Convert 3-digit hex to 6-digit
-  if (hex.length === 3) {
-    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-  }
-  
-  // Parse the hex values
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
-  
-  return `${r}, ${g}, ${b}`;
-}
-
 async function voteIdea(index, button) {
   const input = document.getElementById(`voteInput${index}`);
   const amount = parseInt(input?.value || '1', 10);
@@ -1403,63 +1370,56 @@ async function updateRemainingVotesDisplay() {
 }
 
 // Initialize application
-// Initialize application
 document.addEventListener('DOMContentLoaded', async function() {
   setupTabs();
-  const user = await getUser(); // Wait for user data first
-  if (user) {
-    loadIdeas();
-    loadDiscardedIdeas();
-    updateRemainingVotesDisplay();
-  }
-  
-  // Add form event listener after DOM is loaded
- // Initialize application
-document.addEventListener('DOMContentLoaded', async function() {
-  setupTabs();
-  const user = await getUser(); // Wait for user data first
-  if (user) {
-    loadIdeas();
-    loadDiscardedIdeas();
-    updateRemainingVotesDisplay();
-  }
-  
-  // Add form event listener after DOM is loaded
-  const ideaForm = document.getElementById('ideaForm');
-  if (ideaForm) {
-    ideaForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const ideaText = document.getElementById('ideaText').value.trim();
-      if (!ideaText) return;
-      
-      const submitButton = this.querySelector('button');
-      const originalText = submitButton.textContent;
-      submitButton.disabled = true;
-      submitButton.textContent = 'Submitting...';
+  try {
+    const user = await getUser(); // Wait for user data first
+    if (user) {
+      loadIdeas();
+      loadDiscardedIdeas();
+      updateRemainingVotesDisplay();
+    }
+    
+    // Add form event listener after DOM is loaded
+    const ideaForm = document.getElementById('ideaForm');
+    if (ideaForm) {
+      ideaForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const ideaText = document.getElementById('ideaText').value.trim();
+        if (!ideaText) return;
+        
+        const submitButton = this.querySelector('button');
+        const originalText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitting...';
 
-      try {
-        const res = await fetch(`${BACKEND_URL}/submit-idea`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
-        });
+        try {
+          const res = await fetch(`${BACKEND_URL}/submit-idea`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
+          });
 
-        const data = await res.json();
-        if (data.success) {
-          showNotification('✅ Idea submitted and verified!');
-          document.getElementById('ideaText').value = '';
-          loadIdeas();
-        } else {
-          showNotification(data.error || '❌ Submission failed.', 'error');
+          const data = await res.json();
+          if (data.success) {
+            showNotification('✅ Idea submitted and verified!');
+            document.getElementById('ideaText').value = '';
+            loadIdeas();
+          } else {
+            showNotification(data.error || '❌ Submission failed.', 'error');
+          }
+        } catch (error) {
+          console.error('Error submitting idea:', error);
+          showNotification('❌ Network error. Please try again.', 'error');
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = originalText;
         }
-      } catch (error) {
-        console.error('Error submitting idea:', error);
-        showNotification('❌ Network error. Please try again.', 'error');
-      } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
-      }
-    });
+      });
+    }
+  } catch (error) {
+    console.error('Error during initialization:', error);
+    showNotification('❌ Failed to initialize application', 'error');
   }
 });
 </script>
