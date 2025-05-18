@@ -1384,7 +1384,7 @@ async function voteIdea(index, button) {
 
 async function updateRemainingVotesDisplay() {
   try {
-    const res = await fetch(`${BACKEND_URL}/user`);
+    const res = await fetch(`${BACKEND_URL}/api/user`);
     const user = await res.json();
 
     const voteCountDisplay = document.getElementById('voteCountDisplay');
