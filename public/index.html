@@ -1411,6 +1411,17 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
   
   // Add form event listener after DOM is loaded
+ // Initialize application
+document.addEventListener('DOMContentLoaded', async function() {
+  setupTabs();
+  const user = await getUser(); // Wait for user data first
+  if (user) {
+    loadIdeas();
+    loadDiscardedIdeas();
+    updateRemainingVotesDisplay();
+  }
+  
+  // Add form event listener after DOM is loaded
   const ideaForm = document.getElementById('ideaForm');
   if (ideaForm) {
     ideaForm.addEventListener('submit', async function(e) {
@@ -1448,7 +1459,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
   }
 });
-
 </script>
 </body>
 </html>
