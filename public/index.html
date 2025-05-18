@@ -869,73 +869,76 @@
     </header>
 
     <div class="main-layout">
-      <main class="content-area">
-        <div class="welcome-hero" id="welcomeSection">
-          <h1 class="glow-text">Shape Succinct's future</h1>
-          <p>Backed by your ideas, verified by zero-knowledge proofs.</p>
+  <!-- ASIDE IZQUIERDO -->
+  <aside class="user-sidebar">
+    <div class="sidebar-header">
+      <h2>User Profile</h2>
+    </div>
+    <div class="profile-card not-logged-in" id="profileCardContainer">
+      <!-- Aquí se renderiza el contenido del perfil con JS -->
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL A LA DERECHA -->
+  <main class="content-area">
+    <div class="welcome-hero" id="welcomeSection">
+      <h1 class="glow-text">Shape Succinct's future</h1>
+      <p>Backed by your ideas, verified by zero-knowledge proofs.</p>
+    </div>
+
+    <div class="tabs-container">
+      <div class="tabs-nav">
+        <button class="tab-btn active" data-tab="leaderboard">Leaderboard</button>
+        <button class="tab-btn" data-tab="vote">Vote Ideas</button>
+        <button class="tab-btn" data-tab="create">Create Idea</button>
+      </div>
+
+      <!-- Tab 1: Leaderboard -->
+      <div id="leaderboard-tab" class="tab-content active">
+        <div class="section-header">
+          <h2>Top Ideas</h2>
         </div>
-
-        <div class="tabs-container">
-          <div class="tabs-nav">
-            <button class="tab-btn active" data-tab="leaderboard">Leaderboard</button>
-            <button class="tab-btn" data-tab="vote">Vote Ideas</button>
-            <button class="tab-btn" data-tab="create">Create Idea</button>
-          </div>
-
-          <!-- Tab 1: Leaderboard -->
-          <div id="leaderboard-tab" class="tab-content active">
-            <div class="section-header">
-              <h2>Top Ideas</h2>
-            </div>
-            <div id="ideaCards" class="cards">
-              <div class="loading">
-                <div></div><div></div><div></div><div></div>
-              </div>
-            </div>
-            <div id="voteCounter" class="vote-counter">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M12 16v-4M12 8h.01"></path>
-              </svg>
-              <span>Total verified votes: 0</span>
-            </div>
-          </div>
-
-          <!-- Tab 2: Vote Ideas -->
-          <div id="vote-tab" class="tab-content">
-            <div class="section-header">
-              <h2>Vote on Ideas</h2>
-            </div>
-            <div id="voteIdeasCards" class="cards">
-              <div class="loading">
-                <div></div><div></div><div></div><div></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Tab 3: Create Idea -->
-          <div id="create-tab" class="tab-content">
-            <div id="ideaSubmitSection" class="idea-form">
-              <h3>Submit your innovative idea</h3>
-              <form id="ideaForm">
-                <textarea id="ideaText" placeholder="Describe your innovative idea for Succinct..." required></textarea>
-                <button type="submit">
-                  Submit Idea
-                </button>
-              </form>
-            </div>
-
-            <div class="section-header">
-              <h2>Discarded Ideas</h2>
-            </div>
-            <div id="discardedIdeas" class="cards">
-              <div class="loading">
-                <div></div><div></div><div></div><div></div>
-              </div>
-            </div>
+        <div id="ideaCards" class="cards">
+          <div class="loading">
+            <div></div><div></div><div></div><div></div>
           </div>
         </div>
-      </main>
+        <div id="voteCounter" class="vote-counter">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 16v-4M12 8h.01"></path>
+          </svg>
+          <span>Total verified votes: 0</span>
+        </div>
+      </div>
+
+      <!-- Tab 2: Vote Ideas -->
+      <div id="vote-tab" class="tab-content">
+        <div class="section-header">
+          <h2>Vote on Ideas</h2>
+        </div>
+        <div id="voteIdeasCards" class="cards"></div>
+      </div>
+
+      <!-- Tab 3: Create Idea -->
+      <div id="create-tab" class="tab-content">
+        <div id="ideaSubmitSection" class="idea-form">
+          <h3>Submit your innovative idea</h3>
+          <form id="ideaForm">
+            <textarea id="ideaText" placeholder="Describe your innovative idea for Succinct..." required></textarea>
+            <button type="submit">Submit Idea</button>
+          </form>
+        </div>
+
+        <div class="section-header">
+          <h2>Discarded Ideas</h2>
+        </div>
+        <div id="discardedIdeas" class="cards"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
 
       <aside class="user-sidebar">
         <div class="sidebar-header">
