@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <script>
-   const BACKEND_URL = 'http://217.65.144.64:3000';
+    const BACKEND_URL = 'http://217.65.144.64:3000';
   </script>
   <style>
     :root {
@@ -1003,7 +1003,7 @@ function setupTabs() {
 
 async function getUser() {
   try {
-    const res = await fetch(`http://217.65.144.64:3000/api/user`);
+    const res = await fetch(`${BACKEND_URL}/api/user`);
     const data = await res.json();
     userId = data.discord_id;
     username = data.username;
@@ -1115,13 +1115,15 @@ function updateProfileCard(user) {
 document.getElementById('ideaForm').addEventListener('submit', async function (e) {
   e.preventDefault();
   const ideaText = document.getElementById('ideaText').value.trim();
-  const submitButton = e.submitter; // ✅ esto arregla el error
+  if (!ideaText) return;
+  
+  const submitButton = this.querySelector('button');
   const originalText = submitButton.textContent;
   submitButton.disabled = true;
   submitButton.textContent = 'Submitting...';
 
   try {
-    const res = await fetch(`${BACKEND_URL}/api/submit-idea`, {
+    const res = await fetch(`${BACKEND_URL}/submit-idea`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
@@ -1142,7 +1144,6 @@ document.getElementById('ideaForm').addEventListener('submit', async function (e
     submitButton.textContent = originalText;
   }
 });
-
 
 function createSkeletonCard() {
   const card = document.createElement('div');
@@ -1167,7 +1168,7 @@ async function loadIdeas() {
   }
   
   try {
-    const res = await fetch(`http://217.65.144.64:3000/api/ideas`);
+    const res = await fetch(`${BACKEND_URL}/ideas`);
     const { ideas, totalVotes } = await res.json();
     
     // Update vote counter
@@ -1217,7 +1218,7 @@ async function loadVotableIdeas() {
   }
   
   try {
-    const res = await fetch(`http://217.65.144.64:3000/ideas`);
+    const res = await fetch(`${BACKEND_URL}/ideas`);
     const { ideas } = await res.json();
     
     // Clear container
@@ -1281,7 +1282,7 @@ async function loadDiscardedIdeas() {
   }
   
   try {
-    const res = await fetch(`http://217.65.144.64:3000/api/message.json`);
+    const res = await fetch(`${BACKEND_URL}/message.json`);
     const messages = await res.json();
     
     // Clear container
@@ -1348,7 +1349,7 @@ async function voteIdea(index, button) {
   button.textContent = 'Verifying...';
 
   try {
-    const res = await fetch(`http://217.65.144.64:3000/api/vote`, {
+    const res = await fetch(`${BACKEND_URL}/vote`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1380,7 +1381,7 @@ async function voteIdea(index, button) {
 
 async function updateRemainingVotesDisplay() {
   try {
-    const res = await fetch(`http://217.65.144.64:3000/api/user`);
+    const res = await fetch(`${BACKEND_URL}/api/user`);
     const user = await res.json();
 
     const voteCountDisplay = document.getElementById('voteCountDisplay');
