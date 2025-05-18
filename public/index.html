@@ -745,40 +745,49 @@
     
     /* Responsive */
     @media (max-width: 768px) {
-      .main-layout {
-        padding: var(--spacing-md);
-      }
-      
-      .cards {
-        grid-template-columns: 1fr;
-      }
-      
-      .tabs-nav {
-        flex-direction: column;
-      }
-      
-      .tab-btn {
-        text-align: left;
-        border-bottom: 1px solid rgba(254, 17, 197, 0.1);
-      }
-      
-      .tab-btn::after {
-        left: 0;
-        bottom: 50%;
-        width: 3px;
-        height: 0;
-        transform: translateY(50%);
-      }
-      
-      .tab-btn.active::after {
-        height: 80%;
-        width: 3px;
-      }
-      
-      #notification {
-        width: 90%;
-      }
+  .main-layout {
+    padding: var(--spacing-md);
+    grid-template-columns: 1fr;
+  }
+
+   .cards {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+   }
+
+   .tabs-nav {
+    flex-direction: column;
+   }
+ 
+   .tab-btn {
+    text-align: left;
+    border-bottom: 1px solid rgba(254, 17, 197, 0.1);
+   }
+
+  .tab-btn::after {
+    left: 0;
+    bottom: 50%;
+    width: 3px;
+    height: 0;
+    transform: translateY(50%);
     }
+
+   .tab-btn.active::after {
+    height: 80%;
+    width: 3px;
+    }
+
+    #notification {
+    width: 90%;
+    }
+ 
+    .recent-ideas {
+     margin-top: var(--spacing-lg);
+    }
+
+    .user-sidebar {
+     margin-top: var(--spacing-lg);
+    }
+  }
     
     /* Loading skeleton */
     .skeleton {
