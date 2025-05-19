@@ -1,0 +1,14 @@
+[
+  {
+    "idea": "Make Succinct NFTs with Pepe frogs",
+    "reason": "Off-topic and not aligned with protocol goals"
+  },
+  {
+    "idea": "Add casino and meme coin integration",
+    "reason": "Not a core use case for SP1 zkVM"
+  },
+  {
+    "idea": "Let me verify my cat onchain",
+    "reason": "Funny but outside scope of infrastructure tooling"
+  }
+]
