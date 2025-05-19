@@ -8,9 +8,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <script>
+    // Make the backend URL configurable
     const BACKEND_URL = 'http://217.65.144.64:3000';
   </script>
   <style>
+    /* All existing styles remain unchanged */
     :root {
       --primary: #FE11C5;
       --primary-dark: #c20e99;
@@ -1162,9 +1164,9 @@ async function loadIdeas() {
   }
 }
 
-async function loadIdeas() {
-  const container = document.getElementById('ideaCards');
-
+async function loadVotableIdeas() {
+  const container = document.getElementById('voteIdeasCards');
+  
   container.innerHTML = '';
   for (let i = 0; i < 3; i++) {
     container.appendChild(createSkeletonCard());
@@ -1172,16 +1174,23 @@ async function loadIdeas() {
 
   try {
     const res = await fetch(`${BACKEND_URL}/ideas`);
-    const { ideas, totalVotes } = await res.json();
-
-    ideas.sort((a, b) => b.votes - a.votes);
-
-    const counter = document.getElementById('voteCounter');
-    if (counter) {
-      counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
-    }
+    const { ideas } = await res.json();
 
     container.innerHTML = '';
+
+    if (!userId) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <h3>Please connect with Discord</h3>
+          <p>You need to connect your Discord account to vote on ideas.</p>
+        </div>
+      `;
+      return;
+    }
 
     if (ideas.length === 0) {
       container.innerHTML = `
@@ -1189,29 +1198,32 @@ async function loadIdeas() {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
           </svg>
-          <h3>No ideas yet</h3>
-          <p>Be the first to submit an innovative idea for Succinct's future!</p>
+          <h3>No ideas to vote on</h3>
+          <p>Check back later for new ideas to vote on!</p>
         </div>
       `;
       return;
     }
 
-    ideas.forEach((i, idx) => {
+    ideas.forEach((idea, index) => {
       const card = document.createElement('div');
       card.className = 'idea-card';
       card.innerHTML = `
-        <p class="idea-text">#${idx + 1} — ${i.idea}</p>
-        <span class="username">by @${i.username || 'unknown'}</span>
-        <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
+        <p class="idea-text">${idea.idea}</p>
+        <span class="username">by @${idea.username || 'unknown'}</span>
+        <span class="votes">${idea.votes} vote${idea.votes === 1 ? '' : 's'}</span>
+        <div style="margin-top: 16px;">
+          <input type="number" id="voteInput${index}" min="1" placeholder="Votes" style="margin-right: 8px;">
+          <button onclick="voteIdea(${index}, this)">Vote</button>
+        </div>
       `;
       container.appendChild(card);
     });
   } catch (error) {
-    console.error('Error loading ideas:', error);
+    console.error('Error loading votable ideas:', error);
     container.innerHTML = '<p>Failed to load ideas. Please try again later.</p>';
   }
 }
-
 
 async function loadDiscardedIdeas() {
   const container = document.getElementById('discardedIdeas');
