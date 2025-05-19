@@ -1129,9 +1129,7 @@ function createSkeletonCard() {
     ideas.sort((a, b) => b.votes - a.votes);
 
     const counter = document.getElementById('voteCounter');
-    if (counter) {
-      counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
-    }
+    if (counter) counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
 
     container.innerHTML = '';
 
@@ -1158,11 +1156,13 @@ function createSkeletonCard() {
       `;
       container.appendChild(card);
     });
+
   } catch (error) {
     console.error('Error loading ideas:', error);
     container.innerHTML = '<p>Failed to load ideas. Please try again later.</p>';
   }
 }
+
 
 
 async function loadVotableIdeas() {
