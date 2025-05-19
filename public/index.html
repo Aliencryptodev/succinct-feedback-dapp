@@ -1114,39 +1114,40 @@ function createSkeletonCard() {
   return card;
 }
 
-async function loadIdeas() {
+ async function loadIdeas() {
   const container = document.getElementById('ideaCards');
-  
+
   container.innerHTML = '';
   for (let i = 0; i < 3; i++) {
     container.appendChild(createSkeletonCard());
   }
-  
+
   try {
     const res = await fetch(`${BACKEND_URL}/ideas`);
     const { ideas, totalVotes } = await res.json();
-    
+
     ideas.sort((a, b) => b.votes - a.votes);
-    
+
     const counter = document.getElementById('voteCounter');
-if (counter) counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
+    if (counter) {
+      counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
+    }
 
-}
+    container.innerHTML = '';
 
-if (ideas.length === 0) {
-  container.innerHTML = `
-    <div class="empty-state">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-      </svg>
-      <h3>No ideas yet</h3>
-      <p>Be the first to submit an innovative idea for Succinct's future!</p>
-    </div>
-  `;
-  return;
-}
+    if (ideas.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+          </svg>
+          <h3>No ideas yet</h3>
+          <p>Be the first to submit an innovative idea for Succinct's future!</p>
+        </div>
+      `;
+      return;
+    }
 
-    
     ideas.forEach((i, idx) => {
       const card = document.createElement('div');
       card.className = 'idea-card';
@@ -1162,6 +1163,7 @@ if (ideas.length === 0) {
     container.innerHTML = '<p>Failed to load ideas. Please try again later.</p>';
   }
 }
+
 
 async function loadVotableIdeas() {
   const container = document.getElementById('voteIdeasCards');
