@@ -8,11 +8,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <script>
-    // Make the backend URL configurable
     const BACKEND_URL = 'http://217.65.144.64:3000';
   </script>
   <style>
-    /* All existing styles remain unchanged */
     :root {
       --primary: #FE11C5;
       --primary-dark: #c20e99;
@@ -25,9 +23,8 @@
       --accent-dark: #d9c954;
       --accent-light: #fcf0a3;
       --danger: #FF5555;
-      --tab-active: #BCE4FF;
       --success: #55d6aa;
-      --bg-dark: #f9f9fb;
+      --bg-dark: #0A0A0A;
       --bg-card: #111111;
       --bg-card-hover: #1a1a1a;
       --bg-profile: #0F0F1A;
@@ -161,12 +158,12 @@
     }
     
     /* Header styles */
-     .app-header {
-     padding: 16px 24px;
-     background-color: #ffffff;
-     border-bottom: 1px solid #e4e4e7;
-     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
-     }
+    .app-header {
+      padding: var(--spacing-md) var(--spacing-lg);
+      background-color: rgba(13, 13, 30, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(254, 17, 197, 0.2);
+    }
     
     .header-container {
       max-width: 1400px;
@@ -191,13 +188,14 @@
     }
     
     /* Tab navigation */
-      .tabs-container {
-      background-color: #ffffff;
-      border: 1px solid #e4e4e7;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-      margin-bottom: 32px;
-      }
+    .tabs-container {
+      background-color: var(--bg-nav);
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      margin-bottom: var(--spacing-lg);
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(254, 17, 197, 0.2);
+    }
     
     .tabs-nav {
       display: flex;
@@ -236,7 +234,7 @@
     }
     
     .tab-btn.active {
-      background-color: var(--tab-active);
+      background-color: var(--bg-tab-active);
       color: var(--primary);
     }
     
@@ -245,12 +243,9 @@
     }
     
     .tab-content {
-     display: none;
-     padding: 24px;
-     background-color: #ffffff;
-     border-radius: 12px;
-     color: #333;
-     }
+      display: none;
+      padding: var(--spacing-lg);
+    }
     
     .tab-content.active {
       display: block;
@@ -388,31 +383,26 @@
     }
     
     /* User sidebar styles */
-      .user-sidebar {
-      background-color: #ffffff;
-      border: 1px solid #e4e4e7;
-      border-radius: 12px;
-      padding: 0;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    .user-sidebar {
+      background-color: var(--bg-sidebar);
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(144, 220, 255, 0.2);
       height: fit-content;
-      }
-
-    /* Header del perfil con degradado */
+    }
+    
     .sidebar-header {
-     background: linear-gradient(to right, #FF00B8, #7700FF);
-     color: #ffffff;
-     padding: 16px;
-     font-weight: bold;
-     font-size: 1rem;
-     text-align: center;
-     border-top-left-radius: 12px;
-     border-top-right-radius: 12px;
-     }
-
+      padding: var(--spacing-lg);
+      background: linear-gradient(135deg, rgba(254, 17, 197, 0.1), rgba(144, 220, 255, 0.1));
+      border-bottom: 1px solid rgba(254, 17, 197, 0.2);
+      text-align: center;
+    }
+    
     .sidebar-header h2 {
-    color: white;
-    font-size: 1.2rem;
-    margin: 0;
+      color: var(--secondary);
+      font-size: 1.3rem;
+      margin-bottom: var(--spacing-sm);
     }
     
     /* Profile card styles */
@@ -491,15 +481,14 @@
     }
     
     /* Create idea form styles */
-      .idea-form {
-      background-color: #ffffff;
-      border: 1px solid #e4e4e7;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-      margin-bottom: 32px;
-      }
-
+    .idea-form {
+      background-color: var(--bg-card);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+      border: 1px solid rgba(254, 17, 197, 0.2);
+      box-shadow: var(--shadow-md);
+    }
     
     .idea-form h3 {
       color: var(--secondary);
@@ -588,21 +577,37 @@
     }
     
     .idea-card {
-    background-color: #ffffff;
-    border: 1px solid #e4e4e7;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    transition: all 0.2s ease;
-    color: #333;
+      background-color: var(--bg-card);
+      border: 1px solid rgba(254, 17, 197, 0.3);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-xl);
+      text-align: left;
+      box-shadow: var(--shadow-md), 0 0 20px rgba(254, 17, 197, 0.1);
+      transition: all var(--transition-medium) ease;
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
-
+    
+    .idea-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom right, rgba(254, 17, 197, 0.05), transparent);
+      pointer-events: none;
+    }
+    
     .idea-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-    border-color: #d4d4d8;
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg), 0 0 25px rgba(254, 17, 197, 0.15);
+      border-color: rgba(254, 17, 197, 0.5);
+      background-color: var(--bg-card-hover);
     }
-
     
     .idea-text {
       font-size: 1.1rem;
@@ -1118,23 +1123,23 @@ function createSkeletonCard() {
 
 async function loadIdeas() {
   const container = document.getElementById('ideaCards');
-
+  
   container.innerHTML = '';
   for (let i = 0; i < 3; i++) {
     container.appendChild(createSkeletonCard());
   }
-
+  
   try {
     const res = await fetch(`${BACKEND_URL}/ideas`);
     const { ideas, totalVotes } = await res.json();
-
+    
     ideas.sort((a, b) => b.votes - a.votes);
-
+    
     const counter = document.getElementById('voteCounter');
     if (counter) counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
-
+    
     container.innerHTML = '';
-
+    
     if (ideas.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
@@ -1147,7 +1152,7 @@ async function loadIdeas() {
       `;
       return;
     }
-
+    
     ideas.forEach((i, idx) => {
       const card = document.createElement('div');
       card.className = 'idea-card';
@@ -1171,56 +1176,56 @@ async function loadVotableIdeas() {
   for (let i = 0; i < 3; i++) {
     container.appendChild(createSkeletonCard());
   }
-
+  
   try {
     const res = await fetch(`${BACKEND_URL}/ideas`);
     const { ideas } = await res.json();
-
+    
     container.innerHTML = '';
-
-    if (!userId) {
-      container.innerHTML = `
-        <div class="empty-state">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          <h3>Please connect with Discord</h3>
-          <p>You need to connect your Discord account to vote on ideas.</p>
-        </div>
-      `;
-      return;
-    }
-
+    
     if (ideas.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 8v4M12 16h.01"></path>
           </svg>
           <h3>No ideas to vote on</h3>
-          <p>Check back later for new ideas to vote on!</p>
+          <p>There are no ideas available for voting at this time.</p>
         </div>
       `;
       return;
     }
-
-    ideas.forEach((idea, index) => {
+    
+    const canVote = userRoles.some(r => 
+      r.toLowerCase() === 'proof verified' || 
+      r.toLowerCase() === 'proof of verify'
+    );
+    
+    ideas.forEach((i, idx) => {
       const card = document.createElement('div');
       card.className = 'idea-card';
       card.innerHTML = `
-        <p class="idea-text">${idea.idea}</p>
-        <span class="username">by @${idea.username || 'unknown'}</span>
-        <span class="votes">${idea.votes} vote${idea.votes === 1 ? '' : 's'}</span>
-        <div style="margin-top: 16px;">
-          <input type="number" id="voteInput${index}" min="1" placeholder="Votes" style="margin-right: 8px;">
-          <button onclick="voteIdea(${index}, this)">Vote</button>
-        </div>
+        <p class="idea-text">${i.idea}</p>
+        <span class="username">by @${i.username || 'unknown'}</span>
+        <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
+        ${
+          canVote
+            ? `
+            <div style="margin-top: 1rem;">
+              <input type="number" id="voteInput${idx}" min="1" max="10" placeholder="Votes" />
+              <button onclick="voteIdea(${idx}, this)" class="vote-btn" style="padding: 0.5rem 1rem; margin-top: 0.5rem;">
+                🔎 Vote
+              </button>
+            </div>
+            `
+            : '<p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">You need the "Proof Verified" role to vote</p>'
+        }
       `;
       container.appendChild(card);
     });
   } catch (error) {
-    console.error('Error loading votable ideas:', error);
+    console.error('Error loading ideas:', error);
     container.innerHTML = '<p>Failed to load ideas. Please try again later.</p>';
   }
 }
