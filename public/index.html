@@ -1114,7 +1114,7 @@ function createSkeletonCard() {
   return card;
 }
 
- async function loadIdeas() {
+async function loadIdeas() {
   const container = document.getElementById('ideaCards');
 
   container.innerHTML = '';
@@ -1156,13 +1156,11 @@ function createSkeletonCard() {
       `;
       container.appendChild(card);
     });
-
   } catch (error) {
     console.error('Error loading ideas:', error);
     container.innerHTML = '<p>Failed to load ideas. Please try again later.</p>';
   }
 }
-
 
 
 async function loadVotableIdeas() {
