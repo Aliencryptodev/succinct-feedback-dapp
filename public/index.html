@@ -384,26 +384,31 @@
     }
     
     /* User sidebar styles */
-    .user-sidebar {
-      background-color: var(--bg-sidebar);
-      border-radius: var(--border-radius-lg);
-      overflow: hidden;
-      box-shadow: var(--shadow-lg);
-      border: 1px solid rgba(144, 220, 255, 0.2);
+      .user-sidebar {
+      background-color: #ffffff;
+      border: 1px solid #e4e4e7;
+      border-radius: 12px;
+      padding: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       height: fit-content;
-    }
-    
+      }
+
+    /* Header del perfil con degradado */
     .sidebar-header {
-      padding: var(--spacing-lg);
-      background: linear-gradient(135deg, rgba(254, 17, 197, 0.1), rgba(144, 220, 255, 0.1));
-      border-bottom: 1px solid rgba(254, 17, 197, 0.2);
-      text-align: center;
-    }
-    
+     background: linear-gradient(to right, #FF00B8, #7700FF);
+     color: #ffffff;
+     padding: 16px;
+     font-weight: bold;
+     font-size: 1rem;
+     text-align: center;
+     border-top-left-radius: 12px;
+     border-top-right-radius: 12px;
+     }
+
     .sidebar-header h2 {
-      color: var(--secondary);
-      font-size: 1.3rem;
-      margin-bottom: var(--spacing-sm);
+    color: white;
+    font-size: 1.2rem;
+    margin: 0;
     }
     
     /* Profile card styles */
@@ -482,14 +487,15 @@
     }
     
     /* Create idea form styles */
-    .idea-form {
-      background-color: var(--bg-card);
-      border-radius: var(--border-radius-lg);
-      padding: var(--spacing-xl);
-      margin-bottom: var(--spacing-xl);
-      border: 1px solid rgba(254, 17, 197, 0.2);
-      box-shadow: var(--shadow-md);
-    }
+      .idea-form {
+      background-color: #ffffff;
+      border: 1px solid #e4e4e7;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 32px;
+      }
+
     
     .idea-form h3 {
       color: var(--secondary);
@@ -578,37 +584,21 @@
     }
     
     .idea-card {
-      background-color: var(--bg-card);
-      border: 1px solid rgba(254, 17, 197, 0.3);
-      border-radius: var(--border-radius-lg);
-      padding: var(--spacing-xl);
-      text-align: left;
-      box-shadow: var(--shadow-md), 0 0 20px rgba(254, 17, 197, 0.1);
-      transition: all var(--transition-medium) ease;
-      position: relative;
-      overflow: hidden;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
+    background-color: #ffffff;
+    border: 1px solid #e4e4e7;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    color: #333;
     }
-    
-    .idea-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to bottom right, rgba(254, 17, 197, 0.05), transparent);
-      pointer-events: none;
-    }
-    
+
     .idea-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-lg), 0 0 25px rgba(254, 17, 197, 0.15);
-      border-color: rgba(254, 17, 197, 0.5);
-      background-color: var(--bg-card-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    border-color: #d4d4d8;
     }
+
     
     .idea-text {
       font-size: 1.1rem;
