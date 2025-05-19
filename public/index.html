@@ -1129,8 +1129,8 @@ async function loadIdeas() {
     ideas.sort((a, b) => b.votes - a.votes);
     
     const counter = document.getElementById('voteCounter');
-if (counter) {
-  counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
+if (counter) counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
+
 }
 
 if (ideas.length === 0) {
