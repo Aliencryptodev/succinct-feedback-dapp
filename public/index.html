@@ -1162,59 +1162,47 @@ async function loadIdeas() {
   }
 }
 
+async function loadIdeas() {
+  const container = document.getElementById('ideaCards');
 
-async function loadVotableIdeas() {
-  const container = document.getElementById('voteIdeasCards');
-  
   container.innerHTML = '';
   for (let i = 0; i < 3; i++) {
     container.appendChild(createSkeletonCard());
   }
-  
+
   try {
     const res = await fetch(`${BACKEND_URL}/ideas`);
-    const { ideas } = await res.json();
-    
+    const { ideas, totalVotes } = await res.json();
+
+    ideas.sort((a, b) => b.votes - a.votes);
+
+    const counter = document.getElementById('voteCounter');
+    if (counter) {
+      counter.querySelector('span').textContent = `Total verified votes: ${totalVotes}`;
+    }
+
     container.innerHTML = '';
-    
+
     if (ideas.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 8v4M12 16h.01"></path>
+            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
           </svg>
-          <h3>No ideas to vote on</h3>
-          <p>There are no ideas available for voting at this time.</p>
+          <h3>No ideas yet</h3>
+          <p>Be the first to submit an innovative idea for Succinct's future!</p>
         </div>
       `;
       return;
     }
-    
-    const canVote = userRoles.some(r => 
-      r.toLowerCase() === 'proof verified' || 
-      r.toLowerCase() === 'proof of verify'
-    );
-    
+
     ideas.forEach((i, idx) => {
       const card = document.createElement('div');
       card.className = 'idea-card';
       card.innerHTML = `
-        <p class="idea-text">${i.idea}</p>
+        <p class="idea-text">#${idx + 1} — ${i.idea}</p>
         <span class="username">by @${i.username || 'unknown'}</span>
         <span class="votes">${i.votes} vote${i.votes === 1 ? '' : 's'}</span>
-        ${
-          canVote
-            ? `
-            <div style="margin-top: 1rem;">
-              <input type="number" id="voteInput${idx}" min="1" max="10" placeholder="Votes" />
-              <button onclick="voteIdea(${idx}, this)" class="vote-btn" style="padding: 0.5rem 1rem; margin-top: 0.5rem;">
-                🔎 Vote
-              </button>
-            </div>
-            `
-            : '<p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">You need the "Proof Verified" role to vote</p>'
-        }
       `;
       container.appendChild(card);
     });
@@ -1223,6 +1211,7 @@ async function loadVotableIdeas() {
     container.innerHTML = '<p>Failed to load ideas. Please try again later.</p>';
   }
 }
+
 
 async function loadDiscardedIdeas() {
   const container = document.getElementById('discardedIdeas');
