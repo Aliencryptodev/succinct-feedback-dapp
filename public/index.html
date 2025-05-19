@@ -1133,7 +1133,7 @@ async function loadIdeas() {
     
     container.innerHTML = '';
     
-    if (ideas.length === 0) {
+      if (ideas.length === 0) {
   container.innerHTML = `
     <div class="empty-state">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1141,10 +1141,11 @@ async function loadIdeas() {
       </svg>
       <h3>No ideas yet</h3>
       <p>Be the first to submit an innovative idea for Succinct's future!</p>
-      </div>
-      `;
-       return;
-        }
+    </div>
+  `;
+  return;
+}
+
     
     ideas.forEach((i, idx) => {
       const card = document.createElement('div');
