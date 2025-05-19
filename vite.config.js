@@ -6,7 +6,8 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://217.65.144.64:3000',
-        changeOrigin: true
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
   },
@@ -14,7 +15,7 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       input: {
-        main: 'index.html'
+        main: '/index.html'
       }
     }
   }
