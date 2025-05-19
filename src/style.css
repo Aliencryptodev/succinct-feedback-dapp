@@ -22,38 +22,44 @@
 
 @layer components {
   .btn {
-    @apply bg-primary text-white font-semibold px-6 py-3 rounded-lg
+    @apply bg-primary text-white px-4 py-2 rounded-lg font-semibold
            transition-all duration-200 hover:bg-primary-dark hover:-translate-y-0.5
-           shadow-lg shadow-primary-glow/20 hover:shadow-primary-glow/30;
-  }
-
-  .card {
-    @apply bg-bg-card rounded-lg p-6 border border-primary/20
-           transition-all duration-200 hover:bg-bg-card-hover hover:-translate-y-1
            shadow-lg hover:shadow-xl;
   }
 
-  .tab {
-    @apply px-6 py-3 font-semibold rounded-lg transition-colors duration-200
-           hover:bg-primary/10 relative overflow-hidden;
+  .card {
+    @apply bg-white/5 backdrop-blur rounded-lg p-6 border border-primary/20
+           transition-all duration-200 hover:bg-white/10 hover:-translate-y-1
+           shadow-lg hover:shadow-xl relative overflow-hidden;
   }
 
-  .tab.active {
-    @apply bg-bg-tab-active text-primary;
+  .card::before {
+    @apply content-[''] absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent
+           pointer-events-none opacity-0 transition-opacity duration-200;
   }
 
-  .tab.active::after {
-    @apply content-[''] absolute bottom-0 left-1/2 w-4/5 h-0.5 bg-primary
-           -translate-x-1/2;
-  }
-
-  .role-tag {
-    @apply px-3 py-1 rounded-full text-sm font-medium
-           bg-opacity-10 border border-opacity-30;
+  .card:hover::before {
+    @apply opacity-100;
   }
 
   .vote-count {
     @apply inline-flex items-center gap-2 px-3 py-1 rounded-lg
            bg-accent/10 text-accent font-semibold;
+  }
+
+  .role-tag {
+    @apply px-3 py-1 rounded-full text-sm font-medium border;
+  }
+
+  .role-tag.expert {
+    @apply bg-primary/10 text-primary border-primary/30;
+  }
+
+  .role-tag.contributor {
+    @apply bg-accent/10 text-accent border-accent/30;
+  }
+
+  .role-tag.adopter {
+    @apply bg-secondary/10 text-secondary border-secondary/30;
   }
 }

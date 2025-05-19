@@ -30,9 +30,6 @@ export default {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
       },
-      boxShadow: {
-        'glow': '0 0 20px var(--primary-glow)',
-      },
     },
   },
   plugins: [],
