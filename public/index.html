@@ -16,23 +16,23 @@
       --primary-dark: #c20e99;
       --primary-light: #ff5cdc;
       --primary-glow: rgba(254, 17, 197, 0.3);
-      --secondary: #FE11C5;
+      --secondary: #90DCFF;
       --secondary-dark: #5fa8c9;
       --secondary-light: #c5edff;
-      --accent: #FE11C5;
-      --accent-dark: #FE11C5;
-      --accent-light: #f7f7f7;
-      --danger: #f7f7f7;
+      --accent: #F9E766;
+      --accent-dark: #d9c954;
+      --accent-light: #fcf0a3;
+      --danger: #FF5555;
       --success: #55d6aa;
-      --bg-dark: #f7f7f7;
-      --bg-card: #f7f7f7;
-      --bg-card-hover: #f7f7f7;
-      --bg-profile: #f7f7f7;
-      --bg-sidebar: #f7f7f7;
-      --bg-nav: #f7f7f7;
-      --bg-tab-active: #781961;
-      --text-primary: #FE11C5;
-      --text-secondary: #FE11C5;
+      --bg-dark: #0A0A0A;
+      --bg-card: #111111;
+      --bg-card-hover: #1a1a1a;
+      --bg-profile: #0F0F1A;
+      --bg-sidebar: #13132A;
+      --bg-nav: #13132A;
+      --bg-tab-active: #1E1E42;
+      --text-primary: #ffffff;
+      --text-secondary: #cccccc;
       --border-radius-sm: 8px;
       --border-radius-md: 12px;
       --border-radius-lg: 16px;
@@ -324,7 +324,7 @@
     }
     
     button:disabled {
-      background-color: #FE11C5;
+      background-color: #666;
       cursor: not-allowed;
       opacity: 0.7;
       box-shadow: none;
@@ -336,7 +336,7 @@
       display: inline-flex;
       align-items: center;
       gap: var(--spacing-sm);
-      background-color: #FE11C5;
+      background-color: #5865F2;
       position: relative;
     }
     
@@ -397,7 +397,6 @@
       background: linear-gradient(135deg, rgba(254, 17, 197, 0.1), rgba(144, 220, 255, 0.1));
       border-bottom: 1px solid rgba(254, 17, 197, 0.2);
       text-align: center;
-      font-size: 14px;
     }
     
     .sidebar-header h2 {
@@ -466,7 +465,7 @@
     .vote-counter {
       margin-top: var(--spacing-lg);
       padding: var(--spacing-md);
-      background-color: rgba(254, 17, 197, 0.2);
+      background-color: rgba(249, 231, 102, 0.1);
       border-radius: var(--border-radius-md);
       font-weight: 600;
       color: var(--accent);
@@ -502,7 +501,7 @@
       min-height: 150px;
       border-radius: var(--border-radius-md);
       border: 1px solid rgba(144, 220, 255, 0.3);
-      background-color: rgba(254, 17, 197, 0.1);
+      background-color: rgba(15, 15, 26, 0.8);
       padding: var(--spacing-md);
       font-size: 1rem;
       color: var(--text-primary);
@@ -529,7 +528,7 @@
       padding: var(--spacing-sm);
       border-radius: var(--border-radius-sm);
       border: 1px solid rgba(144, 220, 255, 0.3);
-      background-color: rgba(254, 17, 197, 0.1);
+      background-color: rgba(15, 15, 26, 0.8);
       color: var(--text-primary);
       font-family: var(--font-family);
       font-size: 0.9rem;
@@ -634,7 +633,7 @@
       color: var(--accent);
       font-weight: 600;
       padding: var(--spacing-xs) var(--spacing-sm);
-      background-color: rgba(254, 17, 197, 0.2);
+      background-color: rgba(249, 231, 102, 0.1);
       border-radius: var(--border-radius-sm);
     }
     
@@ -1073,7 +1072,7 @@ function updateProfileCard(user) {
     tag.textContent = role;
     const color = ROLE_STYLES[role.toUpperCase()] || ROLE_STYLES[role] || '#90DCFF';
     tag.style.cssText = `
-      background-color: rgba(254, 17, 197, 0.1);
+      background-color: rgba(26, 26, 43, 0.8);
       color: ${color};
       border: 1px solid ${color};
       border-radius: 12px;
