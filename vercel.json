@@ -8,7 +8,6 @@
     { "source": "/api/message.json", "destination": "/api/message.json" },
 
     // Rutas de autenticación de Discord manejadas por Vercel
-    // Asegúrate de que tu frontend ahora llame a /login o /api/login para iniciar el flujo
     { "source": "/login", "destination": "/api/login" },
     { "source": "/callback", "destination": "/api/callback" }
   ]
