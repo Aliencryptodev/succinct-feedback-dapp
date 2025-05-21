@@ -1,5 +1,4 @@
 // api/login.js
-// No necesitas dotenv.config() aquí, Vercel ya carga las variables
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
 const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI; // Esta será la URL de Vercel
 
