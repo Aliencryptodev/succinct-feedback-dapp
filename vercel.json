@@ -1,8 +1,23 @@
 {
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/api/(.*)",
-      "destination": "http://217.65.144.64:3000/api/$1"
+      "src": "api/**/*.ts",
+      "use": "@vercel/node"
     }
-  ]
+  ],
+  "routes": [
+    {
+      "src": "/api/auth/(.*)",
+      "dest": "/api/auth/[...nextauth]"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    }
+  ],
+  "env": {
+    "NEXTAUTH_URL": "https://succinct-feedback-dapp.vercel.app",
+    "DISCORD_REDIRECT_URI": "https://succinct-feedback-dapp.vercel.app/api/auth/callback/discord"
+  }
 }
