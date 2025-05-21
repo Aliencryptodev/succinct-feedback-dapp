@@ -1,13 +1,10 @@
 {
   "rewrites": [
-    // Rutas para las APIs de datos
     { "source": "/api/user", "destination": "/api/user" },
     { "source": "/api/ideas", "destination": "/api/ideas" },
     { "source": "/api/submit-idea", "destination": "/api/submit-idea" },
     { "source": "/api/vote", "destination": "/api/vote" },
     { "source": "/api/message.json", "destination": "/api/message.json" },
-
-    // Rutas de autenticación de Discord manejadas por Vercel
     { "source": "/login", "destination": "/api/login" },
     { "source": "/callback", "destination": "/api/callback" }
   ]
