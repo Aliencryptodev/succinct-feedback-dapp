@@ -1,24 +1,13 @@
 {
   "rewrites": [
-    // Esto es CRUCIAL: todas las solicitudes que comienzan con /api/
-    // serán enviadas (proxied) a tu backend en la VPS.
-    // Asegúrate de que API_BACKEND_URL esté definida en Vercel como
-    // http://217.65.144.64:3000
     {
       "source": "/api/:path*",
       "destination": "${API_BACKEND_URL}/api/:path*"
     },
-    // Regla para el callback de Discord. Discord redirige al frontend Vercel a /callback.
-    // Esta regla reescribe internamente /callback a /api/callback,
-    // que luego será manejado por la primera regla de proxy.
     {
       "source": "/callback",
       "destination": "/api/callback"
     },
-    // Si tu frontend tiene un botón de login que apunta a /login,
-    // esta regla lo reescribe internamente a /api/login,
-    // que también será manejado por la primera regla de proxy.
-    // (Aunque en la configuración actual del frontend, el login es directo a Discord).
     {
       "source": "/login",
       "destination": "/api/login"
