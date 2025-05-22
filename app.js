@@ -13,7 +13,7 @@ const app = express();
 
 const DATA_FILE = 'ideas.json';
 // ¡CORRECCIÓN CLAVE! Tu backend en Vercel debe llamar directamente a la API de Discord.
-const DISCORD_API = 'https://discord.com/api';
+const DISCORD_API = 'https://succinct-feedback-dapp.vercel.app/api/discord';
 const VOTE_ROLE = 'Proof Verified';
 const COMMENT_ROLE = "lets pruv it";
 
