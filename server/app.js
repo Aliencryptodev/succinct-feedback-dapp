@@ -97,7 +97,7 @@ app.get('/callback', async (req, res) => {
     const userData = await userRes.json();
     req.session.user = userData;
 
-    // ✅ Redirige al frontend Vercel
+    // Ahora redirige al dashboard en TU dominio (no vercel ni IP)
     res.redirect('https://succinct-feedback.com/dashboard');
   } catch (error) {
     console.error('❌ Error en /callback:', error);
