@@ -98,7 +98,7 @@ app.get('/callback', async (req, res) => {
     req.session.user = userData;
 
     // ✅ Redirige al frontend Vercel
-    res.redirect('https://succinct-feedback-dapp.vercel.app');
+    res.redirect('https://succinct-feedback.com/dashboard');
   } catch (error) {
     console.error('❌ Error en /callback:', error);
     res.status(500).send('Error al autenticar con Discord');
