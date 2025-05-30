@@ -209,6 +209,16 @@ app.get('/', (req, res) => {
   res.send('🚀 Backend Succinct Feedback DApp corriendo correctamente.');
 });
 
+const path = require('path'); // Asegúrate de tener esto arriba si no lo tienes
+
+app.get('*', (req, res) => {
+  // Si la ruta empieza por /api, la dejamos pasar como error 404 de API
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'API route not found' });
+  }
+  // Sirve el frontend para cualquier otra ruta (SPA)
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 // Start server
 app.listen(PORT, () => {
   console.log(`✅ Backend running at http://localhost:${PORT}`);
