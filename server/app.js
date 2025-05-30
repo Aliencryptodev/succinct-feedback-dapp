@@ -18,12 +18,27 @@ const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI;
 
+// CORS middleware (permite solo tu dominio y credenciales)
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://succinct-feedback.com');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
+
 // Middleware
 app.use(express.json());
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {
+    secure: true,      // SOLO si usas HTTPS en producción
+    sameSite: 'lax',   // O 'none' si necesitas cross-domain
+    httpOnly: true
+  }
 }));
 app.use(express.static('public'));
 
@@ -97,7 +112,7 @@ app.get('/callback', async (req, res) => {
     const userData = await userRes.json();
     req.session.user = userData;
 
-    // Ahora redirige al dashboard en TU dominio (no vercel ni IP)
+    // Ahora redirige al dashboard en TU dominio
     res.redirect('https://succinct-feedback.com/dashboard');
   } catch (error) {
     console.error('❌ Error en /callback:', error);
