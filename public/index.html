@@ -1002,7 +1002,7 @@ function setupTabs() {
 
 async function getUser() {
   try {
-    const res = await fetch(`${BACKEND_URL}/api/user`);
+    const res = await fetch(`${BACKEND_URL}/api/user`, { credentials: 'include' });
     if (!res.ok) throw new Error('Failed to fetch user data');
     
     const data = await res.json();
@@ -1136,7 +1136,7 @@ async function loadIdeas() {
   }
   
   try {
-    const res = await fetch(`${BACKEND_URL}/ideas`);
+    const res = await fetch(`${BACKEND_URL}/ideas`, { credentials: 'include' });
     const { ideas, totalVotes } = await res.json();
     
     ideas.sort((a, b) => b.votes - a.votes);
@@ -1184,7 +1184,7 @@ async function loadVotableIdeas() {
   }
   
   try {
-    const res = await fetch(`${BACKEND_URL}/ideas`);
+    const res = await fetch(`${BACKEND_URL}/ideas`, { credentials: 'include' });
     const { ideas } = await res.json();
     
     container.innerHTML = '';
@@ -1245,7 +1245,7 @@ async function loadDiscardedIdeas() {
   }
   
   try {
-    const res = await fetch(`${BACKEND_URL}/message.json`);
+    const res = await fetch(`${BACKEND_URL}/message.json`, { credentials: 'include' });
     const messages = await res.json();
     
     container.innerHTML = '';
@@ -1292,16 +1292,17 @@ async function voteIdea(index, button) {
   button.textContent = 'Verifying...';
 
   try {
-    const res = await fetch(`${BACKEND_URL}/vote`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        index,
-        discord_id: userId,
-        username,
-        amount
-      })
-    });
+  const res = await fetch(`${BACKEND_URL}/vote`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include', // 👈 Agrega esta línea
+    body: JSON.stringify({
+      index,
+      discord_id: userId,
+      username,
+      amount
+    })
+  });
 
     const data = await res.json();
 
@@ -1324,7 +1325,7 @@ async function voteIdea(index, button) {
 
 async function updateRemainingVotesDisplay() {
   try {
-    const res = await fetch(`${BACKEND_URL}/api/user`);
+    const res = await fetch(`${BACKEND_URL}/api/user`, { credentials: 'include' });
     const user = await res.json();
 
     const voteCountDisplay = document.getElementById('voteCountDisplay');
@@ -1361,11 +1362,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         submitButton.textContent = 'Submitting...';
 
         try {
-          const res = await fetch(`${BACKEND_URL}/submit-idea`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
-          });
+        const res = await fetch(`${BACKEND_URL}/submit-idea`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // 👈 Añade esta línea
+        body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
+        });
 
           const data = await res.json();
           if (data.success) {
