@@ -4,14 +4,21 @@ const fetch = require('node-fetch');
 const crypto = require('crypto');
 const fs = require('fs');
 const { ensureUserVotes, updateUserVotes } = require('./votes');
-const app = express();
 require('dotenv').config();
+
+const app = express();
+const PORT = 3000;
 
 const DATA_FILE = 'ideas.json';
 const DISCORD_API = 'https://152.53.243.39.sslip.io/api/discord';
 const VOTE_ROLE = 'Proof Verified';
 const COMMENT_ROLE = "lets pruv it";
 
+const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
+const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
+const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI;
+
+// Middleware
 app.use(express.json());
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -20,10 +27,7 @@ app.use(session({
 }));
 app.use(express.static('public'));
 
-const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
-const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
-const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI;
-
+// Helpers
 function loadIdeas() {
   if (!fs.existsSync(DATA_FILE)) return [];
   return JSON.parse(fs.readFileSync(DATA_FILE));
@@ -62,6 +66,7 @@ async function getUserRoles(discordId) {
   }
 }
 
+// Rutas
 app.get('/login', (req, res) => {
   const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify guilds guilds.members.read`;
   res.redirect(url);
@@ -77,18 +82,27 @@ app.get('/callback', async (req, res) => {
   params.append('redirect_uri', REDIRECT_URI);
   params.append('scope', 'identify guilds guilds.members.read');
 
-  const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
-    method: 'POST',
-    body: params,
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-  });
-  const tokenData = await tokenRes.json();
-  const userRes = await fetch('https://discord.com/api/users/@me', {
-    headers: { Authorization: `Bearer ${tokenData.access_token}` },
-  });
-  const userData = await userRes.json();
-  req.session.user = userData;
-  res.redirect('/dashboard');
+  try {
+    const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
+      method: 'POST',
+      body: params,
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+
+    const tokenData = await tokenRes.json();
+    const userRes = await fetch('https://discord.com/api/users/@me', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+    });
+
+    const userData = await userRes.json();
+    req.session.user = userData;
+
+    // Redirige al dashboard
+    res.redirect('/dashboard');
+  } catch (error) {
+    console.error('❌ Error en /callback:', error);
+    res.status(500).send('Error al autenticar con Discord');
+  }
 });
 
 app.get('/dashboard', (req, res) => {
@@ -115,6 +129,12 @@ app.get('/api/user', async (req, res) => {
   });
 });
 
+// ENDPOINT NECESARIO PARA EL FRONTEND
+app.get('/ideas', (req, res) => {
+  const ideas = loadIdeas();
+  const totalVotes = ideas.reduce((acc, i) => acc + (i.votes || 0), 0);
+  res.json({ ideas, totalVotes });
+});
 
 app.post('/submit-idea', async (req, res) => {
   const { idea, discord_id, username } = req.body;
@@ -167,6 +187,26 @@ app.post('/vote', async (req, res) => {
     console.error('❌ Error al votar:', e.message);
     return res.status(400).json({ success: false, error: e.message });
   }
+});
+
+// Ruta para ideas descartadas (si tienes discarded.json)
+app.get('/message.json', (req, res) => {
+  const discardedPath = __dirname + '/discarded.json';
+  if (fs.existsSync(discardedPath)) {
+    res.sendFile(discardedPath);
+  } else {
+    res.json([]);
+  }
+});
+
+// Última ruta para mostrar algo si visitan la raíz
+app.get('/', (req, res) => {
+  res.send('🚀 Backend Succinct Feedback DApp corriendo correctamente.');
+});
+
+// Inicia el servidor
+app.listen(PORT, () => {
+  console.log(`✅ Backend running at http://localhost:${PORT}`);
 });
 
 app.listen(3000, () => console.log('Backend running on http://localhost:3000'));
