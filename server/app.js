@@ -3,6 +3,7 @@ const session = require('express-session');
 const fetch = require('node-fetch');
 const crypto = require('crypto');
 const fs = require('fs');
+const path = require('path'); // Importar path arriba
 const { ensureUserVotes, updateUserVotes } = require('./votes');
 require('dotenv').config();
 
@@ -40,7 +41,7 @@ app.use(session({
     httpOnly: true
   }
 }));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public'))); // Usa path.join aquí
 
 // Helpers
 function loadIdeas() {
@@ -196,7 +197,7 @@ app.get('/ideas', (req, res) => {
 });
 
 app.get('/message.json', (req, res) => {
-  const discardedPath = __dirname + '/discarded.json';
+  const discardedPath = path.join(__dirname, 'discarded.json');
   if (fs.existsSync(discardedPath)) {
     res.sendFile(discardedPath);
   } else {
@@ -209,8 +210,7 @@ app.get('/', (req, res) => {
   res.send('🚀 Backend Succinct Feedback DApp corriendo correctamente.');
 });
 
-const path = require('path'); // Asegúrate de tener esto arriba si no lo tienes
-
+// SPA fallback: sirve index.html para cualquier ruta que no sea API ni recurso estático
 app.get('*', (req, res) => {
   // Si la ruta empieza por /api, la dejamos pasar como error 404 de API
   if (req.path.startsWith('/api')) {
@@ -219,6 +219,7 @@ app.get('*', (req, res) => {
   // Sirve el frontend para cualquier otra ruta (SPA)
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
 // Start server
 app.listen(PORT, () => {
   console.log(`✅ Backend running at http://localhost:${PORT}`);
