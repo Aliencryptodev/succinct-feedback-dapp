@@ -97,17 +97,12 @@ app.get('/callback', async (req, res) => {
     const userData = await userRes.json();
     req.session.user = userData;
 
-    // Redirige al dashboard
-    res.redirect('/dashboard');
+    // ✅ Redirige al frontend Vercel
+    res.redirect('https://succinct-feedback-dapp.vercel.app');
   } catch (error) {
     console.error('❌ Error en /callback:', error);
     res.status(500).send('Error al autenticar con Discord');
   }
-});
-
-app.get('/dashboard', (req, res) => {
-  if (!req.session.user) return res.redirect('/login');
-  res.sendFile(__dirname + '/public/index.html');
 });
 
 app.get('/api/user', async (req, res) => {
@@ -116,8 +111,6 @@ app.get('/api/user', async (req, res) => {
   const discordId = req.session.user.id;
   const username = req.session.user.username;
   const roles = await getUserRoles(discordId);
-
-  // Aseguramos que tenga asignados los votos
   const userVotes = ensureUserVotes(discordId, username, roles);
 
   res.json({
@@ -127,13 +120,6 @@ app.get('/api/user', async (req, res) => {
     roles,
     remaining_votes: userVotes.remaining_votes
   });
-});
-
-// ENDPOINT NECESARIO PARA EL FRONTEND
-app.get('/ideas', (req, res) => {
-  const ideas = loadIdeas();
-  const totalVotes = ideas.reduce((acc, i) => acc + (i.votes || 0), 0);
-  res.json({ ideas, totalVotes });
 });
 
 app.post('/submit-idea', async (req, res) => {
@@ -158,7 +144,7 @@ app.post('/submit-idea', async (req, res) => {
 
     res.json({ success: true });
   } catch (err) {
-    console.error('Error al guardar la idea:', err);
+    console.error('❌ Error al guardar la idea:', err);
     res.status(500).json({ success: false, error: 'Error al guardar la idea' });
   }
 });
@@ -168,7 +154,6 @@ app.post('/vote', async (req, res) => {
 
   console.log(`🗳️ Voto solicitado: ${amount} voto(s) a idea #${index} por ${username} (${discord_id})`);
 
-  // Verifica que el usuario tenga el rol habilitado
   if (!await userHasRole(discord_id, VOTE_ROLE)) {
     return res.status(403).json({ success: false, error: 'No tienes el rol Proof Verified' });
   }
@@ -179,9 +164,9 @@ app.post('/vote', async (req, res) => {
   }
 
   try {
-    updateUserVotes(discord_id, index, amount);  // actualiza votos en users.json
-    ideas[index].votes += amount;                // suma los votos a la idea
-    saveIdeas(ideas);                            // guarda ideas actualizadas
+    updateUserVotes(discord_id, index, amount);
+    ideas[index].votes += amount;
+    saveIdeas(ideas);
     return res.json({ success: true });
   } catch (e) {
     console.error('❌ Error al votar:', e.message);
@@ -189,7 +174,12 @@ app.post('/vote', async (req, res) => {
   }
 });
 
-// Ruta para ideas descartadas (si tienes discarded.json)
+app.get('/ideas', (req, res) => {
+  const ideas = loadIdeas();
+  const totalVotes = ideas.reduce((acc, i) => acc + (i.votes || 0), 0);
+  res.json({ ideas, totalVotes });
+});
+
 app.get('/message.json', (req, res) => {
   const discardedPath = __dirname + '/discarded.json';
   if (fs.existsSync(discardedPath)) {
@@ -204,9 +194,7 @@ app.get('/', (req, res) => {
   res.send('🚀 Backend Succinct Feedback DApp corriendo correctamente.');
 });
 
-// Inicia el servidor
+// Start server
 app.listen(PORT, () => {
   console.log(`✅ Backend running at http://localhost:${PORT}`);
 });
-
-app.listen(3000, () => console.log('Backend running on http://localhost:3000'));
