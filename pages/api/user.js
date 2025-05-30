@@ -1,16 +1,10 @@
-fetch('/api/user', {
-  credentials: 'include'
-})
-  .then(res => res.json())
-  .then(user => {
-    document.getElementById("user-avatar").src = user.avatar_url || "default.png";
-    document.getElementById("user-name").textContent = user.username || "@undefined";
-    document.getElementById("user-roles").textContent = user.roles && user.roles.length > 0 ? user.roles.join(", ") : "No roles";
-    if(document.getElementById("user-votes")) {
-      document.getElementById("user-votes").textContent = user.remaining_votes || "0";
-    }
-  })
-  .catch(() => {
-    document.getElementById("user-name").textContent = "Desconocido";
-    document.getElementById("user-roles").textContent = "No roles";
-  });
+
+export default async function handler(req, res) {
+  try {
+    const backendRes = await fetch('http://217.65.144.64:3000/api/user');
+    const data = await backendRes.json();
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch user data' });
+  }
+}
