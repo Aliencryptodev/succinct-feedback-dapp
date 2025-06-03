@@ -3,7 +3,7 @@ const session = require('express-session');
 const fetch = require('node-fetch');
 const crypto = require('crypto');
 const fs = require('fs');
-const path = require('path'); // Importar path arriba
+const path = require('path');
 const { ensureUserVotes, updateUserVotes } = require('./votes');
 require('dotenv').config();
 
@@ -19,9 +19,17 @@ const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI;
 
-// CORS middleware (permite solo tu dominio y credenciales)
+// CORS middleware: permite ambos dominios, el de producción y el de Vercel
+const allowedOrigins = [
+  'https://succinct-feedback.com',
+  'https://succinct-feedback-dapp.vercel.app'
+];
+
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://succinct-feedback.com');
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -41,7 +49,7 @@ app.use(session({
     httpOnly: true
   }
 }));
-app.use(express.static(path.join(__dirname, 'public'))); // Usa path.join aquí
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Helpers
 function loadIdeas() {
