@@ -158,9 +158,13 @@ app.post('/submit-idea', async (req, res) => {
     ideas.push(ideaEntry);
     saveIdeas(ideas);
 
-    res.json({ success: true });
+    // 👇 Aquí agregas el campo proof (de momento texto fijo)
+    res.json({ 
+      success: true,
+      proof: "ZK SP1 proof: ¡esta es una prueba de proof para el modal!"
+    });
   } catch (err) {
-    console.error('❌ Error al guardar la idea:', err);
+    console.error('Error al guardar la idea:', err);
     res.status(500).json({ success: false, error: 'Error al guardar la idea' });
   }
 });
