@@ -1342,22 +1342,6 @@ async function updateRemainingVotesDisplay() {
   }
 }
 
-function showSp1ProofModal(proofText) {
-  document.getElementById('sp1ProofConsole').textContent = proofText;
-  document.getElementById('sp1ProofModal').style.display = 'flex';
-}
-
-function closeSp1ProofModal() {
-  document.getElementById('sp1ProofModal').style.display = 'none';
-}
-
-function shareSp1OnX() {
-  const proof = document.getElementById('sp1ProofConsole').textContent;
-  const url = 'https://succinct-feedback.com';
-  const tweet = encodeURIComponent(`💡 Just verified a Succinct ZK Proof!\n\n${proof}\n\n${url}`);
-  window.open(`https://twitter.com/intent/tweet?text=${tweet}`,'_blank');
-}
-  
 document.addEventListener('DOMContentLoaded', async function() {
   setupTabs();
   
@@ -1385,17 +1369,14 @@ document.addEventListener('DOMContentLoaded', async function() {
         body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
         });
 
-        const data = await res.json();
-        if (data.success) {
-        showNotification('✅ Idea submitted and verified!');
-        document.getElementById('ideaText').value = '';
-        loadIdeas();
-        if (data.proof) {
-        showSp1ProofModal(data.proof);
-        }
-        } else {
-        showNotification(data.error || '❌ Submission failed.', 'error');
-        }
+          const data = await res.json();
+          if (data.success) {
+            showNotification('✅ Idea submitted and verified!');
+            document.getElementById('ideaText').value = '';
+            loadIdeas();
+          } else {
+            showNotification(data.error || '❌ Submission failed.', 'error');
+          }
         } catch (error) {
           console.error('Error submitting idea:', error);
           showNotification('❌ Network error. Please try again.', 'error');
@@ -1410,19 +1391,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     showNotification('❌ Failed to initialize application', 'error');
   }
 });
-  
 </script>
-
-<!-- SP1 Proof Modal -->
-<div id="sp1ProofModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center;">
-  <div style="background:#181b1e; border-radius:18px; box-shadow:0 8px 32px #0008; max-width:480px; width:90%; margin:auto; padding:32px 24px; display:flex; flex-direction:column; align-items:center; position:relative;">
-    <pre id="sp1ProofConsole" style="background:#181b1e; color:#7fff7f; font-family:monospace; font-size:1rem; border-radius:12px; padding:20px 18px; width:100%; overflow:auto; box-shadow:0 2px 8px #0f08;"></pre>
-    <div style="display:flex; gap:16px; margin-top:18px;">
-      <button onclick="closeSp1ProofModal()" style="background:#fe11c5; color:white; border:none; border-radius:7px; padding:9px 18px; font-weight:600; cursor:pointer;">Cerrar</button>
-      <button onclick="shareSp1OnX()" style="background:#1da1f2; color:white; border:none; border-radius:7px; padding:9px 18px; font-weight:600; cursor:pointer;">Compartir en X</button>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
