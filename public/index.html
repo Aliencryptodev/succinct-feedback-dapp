@@ -1342,6 +1342,22 @@ async function updateRemainingVotesDisplay() {
   }
 }
 
+function showSp1ProofModal(proofText) {
+  document.getElementById('sp1ProofConsole').textContent = proofText;
+  document.getElementById('sp1ProofModal').style.display = 'flex';
+}
+
+function closeSp1ProofModal() {
+  document.getElementById('sp1ProofModal').style.display = 'none';
+}
+
+function shareSp1OnX() {
+  const proof = document.getElementById('sp1ProofConsole').textContent;
+  const url = 'https://succinct-feedback.com';
+  const tweet = encodeURIComponent(`💡 Just verified a Succinct ZK Proof!\n\n${proof}\n\n${url}`);
+  window.open(`https://twitter.com/intent/tweet?text=${tweet}`,'_blank');
+}
+  
 document.addEventListener('DOMContentLoaded', async function() {
   setupTabs();
   
@@ -1369,14 +1385,17 @@ document.addEventListener('DOMContentLoaded', async function() {
         body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
         });
 
-          const data = await res.json();
-          if (data.success) {
-            showNotification('✅ Idea submitted and verified!');
-            document.getElementById('ideaText').value = '';
-            loadIdeas();
-          } else {
-            showNotification(data.error || '❌ Submission failed.', 'error');
-          }
+        const data = await res.json();
+        if (data.success) {
+        showNotification('✅ Idea submitted and verified!');
+        document.getElementById('ideaText').value = '';
+        loadIdeas();
+        if (data.proof) {
+        showSp1ProofModal(data.proof);
+        }
+        } else {
+        showNotification(data.error || '❌ Submission failed.', 'error');
+        }
         } catch (error) {
           console.error('Error submitting idea:', error);
           showNotification('❌ Network error. Please try again.', 'error');
