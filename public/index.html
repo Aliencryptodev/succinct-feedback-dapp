@@ -1119,8 +1119,7 @@ function createSkeletonCard() {
   card.className = 'idea-card';
   card.innerHTML = `
     <div class="skeleton" style="width: 90%; height: 1.2rem;"></div>
-    <div class="skeleton" style="width: 80%; height: 1.2rem;"></div>
-    <div class="skeleton" style="width: 60%; height: 1.2rem;"></div>
+    <div ight: 1.2rem;"></div>
     <div class="skeleton" style="width: 40%; height: 0.9rem; margin-top: 1rem;"></div>
     <div class="skeleton" style="width: 30%; height: 0.9rem;"></div>
   `;
@@ -1292,17 +1291,17 @@ async function voteIdea(index, button) {
   button.textContent = 'Verifying...';
 
   try {
-  const res = await fetch(`${BACKEND_URL}/vote`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include', // 👈 Agrega esta línea
-    body: JSON.stringify({
-      index,
-      discord_id: userId,
-      username,
-      amount
-    })
-  });
+    const res = await fetch(`${BACKEND_URL}/vote`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        index,
+        discord_id: userId,
+        username,
+        amount
+      })
+    });
 
     const data = await res.json();
 
@@ -1312,6 +1311,8 @@ async function voteIdea(index, button) {
       loadVotableIdeas();
       loadIdeas();
       updateRemainingVotesDisplay();
+      // Si tu backend devuelve un hash, puedes mostrarlo aquí:
+      // showVoteHashModal(data.vote); // Descomenta si implementas un modal para el voto
     } else {
       showNotification(data.error || '❌ Vote failed', 'error');
     }
@@ -1362,18 +1363,19 @@ document.addEventListener('DOMContentLoaded', async function() {
         submitButton.textContent = 'Submitting...';
 
         try {
-        const res = await fetch(`${BACKEND_URL}/submit-idea`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include', // 👈 Añade esta línea
-        body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
-        });
+          const res = await fetch(`${BACKEND_URL}/submit-idea`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ idea: ideaText, discord_id: userId, username })
+          });
 
           const data = await res.json();
           if (data.success) {
             showNotification('✅ Idea submitted and verified!');
             document.getElementById('ideaText').value = '';
             loadIdeas();
+            showIdeaHashModal(data.idea); // <-- AÑADIDO: muestra el modal con el hash
           } else {
             showNotification(data.error || '❌ Submission failed.', 'error');
           }
@@ -1391,6 +1393,37 @@ document.addEventListener('DOMContentLoaded', async function() {
     showNotification('❌ Failed to initialize application', 'error');
   }
 });
+
+// Añade la función del modal al final del script
+function showIdeaHashModal(idea) {
+  const modal = document.createElement('div');
+  modal.className = 'modal-hash';
+  modal.innerHTML = `
+    <div class="modal-content-hash">
+      <h2>Idea registrada con éxito</h2>
+      <p><b>Usuario:</b> @${idea.username}</p>
+      <p><b>Idea:</b> ${idea.idea}</p>
+      <p><b>Timestamp:</b> ${new Date(idea.timestamp).toLocaleString()}</p>
+      <p><b>Hash anterior:</b> <code>${idea.previousHash}</code></p>
+      <p><b>Hash de esta idea:</b><br><code style="word-break:break-all">${idea.hash}</code></p>
+      <button onclick="this.parentElement.parentElement.remove()">Cerrar</button>
+    </div>
+    <style>
+      .modal-hash {
+        position: fixed; top:0; left:0; width:100vw; height:100vh;
+        background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:9999;
+      }
+      .modal-content-hash {
+        background:#fff; border-radius:10px; padding:2rem; max-width:90vw;
+        color:#111;
+        box-shadow:0 4px 16px rgba(0,0,0,0.2);
+      }
+      .modal-content-hash code { background:#f6f8fa; padding:2px 4px; border-radius:3px; }
+      .modal-content-hash button { margin-top: 1.5rem; background: #FE11C5; color: #fff; }
+    </style>
+  `;
+  document.body.appendChild(modal);
+}
 </script>
 </body>
 </html>
