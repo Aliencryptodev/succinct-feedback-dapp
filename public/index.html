@@ -1372,13 +1372,15 @@ document.addEventListener('DOMContentLoaded', async function() {
 
           const data = await res.json();
           if (data.success) {
-            showNotification('✅ Idea submitted and verified!');
-            document.getElementById('ideaText').value = '';
-            loadIdeas();
-            showIdeaHashModal(data.idea); // <-- AÑADIDO: muestra el modal con el hash
+          showNotification('✅ Idea submitted and verified!');
+          document.getElementById('ideaText').value = '';
+          loadIdeas();
+          if (data.idea) { // Solo si existe el objeto idea
+          showIdeaHashModal(data.idea);
+           }
           } else {
-            showNotification(data.error || '❌ Submission failed.', 'error');
-          }
+           showNotification(data.error || '❌ Submission failed.', 'error');
+         }
         } catch (error) {
           console.error('Error submitting idea:', error);
           showNotification('❌ Network error. Please try again.', 'error');
